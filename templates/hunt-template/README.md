@@ -1,0 +1,60 @@
+# TEMPLATE: <Hunt title>
+
+> **This is a template.** Copy this folder to `hunts/<YYYY>/<YYYY-MM-DD>-<slug>/` and replace every `<placeholder>`. Delete this notice. Templates are not hunts, and CI does not validate them as rules.
+
+> **Status banner:** keep "Draft for review: untested" until the validation notes below record a real test.
+
+| | |
+|---|---|
+| **Hunt ID** | `<YYYY-MM-DD>-<slug>` |
+| **Date** | `<DD Month YYYY>` |
+| **Status** | `<Experimental / Test / Stable>` |
+| **Platforms** | `<e.g. Linux, Defender XDR, Splunk CIM>` |
+| **ATT&CK** | `<Txxxx, Txxxx.xxx>` |
+| **CVEs** | `<CVE-YYYY-NNNNN or "n/a">` |
+| **Files** | `query.kql` (MIT), `query.spl` (MIT), `rule.yml` (Sigma, DRL 1.1) |
+
+## Hypothesis
+
+`<One sentence: what an attacker would do, and what that would look like in telemetry.>`
+
+## Threat context
+
+- `<What happened, with date and a link to the primary source (vendor advisory, NCSC, CISA KEV, CERT-EU)>`
+- `<Press reports only to add context, clearly attributed>`
+
+State plainly whether the behaviour you hunt for has been **reported** for this threat, or whether it is a **generic** pattern.
+
+**IOCs:** include only indicators published by a cited source, with the link. Never invent them.
+
+## Data sources and tables
+
+| Query | Data source | Requirement |
+|---|---|---|
+| `query.kql` | `<Table, e.g. DeviceProcessEvents>` | `<Sensor or licence needed>` |
+| `rule.yml` | `<Sigma logsource product/category>` | `<Telemetry, e.g. Sysmon, auditd>` |
+| `query.spl` | `<CIM data model or sourcetype>` | `<Add-on needed>` |
+
+## ATT&CK mapping
+
+| ID | Technique |
+|---|---|
+| `<Txxxx>` | `<Technique name>` |
+
+## Tuning and false positives
+
+- `<Known benign causes>`
+- `<Suggested exclusions: by device, account or command line>`
+- `<Expected volume>`
+- `<Coverage gaps>`
+
+## Validation notes
+
+- `<sigma check result and sigma-cli version>`
+- `<Conversion targets tested>`
+- `<Where and how the query was tested, the date and the benign simulation used. Isolated lab only.>`
+
+## Credits and licence
+
+- `<Author, and any upstream rule this adapts (keep the original author credit under DRL 1.1)>`
+- `rule.yml`: [DRL 1.1](../../LICENSE-DRL). `query.kql`, `query.spl` and this README: [MIT](../../LICENSE).

@@ -1,0 +1,23 @@
+```
+Hunt of the week #1 (DRAFT FOR REVIEW, untested): PHP worker or web server spawning a shell or download tool
+Splunk equivalent of query.kql, using the CIM Endpoint data model (Processes dataset) populated by
+an EDR, Sysmon for Linux or auditd add-on. Starting point only: tune for your estate before use.
+Hunt ID: 2026-10-22-php-web-server-spawning-shell | ATT&CK: T1190, T1059.004, T1105, T1505.003
+Source:  https://github.com/CyberThreatNet/hunt-lab | Licence: MIT - see LICENSE
+tstats cannot use regex, so it pre-filters on "php*" and the where clause applies the exact pattern.
+```
+| tstats summariesonly=false allow_old_summaries=true
+    count min(_time) as FirstSeen max(_time) as LastSeen
+    values(Processes.user) as Accounts values(Processes.process) as SampleCommands
+    from datamodel=Endpoint.Processes
+    where (Processes.parent_process_name="php*"
+        OR Processes.parent_process_name IN ("httpd", "apache2", "frankenphp", "lsphp"))
+      AND Processes.process_name IN ("sh", "bash", "dash", "curl", "wget", "nc", "ncat", "perl", "python3", "base64")
+    by Processes.dest Processes.parent_process_name Processes.parent_process Processes.process_name
+| rename "Processes.*" as "*"
+| where match(parent_process_name, "^php(-fpm|-cgi)?[0-9.]*$")
+    OR parent_process_name IN ("httpd", "apache2", "frankenphp", "lsphp")
+``` Tuning: add exclusions for known-good activity here, e.g. | search NOT SampleCommands="*/usr/sbin/sendmail*" ```
+| convert ctime(FirstSeen) ctime(LastSeen)
+| sort 0 FirstSeen
+| table FirstSeen LastSeen dest parent_process_name parent_process process_name Accounts SampleCommands count

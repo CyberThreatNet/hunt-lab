@@ -1,0 +1,30 @@
+# pySigma processing pipeline: maps Sigma process_creation fields to Elastic Common Schema (ECS)
+# as written by Elastic Defend / Elastic Agent and Auditbeat. Use with the elasticsearch backend:
+#   sigma convert -t esql -p pipelines/ecs-process-creation.yml hunts/.../rule.yml
+# Cyber-Threat.net Hunt Lab - https://github.com/CyberThreatNet/hunt-lab - DRL 1.1
+name: Cyber-Threat.net Hunt Lab ECS process_creation mapping
+priority: 30
+transformations:
+  - id: hunt_lab_ecs_process_creation_fields
+    type: field_name_mapping
+    mapping:
+      Image: process.executable
+      ParentImage: process.parent.executable
+      CommandLine: process.command_line
+      ParentCommandLine: process.parent.command_line
+      User: user.name
+      ProcessId: process.pid
+      ParentProcessId: process.parent.pid
+      CurrentDirectory: process.working_directory
+      OriginalFileName: process.pe.original_file_name
+    rule_conditions:
+      - type: logsource
+        category: process_creation
+  - id: hunt_lab_ecs_process_creation_event_filter
+    type: add_condition
+    conditions:
+      event.category: process
+      event.type: start
+    rule_conditions:
+      - type: logsource
+        category: process_creation

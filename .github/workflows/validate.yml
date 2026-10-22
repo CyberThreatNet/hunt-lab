@@ -1,0 +1,88 @@
+name: Validate Sigma rules
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sigma:
+    name: sigma check and test conversions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install sigma-cli and pySigma back ends (pinned)
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            sigma-cli==3.1.0 \
+            pysigma==1.5.1 \
+            pysigma-backend-kusto==1.0.1 \
+            pysigma-backend-splunk==2.1.0 \
+            pysigma-backend-elasticsearch==2.1.1 \
+            pyyaml
+          sigma version
+
+      - name: Check all YAML parses
+        run: |
+          python - <<'PY'
+          import pathlib, sys, yaml
+          bad = 0
+          for p in sorted(pathlib.Path(".").rglob("*.y*ml")):
+              if ".git" in p.parts:
+                  continue
+              try:
+                  yaml.safe_load(p.read_text(encoding="utf-8"))
+                  print(f"ok   {p}")
+              except yaml.YAMLError as exc:
+                  bad += 1
+                  print(f"FAIL {p}: {exc}")
+          sys.exit(1 if bad else 0)
+          PY
+
+      - name: sigma check (fail on errors and issues)
+        # One rule.yml per hunt folder, so the filename-convention validators are excluded.
+        run: |
+          sigma check --fail-on-error --fail-on-issues \
+            -x filename_length -x duplicate_filename \
+            --junitxml sigma-check.junit.xml \
+            hunts/
+
+      - name: Test conversions (Defender XDR, Sentinel ASIM, Splunk, Elastic)
+        run: |
+          set -euo pipefail
+          mapfile -t rules < <(find hunts -name 'rule.yml' | sort)
+          for rule in "${rules[@]}"; do
+            echo "::group::${rule}"
+            sigma convert -t kusto -p microsoft_xdr "${rule}"
+            sigma convert -t kusto -p sentinel_asim "${rule}"
+            sigma convert -t splunk --without-pipeline "${rule}"
+            sigma convert -t esql -p pipelines/ecs-process-creation.yml "${rule}"
+            echo "::endgroup::"
+          done
+
+      - name: Upload sigma check report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sigma-check-report
+          path: sigma-check.junit.xml
+          if-no-files-found: ignore

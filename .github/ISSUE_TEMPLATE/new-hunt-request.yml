@@ -1,0 +1,67 @@
+name: New hunt request
+description: Suggest a threat, CVE or behaviour for a new Hunt Lab hunt.
+title: "[Hunt request]: "
+labels: ["hunt-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a hunt for [Cyber-Threat.net Hunt Lab](https://github.com/CyberThreatNet/hunt-lab).
+        **Defensive content only:** please do not include exploit code, proofs of concept or payloads.
+        Indicators (hashes, IPs, domains) are only useful with a link to the public source that published them.
+  - type: input
+    id: threat
+    attributes:
+      label: Threat, CVE or behaviour
+      description: What should we hunt for?
+      placeholder: e.g. CVE-YYYY-NNNNN, a ransomware group's tradecraft, a suspicious process pattern
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Primary sources
+      description: Links to the vendor advisory, NCSC, CISA KEV, CERT-EU or research write-up.
+      placeholder: "- https://..."
+    validations:
+      required: true
+  - type: textarea
+    id: hypothesis
+    attributes:
+      label: Hypothesis
+      description: What would an attacker do, and how would it show in telemetry?
+    validations:
+      required: true
+  - type: dropdown
+    id: platforms
+    attributes:
+      label: Target platforms
+      multiple: true
+      options:
+        - Microsoft Defender XDR (KQL)
+        - Microsoft Sentinel (KQL)
+        - Sigma
+        - Splunk (SPL)
+        - Elastic (ES|QL / EQL)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: data-sources
+    attributes:
+      label: Data sources available
+      description: Tables, log sources or sensors you could run this against (e.g. DeviceProcessEvents, Sysmon, auditd).
+  - type: input
+    id: attack
+    attributes:
+      label: MITRE ATT&CK techniques (if known)
+      placeholder: e.g. T1190, T1059.004
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: This request contains no exploit code, payloads or sensitive data from my organisation.
+          required: true
+        - label: I have read the Code of Conduct (CODE_OF_CONDUCT.md).
+          required: true

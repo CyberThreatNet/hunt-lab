@@ -1,0 +1,30 @@
+# Python / sigma-cli
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+.pytest_cache/
+
+# Conversion output and CI artefacts
+out/
+converted/
+*.junit.xml
+
+# Never commit real telemetry, exports or secrets
+*.csv
+*.evtx
+*.pcap
+*.pcapng
+*.log
+secrets*
+*.pem
+*.key
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

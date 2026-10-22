@@ -1,0 +1,16 @@
+``` TEMPLATE - replace every <placeholder> and delete this line. ```
+```
+<Hunt title> (DRAFT FOR REVIEW, untested)
+Hunt ID: <YYYY-MM-DD>-<slug> | ATT&CK: <Txxxx> | Data: <CIM data model or sourcetype>
+Source:  https://github.com/CyberThreatNet/hunt-lab | Licence: MIT - see LICENSE
+```
+| tstats summariesonly=false allow_old_summaries=true
+    count min(_time) as FirstSeen max(_time) as LastSeen values(Processes.process) as SampleCommands
+    from datamodel=Endpoint.Processes
+    where Processes.parent_process_name IN ("<parent1>", "<parent2>")
+      AND Processes.process_name IN ("<child1>", "<child2>")
+    by Processes.dest Processes.parent_process_name Processes.process_name
+| rename "Processes.*" as "*"
+``` Tuning: exclusions for known-good activity go here ```
+| convert ctime(FirstSeen) ctime(LastSeen)
+| sort 0 FirstSeen

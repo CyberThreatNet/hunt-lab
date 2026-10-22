@@ -1,0 +1,20 @@
+// TEMPLATE - replace every <placeholder> and delete this line.
+// <Hunt title> (DRAFT FOR REVIEW, untested)
+// Hunt ID:   <YYYY-MM-DD>-<slug>
+// Table:     <e.g. DeviceProcessEvents> - <sensor or licence needed>
+// ATT&CK:    <Txxxx, Txxxx.xxx>
+// Context:   <CVE or threat, with source link in README.md>
+// Source:    https://github.com/CyberThreatNet/hunt-lab
+// Licence:   MIT - see LICENSE. (Sigma rules in this repository are under DRL 1.1.)
+let lookback = 14d;
+let parentProcs = dynamic(["<parent1>", "<parent2>"]);
+let suspiciousChildren = dynamic(["<child1>", "<child2>"]);
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where InitiatingProcessFileName in~ (parentProcs)
+| where FileName in~ (suspiciousChildren)
+// Tuning: exclusions for known-good activity go here
+| summarize Events = count(), FirstSeen = min(Timestamp), LastSeen = max(Timestamp),
+    SampleCommands = make_set(ProcessCommandLine, 10)
+    by DeviceName, InitiatingProcessFileName, FileName
+| order by FirstSeen asc

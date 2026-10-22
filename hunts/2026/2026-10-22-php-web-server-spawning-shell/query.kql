@@ -1,0 +1,26 @@
+// Hunt of the week #1 (DRAFT FOR REVIEW, untested): PHP worker or web server spawning a shell or download tool
+// Defender XDR advanced hunting. Starting point only: tune for your estate before use. Not an exploit signature.
+//
+// Hunt ID:   2026-10-22-php-web-server-spawning-shell
+// Table:     DeviceProcessEvents (needs Microsoft Defender for Endpoint on the Linux web servers).
+//            Also runs in Microsoft Sentinel where the Defender XDR connector streams
+//            DeviceProcessEvents to the workspace.
+// ATT&CK:    T1190, T1059.004, T1105, T1505.003
+// Context:   CVE-2026-109618, CVE-2026-109619 (PHP, 21 Oct 2026). Generic web-shell / RCE
+//            follow-on pattern; no IOCs, as none have been published in the cited sources.
+// Source:    https://github.com/CyberThreatNet/hunt-lab
+// Licence:   MIT - see LICENSE. (Sigma rules in this repository are under DRL 1.1.)
+let lookback = 14d;
+let webServerProcs = dynamic(["httpd", "apache2", "frankenphp", "lsphp"]);
+let suspiciousChildren = dynamic(["sh", "bash", "dash", "curl", "wget", "nc", "ncat", "perl", "python3", "base64"]);
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where InitiatingProcessFileName matches regex @"^php(-fpm|-cgi)?[0-9.]*$"
+    or InitiatingProcessFileName in~ (webServerProcs)
+| where FileName in~ (suspiciousChildren)
+// Tuning: add exclusions for known-good activity here, by device, account or command line, e.g.
+// | where not(ProcessCommandLine has "/usr/sbin/sendmail")   // PHP mail() -> sh -c sendmail
+| summarize Events = count(), FirstSeen = min(Timestamp), LastSeen = max(Timestamp),
+    Accounts = make_set(AccountName, 5), SampleCommands = make_set(ProcessCommandLine, 10)
+    by DeviceName, InitiatingProcessFileName, InitiatingProcessCommandLine, FileName
+| order by FirstSeen asc

@@ -1,0 +1,62 @@
+name: False positive report
+description: Tell us about benign activity that an existing hunt or rule matched.
+title: "[False positive]: "
+labels: ["false-positive"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping tune [Cyber-Threat.net Hunt Lab](https://github.com/CyberThreatNet/hunt-lab).
+        **Please remove sensitive data** (hostnames, usernames, IP addresses, tenant IDs, customer data) before posting.
+  - type: input
+    id: hunt
+    attributes:
+      label: Hunt folder or file
+      description: Path or link to the hunt that matched.
+      placeholder: hunts/2026/2026-10-22-php-web-server-spawning-shell/query.kql
+    validations:
+      required: true
+  - type: dropdown
+    id: query-type
+    attributes:
+      label: Which query?
+      multiple: true
+      options:
+        - KQL (query.kql)
+        - Sigma (rule.yml)
+        - Splunk SPL (query.spl)
+        - Converted Sigma output (please name the back end and pipeline below)
+    validations:
+      required: true
+  - type: textarea
+    id: activity
+    attributes:
+      label: Benign activity that matched
+      description: What legitimate software, job or admin task caused the match? Sanitised example rows are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Platform, OS or distribution, product versions, sigma-cli and back end versions if relevant.
+  - type: input
+    id: volume
+    attributes:
+      label: Approximate volume
+      placeholder: e.g. ~200 events a day across 12 servers
+  - type: textarea
+    id: exclusion
+    attributes:
+      label: Suggested exclusion or tuning
+      description: The filter you used or would suggest. Narrow exclusions (device, account, command line) are preferred.
+      render: text
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I have removed sensitive data from this report.
+          required: true
+        - label: I have read the Code of Conduct (CODE_OF_CONDUCT.md).
+          required: true
