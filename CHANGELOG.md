@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+**Arista EOS CVE-2026-7473 (draft)**
+- `hunts/2026/2026-10-24-arista-cve-2026-7473/`
+- Hypotheses for flow and network data: tunnel traffic to Arista decapsulation IPs that is the wrong tunnel type, or comes from an unknown peer. Based on Arista SA 0137.
+- README and sources only. KQL and SPL are held until tested. No Sigma rule, and the README explains why.
+- Status: draft, untested.
+
 ## [0.1.0] - 2026-10-22
 
 ### Added

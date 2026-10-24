@@ -1,6 +1,6 @@
 # Contributing to Cyber-Threat.net Hunt Lab
 
-Thanks for helping. Hunt Lab lives at <https://github.com/CyberThreatNet/hunt-lab> and feeds the Hunt Lab section of [Cyber-Threat.net](https://cyber-threat.net) (coming soon).
+Thanks for helping. Hunt Lab lives at <https://github.com/CyberThreatNet/hunt-lab> and feeds the Hunt Lab section of [Cyber-Threat.net](https://cyber-threat.net).
 
 ## Ground rules
 

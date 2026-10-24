@@ -5,7 +5,7 @@
 [![Queries and docs: MIT](https://img.shields.io/badge/queries%20%26%20docs-MIT-green)](LICENSE)
 [![MITRE ATT&CK mapped](https://img.shields.io/badge/MITRE%20ATT%26CK-mapped-red)](https://attack.mitre.org/)
 
-Threat-hunting queries and detection rules from **Hunt Lab** at [Cyber-Threat.net](https://cyber-threat.net). The site is coming soon.
+Threat-hunting queries and detection rules from **Hunt Lab** at [Cyber-Threat.net](https://cyber-threat.net).
 
 Each week's threats and CVEs become copy-ready hunts for threat hunters, SOC analysts and detection engineers. Hunts are written in **KQL** (Microsoft Sentinel and Defender XDR), **Sigma** and **Splunk SPL**, and mapped to MITRE ATT&CK. Each folder matches a "Hunt of the week" or CVE query pack entry on the site.
 
@@ -42,6 +42,7 @@ hunt-lab/
 | Date | Hunt | ATT&CK | Status |
 |---|---|---|---|
 | 2026-10-22 | [Shell or download tool spawned by a PHP worker or web server (Linux)](hunts/2026/2026-10-22-php-web-server-spawning-shell/) (CVE-2026-109618, CVE-2026-109619) | T1190, T1059.004, T1105, T1505.003 | Draft, untested |
+| 2026-10-24 | [Arista EOS CVE-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | T1599, T1572 | Draft, untested |
 
 ## Using the queries
 
