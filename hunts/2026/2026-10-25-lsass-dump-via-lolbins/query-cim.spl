@@ -1,0 +1,9 @@
+```
+CIM variant. Converted with: sigma convert -t splunk -p splunk_cim, OR groups bracketed by hand.
+UNTESTED: not run on a real CIM instance. With | from datamodel the field names may come back without
+the Processes. prefix; if so, remove the prefix from the search and table lines.
+Hunt ID: 2026-10-25-lsass-dump-via-lolbins | Licence: MIT - see LICENSE
+```
+| from datamodel:"Endpoint.Processes"
+| search ((Processes.process="*comsvcs*" Processes.process="*minidump*") OR (Processes.process="*comsvcs*" Processes.process="*#*") OR ((Processes.process_path="*\\rdrleakdiag.exe" OR Processes.original_file_name="RdrLeakDiag.exe") Processes.process="*memdmp*"))
+| table _time Processes.dest Processes.user Processes.process_path Processes.process Processes.parent_process

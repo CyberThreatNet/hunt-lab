@@ -1,0 +1,14 @@
+```
+Hunt: Directory replication rights used by a non-machine account (possible DCSync)
+DRAFT FOR REVIEW. Converted from rule.yml with: sigma convert -t splunk -p splunk_windows
+The Sigma rule was tested against public datasets (see README). This SPL converted cleanly but has
+NOT been run in a Splunk instance. Field names assume XML-rendered Security events
+(Splunk Add-on for Microsoft Windows with renderXml=true); classic rendering uses different names.
+OR groups are bracketed explicitly. AccessMask may appear as 256 or %%7688 in some pipelines; adjust if so.
+Hunt ID: 2026-10-25-dcsync-replication-by-non-dc-account | ATT&CK: T1003.006
+Source: https://github.com/CyberThreatNet/hunt-lab | Licence: MIT - see LICENSE
+```
+source="WinEventLog:Security" EventCode=4662 AccessMask="0x100" (Properties="*1131f6aa-9c07-11d1-f79f-00c04fc2dcd2*" OR Properties="*1131f6ad-9c07-11d1-f79f-00c04fc2dcd2*" OR Properties="*89e95b76-444d-4c62-991a-0facbeda640c*") NOT (SubjectUserName="*$" OR SubjectDomainName="Window Manager" OR SubjectUserName="NT AUT*")
+``` Tuning: exclude your Entra Connect sync account and other named replication accounts by EXACT name, never by prefix, e.g. NOT SubjectUserName IN ("MSOL_0123456789ab", "svc-idsync") ```
+| table _time host SubjectDomainName SubjectUserName SubjectLogonId ObjectName Properties
+| sort 0 _time

@@ -59,6 +59,8 @@ Thanks for helping. Hunt Lab lives at <https://github.com/CyberThreatNet/hunt-la
    sigma convert -t kusto -p microsoft_xdr hunts/<YYYY>/<YYYY-MM-DD>-<slug>/rule.yml
    ```
 
+   Every hunt with a `rule.yml` must include `ci-targets.txt` listing one `sigma convert` target per line (`-t <backend> [-p <pipeline> | --without-pipeline]`). Lines starting with `#` are comments; say why any standard target is omitted. CI fails if the file is missing, empty or names a target not on the allow-list.
+
 8. Add a line to `CHANGELOG.md` under "Unreleased" and to the Hunts table in `README.md`.
 9. Open a pull request and complete the template. CI runs the same checks.
 

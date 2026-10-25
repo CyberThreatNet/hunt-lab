@@ -1,0 +1,50 @@
+title: Process Memory Dump via Built-in Windows Binaries (comsvcs MiniDump, RdrLeakDiag)
+id: 42c71de4-0a6e-4623-a646-b204f611866a
+related:
+    - id: 646ea171-dded-4578-8a4d-65e9822892e3
+      type: derived
+    - id: edadb1e5-5919-4e4c-8462-a9e643b02c4b
+      type: derived
+status: test
+description: |
+    Hunting rule for credential dumping that uses tools already present on Windows to
+    write a full memory dump of a process, usually LSASS. Flags rundll32 loading
+    comsvcs.dll with its MiniDump export (by name, or by any export ordinal, which
+    covers ordinal 24 and its wrapped and zero-padded forms), and rdrleakdiag.exe run
+    with /fullmemdmp or /memdmp. Both are common "living off the land" ways to dump
+    LSASS without bringing a dedicated tool.
+references:
+    - https://attack.mitre.org/techniques/T1003/001/
+    - https://lolbas-project.github.io/lolbas/Libraries/comsvcs/
+    - https://github.com/SigmaHQ/sigma/blob/master/rules/windows/process_creation/proc_creation_win_rundll32_process_dump_via_comsvcs.yml
+    - https://github.com/SigmaHQ/sigma/blob/master/rules/windows/process_creation/proc_creation_win_rdrleakdiag_process_dumping.yml
+author: Florian Roth (Nextron Systems), Modexp, Nasreddine Bencherchali (Nextron Systems), Swachchhanda Shrawan Poudel (Nextron Systems), Cedric MAURUGEON (original SigmaHQ rules 646ea171-dded-4578-8a4d-65e9822892e3 and edadb1e5-5919-4e4c-8462-a9e643b02c4b), Cyber-Threat.net Hunt Lab (combined adaptation)
+date: 2026-10-25
+tags:
+    - attack.credential-access
+    - attack.t1003.001
+    - attack.stealth
+    - attack.t1218.011
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_comsvcs_name:
+        CommandLine|contains|all:
+            - 'comsvcs'
+            - 'minidump'
+    selection_comsvcs_ordinal:
+        # Any export-by-ordinal call into comsvcs. Catches #24, #+24, #-4294967272,
+        # #65560 and zero-padded forms such as #0024.
+        CommandLine|contains|all:
+            - 'comsvcs'
+            - '#'
+    selection_rdrleakdiag_img:
+        - Image|endswith: '\rdrleakdiag.exe'
+        - OriginalFileName: 'RdrLeakDiag.exe'
+    selection_rdrleakdiag_cli:
+        CommandLine|contains: 'memdmp'   # /fullmemdmp and /memdmp, any dash or slash
+    condition: 1 of selection_comsvcs_* or all of selection_rdrleakdiag_*
+falsepositives:
+    - Administrators or support staff deliberately capturing a process dump for troubleshooting (rare; confirm with the change record)
+level: high

@@ -1,0 +1,6 @@
+# ASIM omitted: the sentinel_asim pipeline cannot map OriginalFileName
+-t kusto -p microsoft_xdr
+-t splunk --without-pipeline
+-t splunk -p splunk_windows
+-t splunk -p splunk_cim
+-t esql -p pipelines/ecs-process-creation.yml

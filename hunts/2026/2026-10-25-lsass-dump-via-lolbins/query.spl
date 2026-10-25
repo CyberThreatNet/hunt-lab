@@ -1,0 +1,15 @@
+```
+Hunt: Process memory dump via built-in Windows binaries (comsvcs MiniDump, RdrLeakDiag)
+DRAFT FOR REVIEW. Converted with `sigma convert -t splunk -p splunk_windows`, then scoped by hand to
+Sysmon event 1 (`source` and `EventCode` added after conversion) and OR groups bracketed explicitly.
+Raw-event version for Sysmon event 1 (Image, OriginalFileName, CommandLine). For Security 4688,
+map Image to NewProcessName; OriginalFileName is not present in 4688.
+The Sigma rule was tested against public datasets (see README). This SPL converted cleanly but has
+NOT been run in a Splunk instance. A CIM (Endpoint.Processes) variant is in query-cim.spl.
+Hunt ID: 2026-10-25-lsass-dump-via-lolbins | ATT&CK: T1003.001, T1218.011
+Source: https://github.com/CyberThreatNet/hunt-lab | Licence: MIT - see LICENSE
+```
+source="XmlWinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
+((CommandLine="*comsvcs*" CommandLine="*minidump*") OR (CommandLine="*comsvcs*" CommandLine="*#*") OR ((Image="*\\rdrleakdiag.exe" OR OriginalFileName="RdrLeakDiag.exe") CommandLine="*memdmp*"))
+| table _time host User Image CommandLine ParentImage ParentCommandLine
+| sort 0 _time

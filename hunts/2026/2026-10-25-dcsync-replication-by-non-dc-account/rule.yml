@@ -1,0 +1,52 @@
+title: Directory Replication Rights Used by a Non-Machine Account (Possible DCSync)
+id: fc1eb094-1c31-4ade-8107-14415c38246c
+related:
+    - id: 17d619c1-e020-4347-957e-1d1207455c93
+      type: derived
+status: test
+description: |
+    Hunting rule for DCSync-style credential theft. Flags Windows Security event 4662
+    on a domain controller where an account that is not a computer account exercises
+    the directory replication extended rights (DS-Replication-Get-Changes,
+    DS-Replication-Get-Changes-All, DS-Replication-Get-Changes-In-Filtered-Set).
+    Domain controllers replicate using their machine accounts, so a user account doing
+    this is unusual. Requires "Audit Directory Service Access" on domain controllers.
+references:
+    - https://attack.mitre.org/techniques/T1003/006/
+    - https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4662
+    - https://github.com/SigmaHQ/sigma/blob/master/rules/windows/builtin/security/win_security_ad_replication_non_machine_account.yml
+    - https://threathunterplaybook.com/library/windows/active_directory_replication.html
+author: Roberto Rodriguez @Cyb3rWard0g (original SigmaHQ rule 17d619c1-e020-4347-957e-1d1207455c93), Cyber-Threat.net Hunt Lab (adaptation)
+date: 2026-10-25
+tags:
+    - attack.credential-access
+    - attack.t1003.006
+logsource:
+    product: windows
+    service: security
+    definition: |
+        Requirements: "Audit Directory Service Access" (Success) enabled on domain controllers, and a
+        SACL on the domain naming context root that audits use of DS-Replication-Get-Changes and
+        DS-Replication-Get-Changes-All. Without the SACL, event 4662 is not written for these rights.
+detection:
+    selection:
+        EventID: 4662
+        AccessMask: '0x100'
+        Properties|contains:
+            - '1131f6aa-9c07-11d1-f79f-00c04fc2dcd2'
+            - '1131f6ad-9c07-11d1-f79f-00c04fc2dcd2'
+            - '89e95b76-444d-4c62-991a-0facbeda640c'
+    filter_main_machine_account:
+        SubjectUserName|endswith: '$'
+    filter_main_window_manager:
+        SubjectDomainName: 'Window Manager'
+    filter_optional_builtin:
+        SubjectUserName|startswith: 'NT AUT'
+    # Add your Microsoft Entra Connect sync account(s) here by exact name, e.g.
+    # filter_optional_entra_connect:
+    #     SubjectUserName: 'MSOL_0123456789ab'
+    condition: selection and not 1 of filter_*
+falsepositives:
+    - Microsoft Entra Connect (Azure AD Connect) sync accounts, usually named MSOL_ followed by a hex string. Exclude your own by exact name, never by the MSOL_ prefix, because anyone able to create accounts can choose that prefix.
+    - Other legitimate identity sync or backup products granted replication rights; list them and exclude by account
+level: high

@@ -1,0 +1,4 @@
+# Security 4662 has no XDR or ASIM mapping; ES|QL ECS pipeline covers process creation only
+-t kusto -p azure_monitor
+-t splunk --without-pipeline
+-t splunk -p splunk_windows

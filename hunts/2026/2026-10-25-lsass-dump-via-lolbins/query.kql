@@ -1,0 +1,16 @@
+// Hunt: Process memory dump via built-in Windows binaries (comsvcs MiniDump, RdrLeakDiag)
+// DRAFT FOR REVIEW. Converted from rule.yml with: sigma convert -t kusto -p microsoft_xdr
+// The Sigma rule was tested against public datasets (see README "Validation notes"). This KQL has
+// converted cleanly but has NOT been run in Defender XDR advanced hunting.
+//
+// Hunt ID:   2026-10-25-lsass-dump-via-lolbins
+// Table:     DeviceProcessEvents (Microsoft Defender for Endpoint on Windows)
+// ATT&CK:    T1003.001, T1218.011
+// Source:    https://github.com/CyberThreatNet/hunt-lab | Licence: MIT - see LICENSE
+let lookback = 14d;
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where ((ProcessCommandLine contains "comsvcs" and ProcessCommandLine contains "minidump") or (ProcessCommandLine contains "comsvcs" and ProcessCommandLine contains "#")) or ((FolderPath endswith "\\rdrleakdiag.exe" or ProcessVersionInfoOriginalFileName =~ "RdrLeakDiag.exe") and ProcessCommandLine contains "memdmp")
+| project Timestamp, DeviceName, AccountDomain, AccountName, FileName, FolderPath, ProcessCommandLine,
+    InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by Timestamp asc
