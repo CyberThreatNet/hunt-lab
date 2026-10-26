@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**Node2Shell (CVE-2026-111497): shell spawned by a Node.js process**
+- `hunts/2026/2026-10-26-node2shell-brotli/`
+- Process creation: a shell or download tool started directly by node or bun, with package-manager and build-tool parents filtered. Hypotheses for Node.js crashes (SIGSEGV/SIGABRT), Brotli request bodies and exposure.
+- Includes Sigma, per-hunt conversion targets, sources and test evidence.
+- Status: test. The Sigma rule was tested on synthetic and public datasets; conversions are clean but not engine-tested.
+
 **Arista EOS CVE-2026-7473 (draft)**
 - `hunts/2026/2026-10-24-arista-cve-2026-7473/`
 - Hypotheses for flow and network data: tunnel traffic to Arista decapsulation IPs that is the wrong tunnel type, or comes from an unknown peer. Based on Arista SA 0137.

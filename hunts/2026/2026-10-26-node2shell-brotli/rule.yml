@@ -1,0 +1,92 @@
+title: Shell or Download Tool Spawned by a Node.js or Bun Server Process
+id: b54bd896-f37b-417f-8f3f-e5ac060e4016
+status: test
+description: |
+    Hunting starting point for possible post-exploitation of CVE-2026-111497
+    ("Node2Shell"), an out-of-bounds write in the Brotli decoder bundled with
+    Node.js and Bun. Flags a node or bun process starting a command shell,
+    PowerShell or a download/scripting tool on Linux or Windows, while leaving out
+    the package-manager and build-tool parents that do this all day.
+    Behaviour-based, not an exploit signature: it fires on any code execution
+    inside a Node.js server, whatever the cause. Needs tuning per estate.
+references:
+    - https://nodejs.org/en/blog/vulnerability/october-2026-security-releases
+    - https://nvd.nist.gov/vuln/detail/CVE-2026-111497
+    - https://www.imperva.com/blog/node2shell-from-brotli-data-to-remote-code-execution/
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-26-node2shell-brotli
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-26
+tags:
+    - attack.initial-access
+    - attack.t1190
+    - attack.execution
+    - attack.t1059.001
+    - attack.t1059.003
+    - attack.t1059.004
+    - cve.2026-111497
+logsource:
+    category: process_creation
+detection:
+    selection_parent:
+        ParentImage|endswith:
+            - '/node'
+            - '/nodejs'
+            - '/bun'
+            - '\node.exe'
+            - '\bun.exe'
+    selection_child:
+        Image|endswith:
+            - '/sh'
+            - '/bash'
+            - '/dash'
+            - '/zsh'
+            - '/busybox'
+            - '/curl'
+            - '/wget'
+            - '/nc'
+            - '/ncat'
+            - '/socat'
+            - '/perl'
+            - '/python3'
+            - '/base64'
+            - '\cmd.exe'
+            - '\powershell.exe'
+            - '\pwsh.exe'
+            - '\curl.exe'
+            - '\certutil.exe'
+            - '\bitsadmin.exe'
+            - '\mshta.exe'
+    filter_main_npm_title:
+        # npm and npx on Linux rewrite their process title to "npm run <script>" / "npm exec ..."
+        ParentCommandLine|startswith:
+            - 'npm '
+            - 'npx '
+    filter_main_package_managers:
+        ParentCommandLine|contains:
+            - '/bin/npm '
+            - '/bin/npx '
+            - 'npm-cli.js'
+            - 'npx-cli.js'
+            - '/pnpm.cjs'
+            - '\pnpm.cjs'
+            - '/bin/pnpm '
+            - '/.bin/pnpm '
+            - '/yarn.js'
+            - '\yarn.js'
+            - '/bin/yarn '
+            - '/.bin/yarn '
+            - '/.yarn/releases/yarn-'
+            - '\.yarn\releases\yarn-'
+            - 'corepack'
+            - 'node-gyp'
+    filter_main_install_scripts:
+        CommandLine|contains:
+            - 'node-gyp'
+            - 'prebuild-install'
+            - 'npm run '
+    condition: selection_parent and selection_child and not 1 of filter_main_*
+falsepositives:
+    - Node.js applications that legitimately shell out (child_process exec or spawn), for example image, PDF, git or ffmpeg wrappers
+    - Development and CI hosts running test runners, bundlers, Electron apps or VS Code extensions under node
+    - Process managers and health-check scripts started by node (pm2, nodemon, forever)
+level: medium

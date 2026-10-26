@@ -45,6 +45,7 @@ hunt-lab/
 | 2026-10-24 | [Arista EOS CVE-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | T1599, T1572 | Draft, untested |
 | 2026-10-25 | [DCSync: directory replication rights used by a non-machine account](hunts/2026/2026-10-25-dcsync-replication-by-non-dc-account/) | T1003.006 | Test (public datasets) |
 | 2026-10-25 | [LSASS dumping with built-in Windows tools: comsvcs MiniDump and RdrLeakDiag](hunts/2026/2026-10-25-lsass-dump-via-lolbins/) | T1003.001, T1218.011 | Test (public datasets) |
+| 2026-10-26 | [Shell spawned by a Node.js process (Node2Shell, CVE-2026-111497)](hunts/2026/2026-10-26-node2shell-brotli/) | T1190, T1059, T1499.004 | Test (public datasets) |
 
 ## Using the queries
 

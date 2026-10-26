@@ -1,0 +1,9 @@
+# Conversion targets for this hunt (read by the "Test conversions" CI step).
+# The rule has no logsource product (it covers Linux and Windows), so:
+#   splunk_cim omitted: the CIM pipeline rejects process_creation rules without product windows
+#   azure_monitor omitted: SecurityEvent has no ParentCommandLine field (Windows-only table in any case)
+#   splunk_windows omitted: for a rule with no product it applies no Windows mapping, so its output is identical to --without-pipeline
+-t kusto -p microsoft_xdr
+-t kusto -p sentinel_asim
+-t splunk --without-pipeline
+-t esql -p pipelines/ecs-process-creation.yml
