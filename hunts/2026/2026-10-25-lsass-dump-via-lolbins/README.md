@@ -1,6 +1,6 @@
 # LSASS dumping with built-in Windows tools: comsvcs MiniDump and RdrLeakDiag
 
-> **Draft for review: tested against public datasets, not published.** The Sigma rule matched every in-scope true-positive event (three executions) in two public datasets and produced no false positives among roughly 3,600 non-target process-creation events in the public test data (see [Validation notes](#validation-notes)). The KQL and SPL converted cleanly but have **not** been run in Defender XDR or Splunk.
+> **Draft for review: tested against public datasets.** The Sigma rule matched every in-scope true-positive event (three executions) in two public datasets and produced no false positives among roughly 3,600 non-target process-creation events in the public test data (see [Validation notes](#validation-notes)). The KQL and SPL converted cleanly but have **not** been run in Defender XDR or Splunk.
 
 | | |
 |---|---|

@@ -1,6 +1,6 @@
 # Hunt of the week #1: possible PHP RCE follow-on activity
 
-> **Experimental, untested.** This is a behavioural starting point that needs tuning, not an exploit signature. Neither query has been run against live or lab data yet.
+> **Draft for review: untested.** This is a behavioural starting point that needs tuning, not an exploit signature. Neither query has been run against live or lab data yet.
 
 | | |
 |---|---|

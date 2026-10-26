@@ -39,11 +39,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `cve-context.yaml` in each hunt that covers a CVE (2026-10-22 PHP, 2026-10-24 Arista, 2026-10-26 Node2Shell): CISA KEV status (listed, date added, due date, known ransomware use, catalogue version) and FIRST EPSS score and percentile, each with the date checked. Hunts with no CVE have no file.
 - `scripts/refresh_kev_epss.py` (standard library only) refreshes the files and a generated KEV and EPSS table in `README.md`; `--check` validates them offline. A refresh builds everything before writing, so a failed run changes nothing, and it never replaces an existing EPSS score with `null` unless run with `--allow-null`.
 - README, CONTRIBUTING, the hunt template and the pull request template explain the fields: KEV is a yes/no catalogue, not a score; EPSS is a daily probability.
+- `scripts/tests/test_refresh_kev_epss.sh`: offline safety tests for the refresh script (simulated feeds, run on a temporary copy of the repository), run by CI.
+- The refresh script exits with code 3, writing nothing, when FIRST EPSS returns no score for any CVE (an outage, not a gap). Exit codes 0 to 3 are documented in the README and in `--help`.
 
 ### Changed
 
 - `.github/workflows/validate.yml`: new step runs `python scripts/refresh_kev_epss.py --check`.
-- `hunts/2026/2026-10-22-php-web-server-spawning-shell/README.md`: status banner now reads "Experimental, untested" (it previously said "not published").
+- `hunts/2026/2026-10-22-php-web-server-spawning-shell/README.md`: status banner now reads "Draft for review: untested" (it previously said "Draft for review: untested, not published").
+- DCSync, LSASS, Node2Shell and Arista hunt READMEs: "not published" removed from the status banner, as the repository is public. Each banner's test status is unchanged. All hunt banners now use the template's form, "Draft for review: <test status>" (Arista's was "Draft — untested"), and the Arista Status row uses the template's values: "Experimental (draft, untested)".
+- `.github/workflows/validate.yml`: new step runs `scripts/tests/test_refresh_kev_epss.sh`.
 - `.github/workflows/validate.yml`: test conversions now read each hunt's `ci-targets.txt`, check every line against an allow-list and fail if the file is missing, empty or names a target that is not allowed.
 
 ## [0.1.0] - 2026-10-22

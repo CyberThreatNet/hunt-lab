@@ -67,7 +67,8 @@ Thanks for helping. Hunt Lab lives at <https://github.com/CyberThreatNet/hunt-la
    - KEV is a yes/no catalogue of CVEs exploited in the wild, not a score; EPSS is FIRST's daily probability (0 to 1) of exploitation activity in the next 30 days. Both are dated. See [Exploitation context](README.md#exploitation-context-cisa-kev-and-first-epss).
    - Hunts with no CVE need no file.
    - The file is named `.yaml`, not `.yml`, on purpose: `sigma check hunts/` reads every `*.yml` file as a Sigma rule, and would fail on it. CI still checks that it parses as YAML.
-   - The script never replaces an existing EPSS score with `null` when FIRST returns no row (it keeps the old score and warns); use `--allow-null` only if the CVE really has no score.
+   - The script never replaces an existing EPSS score with `null` when FIRST returns no row (it keeps the old score and warns); use `--allow-null` only if the CVE really has no score. If the script exits with code 3, the FIRST EPSS API returned nothing for any CVE: try again later rather than forcing it.
+   - If you change the script, run `bash scripts/tests/test_refresh_kev_epss.sh` (offline; CI runs it too).
 9. Add a line to `CHANGELOG.md` under "Unreleased" and to the Hunts table in `README.md`.
 10. Open a pull request and complete the template. CI runs the same checks, including `python3 scripts/refresh_kev_epss.py --check`.
 

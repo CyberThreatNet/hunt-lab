@@ -1,6 +1,6 @@
 # DCSync: directory replication rights used by a non-machine account
 
-> **Draft for review: tested against public datasets, not published.** The Sigma rule matched every true-positive event in two public datasets and produced no false positives among the 57 non-target event 4662 records in the public test data (see [Validation notes](#validation-notes)). The KQL and SPL converted cleanly but have **not** been run in Sentinel or Splunk.
+> **Draft for review: tested against public datasets.** The Sigma rule matched every true-positive event in two public datasets and produced no false positives among the 57 non-target event 4662 records in the public test data (see [Validation notes](#validation-notes)). The KQL and SPL converted cleanly but have **not** been run in Sentinel or Splunk.
 
 | | |
 |---|---|

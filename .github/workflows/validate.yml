@@ -63,6 +63,11 @@ jobs:
         # Values are refreshed by running scripts/refresh_kev_epss.py without --check.
         run: python scripts/refresh_kev_epss.py --check
 
+      - name: KEV and EPSS refresh script safety tests
+        # Offline (simulated feeds), on a temporary copy of the repository: failed or partial
+        # feed answers must change nothing, and an EPSS outage must exit with code 3.
+        run: bash scripts/tests/test_refresh_kev_epss.sh
+
       - name: sigma check (fail on errors and issues)
         # One rule.yml per hunt folder, so the filename-convention validators are excluded.
         run: |

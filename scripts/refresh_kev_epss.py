@@ -26,7 +26,16 @@ Safety: every output (hunt files and README) is built in memory and checked
 before anything is written, so a failed run changes nothing. The FIRST EPSS API
 answers an unknown CVE with an empty result rather than an error, so by default
 an existing score is never replaced by null: the old score and its dates are
-kept and a warning is printed.
+kept and a warning is printed. If FIRST returns no row for every CVE, and at
+least one of them already has a score, that is treated as an outage, not a gap:
+nothing is written and the script exits with code 3, even with --allow-null.
+
+Exit codes:
+    0  success (refresh written, or --check passed)
+    1  --check found a problem, or a refresh failed (network, feed format, local
+       file); nothing was written
+    2  bad command-line arguments (argparse)
+    3  EPSS outage: FIRST returned no score for any CVE; nothing was written
 
 Licence: MIT (see LICENSE).
 """
@@ -398,6 +407,27 @@ def build_entry(cve: str, k: dict | None, s: dict | None, old: dict | None, kev_
     return entry
 
 
+EXIT_OK, EXIT_ERROR, EXIT_USAGE, EXIT_EPSS_OUTAGE = 0, 1, 2, 3
+
+
+class EpssOutage(RefreshError):
+    """FIRST returned no row for any CVE, although some already had scores."""
+
+
+def check_epss_outage(plan, all_cves: list[str], epss: dict) -> None:
+    """Raise EpssOutage if every CVE came back empty and at least one had a score before.
+
+    One empty CVE is a gap (a new CVE not scored yet); all of them empty at once,
+    including CVEs FIRST has scored before, means the API is not answering properly.
+    """
+    if not all_cves or any(c in epss for c in all_cves):
+        return
+    scored_before = any(e["epss"] is not None for hunt, _ in plan for e in existing_entries(hunt).values())
+    if scored_before:
+        raise EpssOutage(f"FIRST EPSS returned no score for any of the {len(all_cves)} CVE(s), "
+                         "including ones it has scored before; treating this as an outage")
+
+
 def refresh(today: str, allow_null: bool = False) -> int:
     """Fetch, build every output in memory, then write. Any error leaves the tree untouched."""
     warnings: list[str] = []
@@ -406,6 +436,7 @@ def refresh(today: str, allow_null: bool = False) -> int:
         all_cves = sorted({c for _, cves in plan for c in cves}, key=cve_sort_key)
         kev_version, kev = fetch_kev()
         epss = fetch_epss(all_cves) if all_cves else {}
+        check_epss_outage(plan, all_cves, epss)
         rows, writes, report = [], {}, []
         for hunt, cves in plan:
             old = existing_entries(hunt)
@@ -422,12 +453,15 @@ def refresh(today: str, allow_null: bool = False) -> int:
             else:
                 report.append(f"{hunt.name}: no CVE, no {CONTEXT_NAME}")
         writes[README] = replace_block(README.read_text(encoding="utf-8"), render_table(rows))
+    except EpssOutage as exc:
+        print(f"error: {exc}. Nothing changed; try again later.", file=sys.stderr)
+        return EXIT_EPSS_OUTAGE
     except RefreshError as exc:
         print(f"error: {exc}. Nothing changed.", file=sys.stderr)
-        return 1
+        return EXIT_ERROR
     except (OSError, UnicodeDecodeError) as exc:
         print(f"error: could not read a local file: {exc}. Nothing changed.", file=sys.stderr)
-        return 1
+        return EXIT_ERROR
 
     for path, text in writes.items():
         path.write_text(text, encoding="utf-8")
@@ -435,7 +469,7 @@ def refresh(today: str, allow_null: bool = False) -> int:
     for w in warnings:
         print(f"warning: {w}", file=sys.stderr)
     print(f"KEV catalogue {kev_version}; checked {today}. {len(writes) - 1} hunt file(s) and README table written.")
-    return 0
+    return EXIT_OK
 
 
 def check() -> int:
@@ -494,10 +528,18 @@ def check() -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    ap = argparse.ArgumentParser(
+        description=__doc__.split("\n\n")[0],
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="exit codes:\n"
+               "  0  success (refresh written, or --check passed)\n"
+               "  1  --check found a problem, or a refresh failed; nothing written\n"
+               "  2  bad command-line arguments\n"
+               "  3  EPSS outage: FIRST returned no score for any CVE; nothing written")
     ap.add_argument("--check", action="store_true", help="validate files offline instead of refreshing (used by CI)")
     ap.add_argument("--allow-null", action="store_true",
-                    help="record null when EPSS returns no row, even if the CVE already has a score")
+                    help="record null when EPSS returns no row, even if the CVE already has a score "
+                         "(does not override the outage check, exit code 3)")
     ap.add_argument("--date", help="checked date to record (YYYY-MM-DD); defaults to today in Europe/London")
     args = ap.parse_args()
     if args.check:
