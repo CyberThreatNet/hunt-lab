@@ -27,6 +27,7 @@
 - [ ] `sigma check --fail-on-issues -x filename_length -x duplicate_filename hunts/` passes locally.
 - [ ] The test conversion (`sigma convert -t kusto -p microsoft_xdr`) works.
 - [ ] Validation notes say honestly what was and was not tested (isolated lab, benign simulation only).
+- [ ] For CVE hunts: `python3 scripts/refresh_kev_epss.py` has been run, so `cve-context.yaml` and the README KEV and EPSS table are current.
 - [ ] `CHANGELOG.md` and the README hunts table are updated.
 - [ ] I agree that Sigma rules are licensed under DRL 1.1 and everything else under MIT.
 

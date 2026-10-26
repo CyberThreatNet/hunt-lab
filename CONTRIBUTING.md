@@ -61,8 +61,15 @@ Thanks for helping. Hunt Lab lives at <https://github.com/CyberThreatNet/hunt-la
 
    Every hunt with a `rule.yml` must include `ci-targets.txt` listing one `sigma convert` target per line (`-t <backend> [-p <pipeline> | --without-pipeline]`). Lines starting with `#` are comments; say why any standard target is omitted. CI fails if the file is missing, empty or names a target not on the allow-list.
 
-8. Add a line to `CHANGELOG.md` under "Unreleased" and to the Hunts table in `README.md`.
-9. Open a pull request and complete the template. CI runs the same checks.
+8. If the hunt covers a CVE, add the KEV and EPSS context:
+   - Tag the CVE in `rule.yml` (`cve.YYYY-NNNNN`). List it in the "CVEs" row of the hunt `README.md` too; for a hunt with no Sigma rule, that row is what the script and CI use.
+   - Run `python3 scripts/refresh_kev_epss.py`. It fills in `cve-context.yaml` from the CISA KEV feed and the FIRST EPSS API, and updates the KEV and EPSS table in `README.md`. Do not edit the values by hand.
+   - KEV is a yes/no catalogue of CVEs exploited in the wild, not a score; EPSS is FIRST's daily probability (0 to 1) of exploitation activity in the next 30 days. Both are dated. See [Exploitation context](README.md#exploitation-context-cisa-kev-and-first-epss).
+   - Hunts with no CVE need no file.
+   - The file is named `.yaml`, not `.yml`, on purpose: `sigma check hunts/` reads every `*.yml` file as a Sigma rule, and would fail on it. CI still checks that it parses as YAML.
+   - The script never replaces an existing EPSS score with `null` when FIRST returns no row (it keeps the old score and warns); use `--allow-null` only if the CVE really has no score.
+9. Add a line to `CHANGELOG.md` under "Unreleased" and to the Hunts table in `README.md`.
+10. Open a pull request and complete the template. CI runs the same checks, including `python3 scripts/refresh_kev_epss.py --check`.
 
 ## Adapting someone else's rule
 

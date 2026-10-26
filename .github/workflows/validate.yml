@@ -58,6 +58,11 @@ jobs:
           sys.exit(1 if bad else 0)
           PY
 
+      - name: KEV and EPSS context is present and well formed
+        # Offline: checks each hunt's cve-context.yaml against its rule.yml CVE tags and the README table.
+        # Values are refreshed by running scripts/refresh_kev_epss.py without --check.
+        run: python scripts/refresh_kev_epss.py --check
+
       - name: sigma check (fail on errors and issues)
         # One rule.yml per hunt folder, so the filename-convention validators are excluded.
         run: |

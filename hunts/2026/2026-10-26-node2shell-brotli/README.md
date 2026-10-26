@@ -9,7 +9,7 @@
 | **Status** | Test (Sigma rule tested on synthetic and public datasets; conversions clean, not engine-tested). Hunts 2 to 4 are hypotheses only |
 | **Platforms** | Linux and Windows servers and containers running Node.js or Bun. Sigma `category: process_creation` with no `product`, so it applies to Sysmon event 1 (Windows), Sysmon for Linux event 1, Security 4688 with command line, auditd-derived process events, or EDR process telemetry |
 | **ATT&CK** | T1190, T1059 (.001, .003, .004), T1499.004 |
-| **CVEs** | CVE-2026-111497 |
+| **CVEs** | CVE-2026-111497. KEV and EPSS (dated): [`cve-context.yaml`](cve-context.yaml) |
 | **Files** | [`rule.yml`](rule.yml) (Sigma, DRL 1.1), [`ci-targets.txt`](ci-targets.txt), [`sources.md`](sources.md), [`EVIDENCE.md`](EVIDENCE.md) |
 
 ## Hypothesis

@@ -1,6 +1,6 @@
 # Hunt of the week #1: possible PHP RCE follow-on activity
 
-> **Draft for review: untested, not published.** This is a behavioural starting point that needs tuning, not an exploit signature. Neither query has been run against live or lab data yet.
+> **Experimental, untested.** This is a behavioural starting point that needs tuning, not an exploit signature. Neither query has been run against live or lab data yet.
 
 | | |
 |---|---|
@@ -9,7 +9,7 @@
 | **Status** | Experimental (draft, untested) |
 | **Platforms** | Linux web servers only. KQL for Microsoft Defender XDR advanced hunting (Defender for Endpoint on Linux). Sigma for Linux `process_creation`. SPL for the Splunk CIM Endpoint data model. |
 | **ATT&CK** | T1190, T1059.004, T1105, T1505.003 |
-| **CVEs** | CVE-2026-109618, CVE-2026-109619 |
+| **CVEs** | CVE-2026-109618, CVE-2026-109619. KEV and EPSS (dated): [`cve-context.yaml`](cve-context.yaml) |
 | **Files** | [`query.kql`](query.kql) (MIT), [`query.spl`](query.spl) (MIT), [`rule.yml`](rule.yml) (Sigma, DRL 1.1) |
 
 ## Hypothesis
