@@ -32,7 +32,7 @@ hunt-lab/
 ├── templates/
 │   └── hunt-template/       # copy this to start a new hunt
 ├── pipelines/
-│   └── ecs-process-creation.yml   # pySigma field mapping for Elastic (ECS)
+│   └── ecs-process-creation.yml   # pySigma ECS field mapping for Elastic (process_creation and file_event)
 ├── scripts/
 │   ├── refresh_kev_epss.py  # refreshes and checks KEV and EPSS context
 │   └── tests/               # offline safety tests for the script (run by CI)
@@ -152,13 +152,15 @@ sigma convert -t splunk -p splunk_cim <rule.yml>
 
 ### Elastic Security (ES|QL, EQL, Lucene)
 
-Sigma's `process_creation` fields need mapping to the Elastic Common Schema (ECS). Use the pipeline in this repository:
+Sigma's `process_creation` and `file_event` fields need mapping to the Elastic Common Schema (ECS). Use the pipeline in this repository (it maps only those two categories):
 
 ```bash
 sigma convert -t esql   -p pipelines/ecs-process-creation.yml <rule.yml>
 sigma convert -t eql    -p pipelines/ecs-process-creation.yml <rule.yml>
 sigma convert -t lucene -p pipelines/ecs-process-creation.yml <rule.yml>
 ```
+
+The pipeline also limits `file_event` rules to file creation and change events (`event.category` file, `event.type` creation or change). It maps `User` to `user.name`, which holds the account name without the domain, so write `User` values without `DOMAIN\`.
 
 Always review the converted output. Regular-expression semantics differ between back ends, and each hunt README notes any known differences.
 

@@ -1,8 +1,11 @@
-# pySigma processing pipeline: maps Sigma process_creation fields to Elastic Common Schema (ECS)
-# as written by Elastic Defend / Elastic Agent and Auditbeat. Use with the elasticsearch backend:
+# pySigma processing pipeline: maps Sigma process_creation and file_event fields to Elastic Common
+# Schema (ECS) as written by Elastic Defend / Elastic Agent and Auditbeat. The file keeps its original
+# name so existing ci-targets.txt lines and links still work. Use with the elasticsearch backend:
 #   sigma convert -t esql -p pipelines/ecs-process-creation.yml hunts/.../rule.yml
+# Any field a rule uses that is not mapped here for its logsource category fails CI for Elastic
+# targets (scripts/check_elastic_fields.py).
 # Cyber-Threat.net Hunt Lab - https://github.com/CyberThreatNet/hunt-lab - DRL 1.1
-name: Cyber-Threat.net Hunt Lab ECS process_creation mapping
+name: Cyber-Threat.net Hunt Lab ECS process_creation and file_event mapping
 priority: 30
 transformations:
   - id: hunt_lab_ecs_process_creation_fields
@@ -30,3 +33,30 @@ transformations:
     rule_conditions:
       - type: logsource
         category: process_creation
+  # file_event (Sysmon event 11 FileCreate in Sigma's taxonomy). ECS: https://www.elastic.co/docs/reference/ecs/ecs-file
+  # and https://www.elastic.co/docs/reference/ecs/ecs-process. Elastic Defend file events (creation, modification,
+  # rename, Windows overwrite) document all four targets; Elastic's Windows integration fills them from Sysmon event 11.
+  - id: hunt_lab_ecs_file_event_fields
+    type: field_name_mapping
+    mapping:
+      TargetFilename: file.path
+      Image: process.executable
+      ProcessId: process.pid
+      # User: Sysmon's DOMAIN\user is split by the Windows integration, so user.name holds the name part only
+      User: user.name
+    rule_conditions:
+      - type: logsource
+        category: file_event
+  # Writes only: Sysmon event 11 is event.type creation; Elastic Defend modification, rename and overwrite
+  # events also write a file, and Defend documents no macOS file-create event. Deletion and access are left out.
+    # On Sysmon data this also matches event 2 (file creation time changed) and event 29 (executable detected); add event.code 11 in the query if you need file creation only.
+  - id: hunt_lab_ecs_file_event_filter
+    type: add_condition
+    conditions:
+      event.category: file
+      event.type:
+        - creation
+        - change
+    rule_conditions:
+      - type: logsource
+        category: file_event
