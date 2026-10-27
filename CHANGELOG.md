@@ -49,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - DCSync, LSASS, Node2Shell and Arista hunt READMEs: "not published" removed from the status banner, as the repository is public. Each banner's test status is unchanged. All hunt banners now use the template's form, "Draft for review: <test status>" (Arista's was "Draft — untested"), and the Arista Status row uses the template's values: "Experimental (draft, untested)".
 - `.github/workflows/validate.yml`: new step runs `scripts/tests/test_refresh_kev_epss.sh`.
 - `.github/workflows/validate.yml`: test conversions now read each hunt's `ci-targets.txt`, check every line against an allow-list and fail if the file is missing, empty or names a target that is not allowed.
+- `README.md`: says the hunts are free to use, links to the Hunt Lab pages and RSS feed on Cyber-Threat.net, and adds badges for both.
 
 ## [0.1.0] - 2026-10-22
 

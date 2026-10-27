@@ -4,10 +4,14 @@
 [![Sigma rules: DRL 1.1](https://img.shields.io/badge/Sigma%20rules-DRL%201.1-blue)](LICENSE-DRL)
 [![Queries and docs: MIT](https://img.shields.io/badge/queries%20%26%20docs-MIT-green)](LICENSE)
 [![MITRE ATT&CK mapped](https://img.shields.io/badge/MITRE%20ATT%26CK-mapped-red)](https://attack.mitre.org/)
+[![Hunt Lab on Cyber-Threat.net](https://img.shields.io/badge/Hunt%20Lab-cyber--threat.net-0b5394)](https://cyber-threat.net/category/hunt-lab/)
+[![Hunt Lab RSS feed](https://img.shields.io/badge/RSS-Hunt%20Lab-orange)](https://cyber-threat.net/category/hunt-lab/feed/)
 
-Threat-hunting queries and detection rules from **Hunt Lab** at [Cyber-Threat.net](https://cyber-threat.net).
+Free threat-hunting queries and detection rules from **Hunt Lab** at [Cyber-Threat.net](https://cyber-threat.net).
 
 Each week's threats and CVEs become copy-ready hunts for threat hunters, SOC analysts and detection engineers. Hunts are written in **KQL** (Microsoft Sentinel and Defender XDR), **Sigma** and **Splunk SPL**, and mapped to MITRE ATT&CK. Each folder matches a "Hunt of the week" or CVE query pack entry on the site.
+
+Read the write-ups behind each hunt on the [Hunt Lab pages at Cyber-Threat.net](https://cyber-threat.net/category/hunt-lab/), and follow new hunts with the [Hunt Lab RSS feed](https://cyber-threat.net/category/hunt-lab/feed/). Everything here is free to use under the licences below.
 
 Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
