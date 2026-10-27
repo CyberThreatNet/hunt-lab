@@ -44,6 +44,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+**KEV and EPSS refresh, 27 October 2026**
+- CISA added the PHP CVEs (CVE-2026-109618, CVE-2026-109619) to KEV on 26 October 2026 (catalogue 2026.10.26; due 29 October; ransomware use Unknown). `cve-context.yaml` for the 2026-10-22 PHP hunt and the README table now show them as listed. Other hunts: checked dates and catalogue version only.
+- README "Why KEV and EPSS can disagree" rewritten: the PHP CVEs are no longer an example of "high EPSS, not in KEV"; Node2Shell CVE-2026-111497 now is.
+
 - `.github/workflows/validate.yml`: new step runs `python scripts/refresh_kev_epss.py --check`.
 - `hunts/2026/2026-10-22-php-web-server-spawning-shell/README.md`: status banner now reads "Draft for review: untested" (it previously said "Draft for review: untested, not published").
 - DCSync, LSASS, Node2Shell and Arista hunt READMEs: "not published" removed from the status banner, as the repository is public. Each banner's test status is unchanged. All hunt banners now use the template's form, "Draft for review: <test status>" (Arista's was "Draft — untested"), and the Arista Status row uses the template's values: "Experimental (draft, untested)".

@@ -66,7 +66,8 @@ Every hunt that covers a CVE has a `cve-context.yaml` file giving two public, da
 **Why KEV and EPSS can disagree.** KEV is evidence: CISA has seen exploitation. EPSS is a model: a prediction from signals about the CVE. The two often line up, but not always, and the table below has both kinds of difference:
 
 - Arista CVE-2026-7473 is **in KEV** but has a **low EPSS** score. Exploitation has been confirmed, even though the model rates further activity as unlikely.
-- The PHP CVEs (CVE-2026-109618 and CVE-2026-109619) are **near the top of EPSS** but **not in KEV**. The model rates exploitation as very likely, but CISA has not listed them.
+- Node2Shell CVE-2026-111497 has a **high EPSS percentile** but is **not in KEV**. The model rates exploitation activity as more likely than for most CVEs, but CISA has not listed it.
+- The PHP CVEs (CVE-2026-109618 and CVE-2026-109619) show the gap can close. They were **near the top of EPSS** but **not in KEV** until CISA [added both on 26 October 2026](https://www.cisa.gov/news-events/alerts/2026/10/26/cisa-adds-two-known-exploited-vulnerabilities-catalog). A high EPSS score can arrive days before KEV evidence does.
 
 Neither replaces your own exposure and asset context. Use them to help prioritise.
 
@@ -102,12 +103,12 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 
 | Hunt | CVE | In KEV | KEV added | KEV due | Ransomware use (KEV) | EPSS (0-1) | EPSS percentile (0-100) | Checked |
 |---|---|---|---|---|---|---|---|---|
-| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109618 | No | – | – | – | 0.99981 | 99.98 | 2026-10-26 (KEV catalogue 2026.10.23) |
-| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109619 | No | – | – | – | 0.99997 | 99.99 | 2026-10-26 (KEV catalogue 2026.10.23) |
-| [2026-10-24-arista-cve-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | CVE-2026-7473 | Yes | 2026-06-09 | 2026-06-23 | Unknown | 0.01108 | 65.64 | 2026-10-26 (KEV catalogue 2026.10.23) |
+| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99981 | 99.98 | 2026-10-27 (KEV catalogue 2026.10.26) |
+| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99997 | 99.99 | 2026-10-27 (KEV catalogue 2026.10.26) |
+| [2026-10-24-arista-cve-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | CVE-2026-7473 | Yes | 2026-06-09 | 2026-06-23 | Unknown | 0.01108 | 65.64 | 2026-10-27 (KEV catalogue 2026.10.26) |
 | [2026-10-25-dcsync-replication-by-non-dc-account](hunts/2026/2026-10-25-dcsync-replication-by-non-dc-account/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-25-lsass-dump-via-lolbins](hunts/2026/2026-10-25-lsass-dump-via-lolbins/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-10-26-node2shell-brotli](hunts/2026/2026-10-26-node2shell-brotli/) | CVE-2026-111497 | No | – | – | – | 0.36027 | 98.46 | 2026-10-26 (KEV catalogue 2026.10.23) |
+| [2026-10-26-node2shell-brotli](hunts/2026/2026-10-26-node2shell-brotli/) | CVE-2026-111497 | No | – | – | – | 0.36027 | 98.46 | 2026-10-27 (KEV catalogue 2026.10.26) |
 
 <!-- kev-epss:end -->
 

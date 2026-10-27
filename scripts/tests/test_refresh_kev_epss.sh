@@ -36,10 +36,12 @@ tree() { (cd "${W}" && find hunts README.md -type f -print0 | sort -z | xargs -0
 # SCORED: a cve-context.yaml with at least one EPSS score. RULELESS: one in a hunt with no rule.yml.
 SCORED=""
 RULELESS=""
+NOTKEV=""
 while IFS= read -r f; do
   rel="${f#"${REPO}"/}"
   if [[ -z "${SCORED}" ]] && grep -Eq '^      epss: [0-9]' "${f}"; then SCORED="${rel}"; fi
   if [[ -z "${RULELESS}" && ! -f "$(dirname "${f}")/rule.yml" ]]; then RULELESS="${rel}"; fi
+  if [[ -z "${NOTKEV}" ]] && grep -Eq '^      kev_listed: false' "${f}"; then NOTKEV="${rel}"; fi
 done < <(find "${REPO}/hunts" -name cve-context.yaml | sort)
 if [[ -z "${SCORED}" ]]; then echo "no cve-context.yaml with an EPSS score; nothing to test"; exit 1; fi
 
@@ -52,8 +54,13 @@ expect_check_fail() {
 
 reset; if chk; then ok "unchanged repository passes --check"; else bad "unchanged repository fails --check"; fi
 reset; sed -i '0,/^      epss: [0-9].*/s//      epss: 1.5/' "${W}/${SCORED}";   expect_check_fail "--check: EPSS out of range"
-reset; sed -i '0,/^      kev_listed: false/s//      kev_listed: true/' "${W}/${SCORED}"
-if grep -q 'kev_listed: true' "${W}/${SCORED}"; then expect_check_fail "--check: listed in KEV but no KEV dates"; fi
+# Use a hunt whose CVE is not yet in KEV (the first scored hunt may already be listed).
+if [[ -n "${NOTKEV}" ]]; then
+  reset; sed -i '0,/^      kev_listed: false/s//      kev_listed: true/' "${W}/${NOTKEV}"
+  expect_check_fail "--check: listed in KEV but no KEV dates"
+else
+  echo "SKIP  --check: every CVE is already in KEV, so there is no unlisted entry to corrupt"
+fi
 reset; sed -i '0,/^      epss_note:.*/{//d}' "${W}/${SCORED}";               expect_check_fail "--check: missing field"
 reset; rm "${W}/${SCORED}";                                                      expect_check_fail "--check: cve-context.yaml deleted"
 if [[ -n "${RULELESS}" ]]; then
