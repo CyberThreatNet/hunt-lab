@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+**KEV and EPSS refresh, 27 October 2026 (evening)**
+- CISA added Node2Shell CVE-2026-111497 to KEV on 27 October 2026 (catalogue 2026.10.27; due 10 November; ransomware use Unknown; forensic triage No). `cve-context.yaml` for the 2026-10-26 Node2Shell hunt and the README table now show it as listed. EPSS for CVE-2026-111497 is 0.55483 (percentile 99.03, model date 27 October).
+- Other hunts: catalogue version, checked dates and EPSS refreshed from the same feeds (PHP CVEs remain in KEV; their EPSS model date moved to 27 October).
+- README "Why KEV and EPSS can disagree" updated: Node2Shell is no longer an example of "high EPSS, not in KEV"; it joins the PHP CVEs as a gap that closed.
+- Node2Shell hunt README: the "no in-the-wild exploitation" line replaced with the KEV listing and ELLIO's 26 October sighting (no PoC links).
+
 ### Added
 
 **testmetest npm worm: `.github/init.js` loaders, native-addon drops and persistence**
