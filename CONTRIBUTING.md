@@ -59,7 +59,7 @@ Thanks for helping. Hunt Lab lives at <https://github.com/CyberThreatNet/hunt-la
    sigma convert -t kusto -p microsoft_xdr hunts/<YYYY>/<YYYY-MM-DD>-<slug>/rule.yml
    ```
 
-   Every hunt with a `rule.yml` must include `ci-targets.txt` listing one `sigma convert` target per line (`-t <backend> [-p <pipeline> | --without-pipeline]`). Lines starting with `#` are comments; say why any standard target is omitted. CI fails if the file is missing, empty or names a target not on the allow-list.
+   Every hunt with a `rule.yml` must include `ci-targets.txt` listing one `sigma convert` target per line (`-t <backend> [-p <pipeline> | --without-pipeline]`). Lines starting with `#` are comments; say why any standard target is omitted. CI fails if the file is missing, empty or names a target not on the allow-list. It also fails an `-t esql` target if any `|re` value in the rule uses `^` or `$` anchors, `\b` or `(?...)` groups, an `|re|i`, `|re|m` or `|re|s` modifier, or a top-level branch that doesn't start with `.*`: Elastic's Lucene regex engine matches the whole value and doesn't support the rest, so the converted check could error or never match. Rewrite the pattern as a whole-value match, or leave ES|QL out and say why (`python3 scripts/check_elastic_regex.py <rule.yml>` runs the same check locally).
 
 8. If the hunt covers a CVE, add the KEV and EPSS context:
    - Tag the CVE in `rule.yml` (`cve.YYYY-NNNNN`). List it in the "CVEs" row of the hunt `README.md` too; for a hunt with no Sigma rule, that row is what the script and CI use.

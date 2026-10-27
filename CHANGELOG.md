@@ -55,6 +55,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `.github/workflows/validate.yml`: test conversions now read each hunt's `ci-targets.txt`, check every line against an allow-list and fail if the file is missing, empty or names a target that is not allowed.
 - `README.md`: says the hunts are free to use, links to the Hunt Lab pages and RSS feed on Cyber-Threat.net, and adds badges for both.
 - ECS pipeline maps Sigma's Description field to process.pe.description, so EQL and ES|QL no longer reject rules that use it. Sysmon data via Elastic's Windows integration fills it; Elastic Defend maps the field but doesn't document filling it on process events.
+- CI: fail an Elastic (ES|QL) target when a rule's regex can't work on Elastic's regex engine: `^`/`$` anchors, `\b` or `(?…)` groups, `|re|i`/`|re|m`/`|re|s` modifiers, unsupported escapes, or a top-level branch without a leading `.*` (`scripts/check_elastic_regex.py`, with unit tests in `scripts/tests/test_check_elastic_regex.py`, run by CI). PHP web-server hunt: dropped the ES|QL target and corrected the Elastic note.
+- CI: test conversions now cover every rule YAML in a hunt folder (any `*.yml` with a `detection` section), not only `rule.yml`.
 
 ## [0.1.0] - 2026-10-22
 

@@ -1,4 +1,6 @@
+# ES|QL omitted: the ParentImage|re check ends in a $ anchor, which Elastic's Lucene regex engine
+#   does not support, so an ES|QL conversion would pass CI with a PHP-worker check that never matches.
+#   See the README's Elastic note.
 -t kusto -p microsoft_xdr
 -t kusto -p sentinel_asim
 -t splunk --without-pipeline
--t esql -p pipelines/ecs-process-creation.yml

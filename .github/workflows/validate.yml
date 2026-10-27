@@ -68,6 +68,10 @@ jobs:
         # feed answers must change nothing, and an EPSS outage must exit with code 3.
         run: bash scripts/tests/test_refresh_kev_epss.sh
 
+      - name: Elastic regex checker unit tests
+        # Offline: known patterns that scripts/check_elastic_regex.py must flag or pass.
+        run: python scripts/tests/test_check_elastic_regex.py
+
       - name: sigma check (fail on errors and issues)
         # One rule.yml per hunt folder, so the filename-convention validators are excluded.
         run: |
@@ -77,13 +81,26 @@ jobs:
             hunts/
 
       - name: Test conversions (per-hunt targets from ci-targets.txt; missing or empty is an error)
+        # Every rule YAML in a hunt folder (any *.yml or *.yaml with a detection section) is converted
+        # with that folder's targets. Elastic targets (esql; eql or lucene if ever allowed) also need every
+        # Sigma |re value to work on Elastic's Lucene regex engine (whole-value match with a leading .*;
+        # no ^ or $ anchors, \b, (?...) groups or |re|i/m/s modifiers): scripts/check_elastic_regex.py.
         shell: bash
         run: |
           set -euo pipefail
           allowed='^-t (kusto -p (microsoft_xdr|sentinel_asim|azure_monitor)|splunk (--without-pipeline|-p (splunk_windows|splunk_cim))|esql -p pipelines/ecs-process-creation\.yml)$'
           fail=0
-          mapfile -t rules < <(find hunts -name 'rule.yml' | sort)
-          if (( ${#rules[@]} == 0 )); then echo "::error::no rule.yml found under hunts/"; exit 1; fi
+          mapfile -t rules < <(python - <<'PY'
+          import pathlib, yaml
+          for p in sorted(pathlib.Path("hunts").rglob("*.y*ml")):
+              if p.suffix not in (".yml", ".yaml"):
+                  continue
+              docs = list(yaml.safe_load_all(p.read_text(encoding="utf-8")))
+              if any(isinstance(d, dict) and "detection" in d for d in docs):
+                  print(p)
+          PY
+          )
+          if (( ${#rules[@]} == 0 )); then echo "::error::no rule YAML with a detection section found under hunts/"; exit 1; fi
           for rule in "${rules[@]}"; do
             targets="$(dirname "${rule}")/ci-targets.txt"
             echo "::group::${rule}"
@@ -99,6 +116,14 @@ jobs:
                 echo "::error file=${targets}::target not on the allow-list: ${line}"; fail=1; continue
               fi
               read -r -a args <<< "${line}"
+              if [[ "${args[1]}" =~ ^(esql|eql|lucene)$ ]]; then
+                rc=0; python scripts/check_elastic_regex.py "${rule}" < /dev/null || rc=$?
+                if (( rc == 2 )); then
+                  echo "::error file=${rule}::regex check could not read the rule: ${line}"; fail=1; continue
+                elif (( rc != 0 )); then
+                  echo "::error file=${targets}::regex not usable on Elastic, so this target would pass a conversion that can never match: ${line}"; fail=1; continue
+                fi
+              fi
               if sigma convert "${args[@]}" "${rule}" < /dev/null > /dev/null; then
                 n=$((n + 1)); echo "ok   ${line}"
               else

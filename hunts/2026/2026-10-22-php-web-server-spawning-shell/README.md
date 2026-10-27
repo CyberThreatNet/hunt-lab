@@ -82,7 +82,11 @@ The KQL summarises by device, parent, parent command line and child, so rare com
 - Windows (IIS with php-cgi) and containers are not covered. A Windows variant is a follow-up.
 - The hunt only sees hosts with process telemetry.
 
-**Elastic users:** the Sigma `|re` pattern relies on a `$` anchor. Elastic's EQL and ES|QL regex matching is evaluated against the whole field value, so check the converted query. You may need to rewrite the pattern as `.*/php(-fpm|-cgi)?[0-9.]*` for Elastic back ends.
+**Elastic users:** the PHP-worker check (`ParentImage|re`) does not work on Elastic as converted. Elastic runs regular expressions on Lucene's [regex engine](https://www.elastic.co/docs/reference/query-languages/query-dsl/regexp-syntax), which must match the whole value and does not support the `^` and `$` anchors, so the pattern's `$` is read as a literal character. Deleting the `$` doesn't fix it: without a leading `.*` the pattern must match the whole path, so it still never matches.
+- `-t eql`: the output escapes the slash as `\/`, which EQL strings do not allow ([EQL syntax](https://www.elastic.co/docs/reference/query-languages/eql/eql-syntax)), so expect Elastic to reject the whole query.
+- `-t esql` and `-t lucene`: the query runs, but the PHP-worker check matches nothing. The web-server check (`httpd`, `apache2`, `frankenphp`, `lsphp`) still works.
+- For that reason `ci-targets.txt` no longer lists ES|QL, and CI rejects an ES|QL target for any rule whose regex uses anchors, `\b` or `(?...)` groups (`scripts/check_elastic_regex.py`).
+- These points come from Elastic's grammar and documentation, not a live Elastic run (checked 27 Oct 2026). We have not written or tested an Elastic version of the regex. Until one is tested, rewrite or drop the check yourself and test it against your own data.
 
 ## Validation notes
 
@@ -92,7 +96,7 @@ The KQL summarises by device, parent, parent command line and child, so rare com
 - It converts without errors to:
   - Defender XDR KQL (`-t kusto -p microsoft_xdr`), producing a `DeviceProcessEvents` query;
   - Splunk (`-t splunk -p splunk_cim` and `--without-pipeline`);
-  - Elastic ES|QL and EQL (`-p pipelines/ecs-process-creation.yml`).
+  - Elastic ES|QL and EQL (`-p pipelines/ecs-process-creation.yml`). Conversion succeeds, but Elastic should reject the EQL query outright (`\/` is not a valid EQL escape) and the ES|QL PHP-worker check can't match (see the Elastic note above). Lucene isn't claimed. Re-checked 27 Oct 2026; CI no longer converts to ES|QL for this hunt.
 - The hand-written `query.kql` uses only documented `DeviceProcessEvents` columns.
 
 **Not done:**
