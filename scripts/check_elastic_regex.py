@@ -20,7 +20,6 @@ Usage: check_elastic_regex.py RULE.yml [RULE.yml ...]
 Exit 0 if no problem was found, 1 if any pattern was flagged, 2 on a read or parse error.
 Cyber-Threat.net Hunt Lab - https://github.com/CyberThreatNet/hunt-lab - MIT
 """
-import re
 import sys
 
 import yaml
