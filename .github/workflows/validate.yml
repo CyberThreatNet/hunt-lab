@@ -72,8 +72,13 @@ jobs:
         # Offline: known patterns that scripts/check_elastic_regex.py must flag or pass.
         run: python scripts/tests/test_check_elastic_regex.py
 
+      - name: Elastic field-mapping checker unit tests
+        # Offline: rules and pipelines that scripts/check_elastic_fields.py must flag or pass.
+        run: python scripts/tests/test_check_elastic_fields.py
+
       - name: sigma check (fail on errors and issues)
-        # One rule.yml per hunt folder, so the filename-convention validators are excluded.
+        # Hunt rule files are named rule.yml or rule-<topic>.yml inside each dated hunt folder, not by
+        # SigmaHQ's naming convention, so the filename-convention validators are excluded.
         run: |
           sigma check --fail-on-error --fail-on-issues \
             -x filename_length -x duplicate_filename \
@@ -85,6 +90,8 @@ jobs:
         # with that folder's targets. Elastic targets (esql; eql or lucene if ever allowed) also need every
         # Sigma |re value to work on Elastic's Lucene regex engine (whole-value match with a leading .*;
         # no ^ or $ anchors, \b, (?...) groups or |re|i/m/s modifiers): scripts/check_elastic_regex.py.
+        # They must also use a repository pipeline that maps every field the rule uses for its logsource
+        # category, or the output keeps bare Sigma names that Elastic rejects (EQL, ES|QL) or never matches (Lucene): scripts/check_elastic_fields.py.
         shell: bash
         run: |
           set -euo pipefail
@@ -116,12 +123,21 @@ jobs:
                 echo "::error file=${targets}::target not on the allow-list: ${line}"; fail=1; continue
               fi
               read -r -a args <<< "${line}"
-              if [[ "${args[1]}" =~ ^(esql|eql|lucene)$ ]]; then
+              if [[ "${args[1]}" =~ ^(esql|eql|lucene|elastalert)$ ]]; then
                 rc=0; python scripts/check_elastic_regex.py "${rule}" < /dev/null || rc=$?
                 if (( rc == 2 )); then
                   echo "::error file=${rule}::regex check could not read the rule: ${line}"; fail=1; continue
                 elif (( rc != 0 )); then
                   echo "::error file=${targets}::regex not usable on Elastic, so this target would pass a conversion that can never match: ${line}"; fail=1; continue
+                fi
+                if [[ "${args[2]:-}" != "-p" || ! -f "${args[3]:-}" ]]; then
+                  echo "::error file=${targets}::Elastic target without a repository pipeline file, so its field mapping can't be checked: ${line}"; fail=1; continue
+                fi
+                rc=0; python scripts/check_elastic_fields.py "${args[3]}" "${rule}" < /dev/null || rc=$?
+                if (( rc == 2 )); then
+                  echo "::error file=${rule}::field check could not read the rule or pipeline: ${line}"; fail=1; continue
+                elif (( rc != 0 )); then
+                  echo "::error file=${targets}::rule uses a field that ${args[3]} doesn't map, so Elastic would reject or never match this target: ${line}"; fail=1; continue
                 fi
               fi
               if sigma convert "${args[@]}" "${rule}" < /dev/null > /dev/null; then

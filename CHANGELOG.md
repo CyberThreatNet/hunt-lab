@@ -58,6 +58,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - CI: fail an Elastic (ES|QL) target when a rule's regex can't work on Elastic's regex engine: `^`/`$` anchors, `\b` or `(?…)` groups, `|re|i`/`|re|m`/`|re|s` modifiers, unsupported escapes, or a top-level branch without a leading `.*` (`scripts/check_elastic_regex.py`, with unit tests in `scripts/tests/test_check_elastic_regex.py`, run by CI). PHP web-server hunt: dropped the ES|QL target and corrected the Elastic note.
 - CI: test conversions now cover every rule YAML in a hunt folder (any `*.yml` with a `detection` section), not only `rule.yml`.
 - ECS pipeline maps Sigma `file_event` rules: `TargetFilename` to `file.path`, `Image` to `process.executable`, `ProcessId` to `process.pid` and `User` to `user.name`, limited to file creation and change events (`event.category` file, `event.type` creation or change). Elastic Defend lists all four fields on its file creation, modification, overwrite and rename events; Sysmon event 11 via Elastic's Windows integration fills them too (`User` only from Sysmon 13.30, and only the name part of `DOMAIN\user`). `User` values must omit the domain, because `user.name` holds the name only.
+- CI now fails an Elastic target (ES|QL today; EQL and Lucene too if they are added to the allow-list) whose rule uses a field the target's pipeline doesn't map, so a rule can no longer pass CI and then be rejected or match nothing in Elastic.
 
 ## [0.1.0] - 2026-10-22
 
