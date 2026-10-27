@@ -1,0 +1,66 @@
+title: Node.js or Bun Running a testmetest Worm Loader, Drop File or Persistence Script
+id: 9d21d26d-49d2-4064-b0c3-53778275f529
+status: experimental
+description: |
+    Hunting starting point for the testmetest / @iobandamwer npm worm and the
+    GitHub repositories it armed. Flags node or bun running .github/init.js
+    (the oversized wrapper started by planted Claude Code, Gemini CLI, Cursor
+    and VS Code hooks), node running the native addon's hidden temp drop
+    (/tmp/.<pid> on Linux, %TEMP%\.nc<pid>.js on Windows), bun running a
+    staged index.js from a .b-* temp folder, and any process naming the
+    net-health-checker or pkg-runtime persistence. Paths and names come from
+    the JFrog and SafeDep reports; the operator can change them in a new build.
+references:
+    - https://research.jfrog.com/post/beyond-testmetest-42-hijacked-github-repos/
+    - https://safedep.io/testmetest-npm-worm-miasma-variant
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-27-testmetest-ide-hook-loader
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-27
+tags:
+    - attack.initial-access
+    - attack.t1195.002
+    - attack.execution
+    - attack.t1059.007
+    - attack.persistence
+    - attack.t1543.002
+    - attack.t1543.001
+logsource:
+    category: process_creation
+detection:
+    selection_runtime:
+        Image|endswith:
+            - '/node'
+            - '/nodejs'
+            - '/bun'
+            - '\node.exe'
+            - '\bun.exe'
+    selection_cmd_init:
+        # Planted hook: "node .github/init.js || bun .github/init.js"
+        CommandLine|contains:
+            - '.github/init.js'
+            - '.github\init.js'
+    selection_cmd_drop:
+        # Native addon writes the decrypted stage to /tmp/.<pid> (Linux) or %TEMP%\.nc<pid>.js (Windows) and runs it with node.
+        # No ^ or $: ES|QL RLIKE uses anchored Lucene syntax, the other backends search unanchored.
+        CommandLine|re:
+            - '.*/tmp/\.[0-9]+( .*)?'
+            - '.*\\\.nc[0-9]+\.js.*'
+    filter_drop_not_pid:
+        # Unanchored engines would otherwise also match /tmp/.12ab...; drop the event when the digits run into other characters
+        CommandLine|re: '.*/tmp/\.[0-9]+[^0-9 ].*'
+    selection_cmd_bun_stage:
+        # Loader writes the decrypted payload to a .b-* temp folder and runs it with bun run
+        CommandLine|contains|all:
+            - '/.b-'
+            - '/index.js'
+    selection_persistence:
+        CommandLine|contains:
+            - 'net-health-checker'
+            - '.local/share/runtimes/sync.py'
+            - 'com.user.pkg-runtime'
+    condition: (selection_runtime and (selection_cmd_init or selection_cmd_bun_stage or (selection_cmd_drop and not filter_drop_not_pid))) or selection_persistence
+falsepositives:
+    - A project that legitimately keeps a script at .github/init.js and runs it with node (rare; check its size and history)
+    - Unrelated software that happens to use a temp file named /tmp/.<digits> or a folder named .b-<something>
+    - Responders running systemctl, launchctl or rm against the persistence names while cleaning up
+level: high

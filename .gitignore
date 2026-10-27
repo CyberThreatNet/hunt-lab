@@ -22,6 +22,10 @@ secrets*
 *.pem
 *.key
 
+# Private working files (raw evidence and IOC working lists) never belong here
+evidence/
+iocs.md
+
 # Editors and OS
 .vscode/
 .idea/

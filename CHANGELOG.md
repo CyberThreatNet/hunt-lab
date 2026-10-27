@@ -8,6 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**testmetest npm worm: `.github/init.js` loaders, native-addon drops and persistence**
+- `hunts/2026/2026-10-27-testmetest-ide-hook-loader/`
+- Process creation: node or bun running `.github/init.js`, a hidden `/tmp/.<pid>` or `%TEMP%\.nc<pid>.js` drop, or a `.b-*` stage; processes naming the `net-health-checker` or `pkg-runtime` persistence. File events: the persistence files, `.napi_cache` and the Windows drop. A read-only file-search script for workstations and runners, and GitHub tree-sweep commands. Based on JFrog and SafeDep research.
+- Includes two Sigma rules, per-hunt conversion targets, a standard-library Python script with offline tests, sources and test evidence.
+- Status: test. The rules were tested on synthetic events and public datasets and the script on Linux; conversions are clean but not engine-tested.
+- `.gitignore`: `evidence/` and `iocs.md` added, so private working files cannot be committed by accident.
+
 **Node2Shell (CVE-2026-111497): shell spawned by a Node.js process**
 - `hunts/2026/2026-10-26-node2shell-brotli/`
 - Process creation: a shell or download tool started directly by node or bun, with package-manager and build-tool parents filtered. Hypotheses for Node.js crashes (SIGSEGV/SIGABRT), Brotli request bodies and exposure.

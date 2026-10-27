@@ -1,0 +1,51 @@
+title: testmetest npm Worm Persistence or Payload Files Created
+id: 732f366b-acfd-4ccc-8825-8fe33a856cf9
+status: experimental
+description: |
+    Companion to rule.yml in the same hunt. Flags creation of the files the
+    testmetest / @iobandamwer npm worm writes: the net-health-checker
+    token watchdog (which wipes the home folder when its GitHub token stops
+    working), the pkg-runtime sync.py poller, their systemd user units and
+    macOS Launch Agents, the hidden .napi_cache payload next to the native
+    addon, and the Windows temp drop .nc<pid>.js. File names come from the
+    JFrog and SafeDep reports and can change in a new build.
+references:
+    - https://research.jfrog.com/post/beyond-testmetest-42-hijacked-github-repos/
+    - https://safedep.io/testmetest-npm-worm-miasma-variant
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-27-testmetest-ide-hook-loader
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-27
+tags:
+    - attack.persistence
+    - attack.t1543.002
+    - attack.t1543.001
+    - attack.stealth
+    - attack.t1027
+    - attack.impact
+    - attack.t1485
+logsource:
+    category: file_event
+detection:
+    selection_persistence:
+        TargetFilename|endswith:
+            - '/.local/bin/net-health-checker.sh'
+            - '/.local/share/runtimes/sync.py'
+            - '/systemd/user/net-health-checker.service'
+            - '/systemd/user/pkg-runtime.service'
+            - '/LaunchAgents/com.user.net-health-checker.plist'
+            - '/LaunchAgents/com.user.pkg-runtime.plist'
+            - '/var/tmp/.fontconfig_state'
+    selection_config_dir:
+        TargetFilename|contains: '/.config/net-health-checker/'
+    selection_payload:
+        TargetFilename|endswith:
+            - '/.napi_cache'
+            - '\.napi_cache'
+    selection_windows_drop:
+        # Whole-string match, no $ anchor, so ES|QL RLIKE (anchored, Lucene syntax) behaves like the other backends
+        TargetFilename|re: '.*\\\.nc[0-9]+\.js'
+    condition: 1 of selection_*
+falsepositives:
+    - Responders or test harnesses recreating these paths (for example synthetic fixtures)
+    - A legitimate package that ships a file called .napi_cache (none known to us when written)
+level: high
