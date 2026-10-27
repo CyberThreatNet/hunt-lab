@@ -17,6 +17,8 @@ transformations:
       ParentProcessId: process.parent.pid
       CurrentDirectory: process.working_directory
       OriginalFileName: process.pe.original_file_name
+      # Description: filled from Sysmon EID 1 by Elastic's Windows integration; mapped but not documented as filled by Elastic Defend
+      Description: process.pe.description
     rule_conditions:
       - type: logsource
         category: process_creation

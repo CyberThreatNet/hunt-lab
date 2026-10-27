@@ -54,6 +54,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `.github/workflows/validate.yml`: new step runs `scripts/tests/test_refresh_kev_epss.sh`.
 - `.github/workflows/validate.yml`: test conversions now read each hunt's `ci-targets.txt`, check every line against an allow-list and fail if the file is missing, empty or names a target that is not allowed.
 - `README.md`: says the hunts are free to use, links to the Hunt Lab pages and RSS feed on Cyber-Threat.net, and adds badges for both.
+- ECS pipeline maps Sigma's Description field to process.pe.description, so EQL and ES|QL no longer reject rules that use it. Sysmon data via Elastic's Windows integration fills it; Elastic Defend maps the field but doesn't document filling it on process events.
 
 ## [0.1.0] - 2026-10-22
 
