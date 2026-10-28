@@ -1,0 +1,32 @@
+title: MLflow Scorer Invoke API Called on Tracking Server
+id: 3ba812d1-f4d0-472c-97e7-abf319eaaee6
+status: experimental
+description: |
+    Hunting starting point for CVE-2026-116692 (GHSA-26p8-2jq9-3vq9): weak
+    allow-list on third-party scorer deserialization reached via
+    /ajax-api/3.0/mlflow/scorer/invoke. Flags proxy/web requests to that
+    path. Behaviour-based; auth-disabled tracking servers are highest risk
+    per the CVE text. Needs HTTP access or reverse-proxy logs.
+references:
+    - https://nvd.nist.gov/vuln/detail/CVE-2026-116692
+    - https://github.com/advisories/GHSA-26p8-2jq9-3vq9
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-28-mlflow-scorer-invoke
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-28
+modified: 2026-10-28
+tags:
+    - attack.initial-access
+    - attack.t1190
+    - attack.execution
+    - cve.2026-116692
+logsource:
+    category: proxy
+detection:
+    selection:
+        cs-uri-stem|contains:
+            - '/ajax-api/3.0/mlflow/scorer/invoke'
+            - '/ajax-api/3.0/mlflow/scorers'
+    condition: selection
+falsepositives:
+    - Legitimate MLflow GenAI evaluation workloads that invoke registered scorers
+level: medium
