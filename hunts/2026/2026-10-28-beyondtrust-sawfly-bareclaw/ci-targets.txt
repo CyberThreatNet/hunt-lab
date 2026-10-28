@@ -1,0 +1,4 @@
+# file_event + process_creation: kusto/microsoft_xdr map partially; proxy cs-uri-*
+# does not map to Device* tables. Ship hand KQL (kql-microsoft-xdr.txt).
+# Validate with: sigma check; sigma convert -t splunk --without-pipeline
+-t splunk --without-pipeline
