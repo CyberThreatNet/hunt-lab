@@ -114,6 +114,8 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-10-27-magento-cms-loader-domains](hunts/2026/2026-10-27-magento-cms-loader-domains/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.30582 | 98.23 | 2026-10-28 (KEV catalogue 2026.10.27) |
 | [2026-10-27-magento-polyshell-webshell](hunts/2026/2026-10-27-magento-polyshell-webshell/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.30582 | 98.23 | 2026-10-28 (KEV catalogue 2026.10.27) |
 | [2026-10-27-testmetest-ide-hook-loader](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) | n/a (no CVE) | n/a | | | | | | |
+| [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108014 | No | – | – | – | not yet scored | – | 2026-10-28 (KEV catalogue 2026.10.27) |
+| [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108015 | No | – | – | – | not yet scored | – | 2026-10-28 (KEV catalogue 2026.10.27) |
 
 <!-- kev-epss:end -->
 
