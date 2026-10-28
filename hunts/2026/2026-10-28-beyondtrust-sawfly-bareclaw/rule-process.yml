@@ -1,0 +1,62 @@
+title: BeyondTrust Appliance Credential Dump or SUID Persistence Tools
+id: 8a50e98b-02cd-4322-890f-315b29d19567
+status: experimental
+description: |
+    Companion hunt for CVE-2026-102764 post-exploitation. Mandiant observed
+    ARMORY CASTLE abusing /ns/sbin/bt-secrets to pull the vault, copying
+    /bin/sh to an SUID helper resembling dbus-authd, writing post_boot.d
+    persistence (zz-root-persist), and launching a SOCKS/WebSocket tunneler
+    (BARECLAW / ingredi_ws) with --obfs/--token/--ws-path. Flags those
+    process patterns on Linux hosts that look like BeyondTrust appliances.
+    Pair content scanning with Mandiant YARA G_Hunting_Backdoor_BARECLAW_1.
+references:
+    - https://cloud.google.com/blog/topics/threat-intelligence/armory-castle-exploits-beyondtrust/
+    - https://www.beyondtrust.com/blog/entry/bt26-05
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-28
+modified: 2026-10-28
+tags:
+    - attack.credential-access
+    - attack.t1003
+    - attack.privilege-escalation
+    - attack.t1548.001
+    - attack.persistence
+    - attack.command-and-control
+    - attack.t1090
+    - cve.2026-102764
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_bt_secrets:
+        Image|endswith:
+            - '/bt-secrets'
+        CommandLine|contains:
+            - 'vault'
+    selection_suid_helper:
+        CommandLine|contains|all:
+            - 'dbus-authd'
+            - 'chmod'
+    selection_persist:
+        CommandLine|contains:
+            - 'post_boot.d'
+            - 'zz-root-persist'
+            - 'sudoers.template'
+    selection_bareclaw:
+        CommandLine|contains|all:
+            - '--obfs'
+            - '--token'
+        CommandLine|contains:
+            - '--ws-path'
+            - '--listen'
+    selection_ingredi_ws:
+        Image|endswith:
+            - '/ingredi_ws'
+        CommandLine|contains:
+            - '--listen'
+    condition: 1 of selection_*
+falsepositives:
+    - BeyondTrust Support or authorised admins using bt-secrets for recovery
+    - Legitimate appliance rebuild scripts that touch sudoers.template / post_boot.d
+level: high
