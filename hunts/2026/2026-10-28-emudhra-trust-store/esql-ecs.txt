@@ -1,0 +1,8 @@
+FROM logs-*
+| WHERE process.name IN ("certutil.exe", "powershell.exe", "pwsh.exe")
+  AND (
+    process.command_line LIKE "*addstore*" OR
+    process.command_line LIKE "*Import-Certificate*" OR
+    process.command_line LIKE "*LocalMachine\\Root*"
+  )
+| KEEP @timestamp, host.name, process.name, process.command_line, user.name

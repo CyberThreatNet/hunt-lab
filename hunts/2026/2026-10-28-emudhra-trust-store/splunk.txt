@@ -1,0 +1,2 @@
+index=* (certutil.exe (addstore OR importpfx) OR (powershell* (Import-Certificate OR Import-PfxCertificate OR "LocalMachine\\Root")))
+| table _time host user Image CommandLine

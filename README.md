@@ -58,6 +58,7 @@ hunt-lab/
 | 2026-10-27 | [Magento / Adobe Commerce PolyShell webshells (CVE-2026-48356)](hunts/2026/2026-10-27-magento-polyshell-webshell/) | T1190, T1505.003 | Draft, untested |
 | 2026-10-27 | [Magento PolyShell CMS loader domains (CVE-2026-48356)](hunts/2026/2026-10-27-magento-cms-loader-domains/) | T1071.001, T1505.003 | Draft, untested |
 | 2026-10-28 | [BeyondTrust SAWFLY / BARECLAW (CVE-2026-102764)](hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw/) | T1190, T1505.003, T1003, T1548.001, T1090, T1070.004 | Draft, untested |
+| 2026-10-28 | [eMudhra trust-store follow-up](hunts/2026/2026-10-28-emudhra-trust-store/) | T1553.004 | Draft, untested |
 | 2026-10-28 | [Ivanti Connect Secure X-DSCGI-PATH (CVE-2026-104935)](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | T1190 | Draft, untested |
 | 2026-10-28 | [PeopleSoft PSIGW→PSEMHUB (CVE-2026-35273)](hunts/2026/2026-10-28-peoplesoft-psigw-psemhub/) | T1190, T1210, T1505.003 | Draft, untested |
 | 2026-10-28 | [MLflow scorer invoke (CVE-2026-116692)](hunts/2026/2026-10-28-mlflow-scorer-invoke/) | T1190 | Draft, untested |
@@ -120,6 +121,8 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-10-27-magento-polyshell-webshell](hunts/2026/2026-10-27-magento-polyshell-webshell/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.59078 | 99.11 | 2026-10-28 (KEV catalogue 2026.10.28) |
 | [2026-10-27-testmetest-ide-hook-loader](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-28-beyondtrust-sawfly-bareclaw](hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw/) | CVE-2026-102764 | Yes | 2026-10-16 | 2026-10-19 | Unknown | 0.18950 | 97.29 | 2026-10-28 (KEV catalogue 2026.10.28) |
+| [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108014 | No | – | – | – | not yet scored | – | 2026-10-28 (KEV catalogue 2026.10.27) |
+| [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108015 | No | – | – | – | not yet scored | – | 2026-10-28 (KEV catalogue 2026.10.27) |
 | [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-104935 | Yes | 2026-10-13 | 2026-10-16 | Unknown | 0.86766 | 99.74 | 2026-10-28 (KEV catalogue 2026.10.28) |
 | [2026-10-28-mlflow-scorer-invoke](hunts/2026/2026-10-28-mlflow-scorer-invoke/) | CVE-2026-116692 | No | – | – | – | not yet scored | – | 2026-10-28 (KEV catalogue 2026.10.27) |
 | [2026-10-28-peoplesoft-psigw-psemhub](hunts/2026/2026-10-28-peoplesoft-psigw-psemhub/) | CVE-2026-35273 | Yes | 2026-06-12 | 2026-06-15 | Known | 0.96678 | 99.88 | 2026-10-28 (KEV catalogue 2026.10.28) |
