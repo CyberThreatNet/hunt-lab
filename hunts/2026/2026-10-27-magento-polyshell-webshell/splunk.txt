@@ -1,0 +1,2 @@
+Parsing Sigma rules
+TargetFilename IN ("*/pub/media/custom_options/*", "*\\pub\\media\\custom_options\\*", "*/media/custom_options/*", "*\\media\\custom_options\\*") TargetFilename IN ("*.php", "*.phtml", "*.phar", "*.PHP", "*.PHTML", "*.PHAR") NOT (TargetFilename IN ("*/.htaccess", "*\\.htaccess"))
