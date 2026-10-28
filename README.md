@@ -57,6 +57,9 @@ hunt-lab/
 | 2026-10-27 | [testmetest npm worm: `.github/init.js` loaders started by IDE and AI-assistant hooks, native-addon drops and persistence](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) | T1195.002, T1059.007, T1543.002, T1543.001, T1027, T1485 | Test (synthetic data; script tested on Linux) |
 | 2026-10-27 | [Magento / Adobe Commerce PolyShell webshells (CVE-2026-48356)](hunts/2026/2026-10-27-magento-polyshell-webshell/) | T1190, T1505.003 | Draft, untested |
 | 2026-10-27 | [Magento PolyShell CMS loader domains (CVE-2026-48356)](hunts/2026/2026-10-27-magento-cms-loader-domains/) | T1071.001, T1505.003 | Draft, untested |
+| 2026-10-28 | [BeyondTrust SAWFLY / BARECLAW (CVE-2026-102764)](hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw/) | T1190, T1505.003, T1003, T1548.001, T1090, T1070.004 | Draft, untested |
+| 2026-10-28 | [Ivanti Connect Secure X-DSCGI-PATH (CVE-2026-104935)](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | T1190 | Draft, untested |
+| 2026-10-28 | [PHP2Shell chained with Fragnesia (CVE-2026-109618 / 109619 / 46300)](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | T1190, T1059.004, T1068, T1556.003, T1505.003 | Draft, untested |
 
 ## Exploitation context: CISA KEV and FIRST EPSS
 
@@ -105,17 +108,20 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 
 | Hunt | CVE | In KEV | KEV added | KEV due | Ransomware use (KEV) | EPSS (0-1) | EPSS percentile (0-100) | Checked |
 |---|---|---|---|---|---|---|---|---|
-| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-28 (KEV catalogue 2026.10.27) |
-| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-28 (KEV catalogue 2026.10.27) |
-| [2026-10-24-arista-cve-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | CVE-2026-7473 | Yes | 2026-06-09 | 2026-06-23 | Unknown | 0.01108 | 65.69 | 2026-10-28 (KEV catalogue 2026.10.27) |
+| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-28 (KEV catalogue 2026.10.28) |
+| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-28 (KEV catalogue 2026.10.28) |
+| [2026-10-24-arista-cve-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | CVE-2026-7473 | Yes | 2026-06-09 | 2026-06-23 | Unknown | 0.01108 | 65.75 | 2026-10-28 (KEV catalogue 2026.10.28) |
 | [2026-10-25-dcsync-replication-by-non-dc-account](hunts/2026/2026-10-25-dcsync-replication-by-non-dc-account/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-25-lsass-dump-via-lolbins](hunts/2026/2026-10-25-lsass-dump-via-lolbins/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-10-26-node2shell-brotli](hunts/2026/2026-10-26-node2shell-brotli/) | CVE-2026-111497 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.55483 | 99.03 | 2026-10-28 (KEV catalogue 2026.10.27) |
-| [2026-10-27-magento-cms-loader-domains](hunts/2026/2026-10-27-magento-cms-loader-domains/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.30582 | 98.23 | 2026-10-28 (KEV catalogue 2026.10.27) |
-| [2026-10-27-magento-polyshell-webshell](hunts/2026/2026-10-27-magento-polyshell-webshell/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.30582 | 98.23 | 2026-10-28 (KEV catalogue 2026.10.27) |
+| [2026-10-26-node2shell-brotli](hunts/2026/2026-10-26-node2shell-brotli/) | CVE-2026-111497 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.87988 | 99.76 | 2026-10-28 (KEV catalogue 2026.10.28) |
+| [2026-10-27-magento-cms-loader-domains](hunts/2026/2026-10-27-magento-cms-loader-domains/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.59078 | 99.11 | 2026-10-28 (KEV catalogue 2026.10.28) |
+| [2026-10-27-magento-polyshell-webshell](hunts/2026/2026-10-27-magento-polyshell-webshell/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.59078 | 99.11 | 2026-10-28 (KEV catalogue 2026.10.28) |
 | [2026-10-27-testmetest-ide-hook-loader](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-10-28-beyondtrust-sawfly-bareclaw](hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw/) | CVE-2026-102764 | Yes | 2026-10-16 | 2026-10-19 | Unknown | 0.18950 | 97.29 | 2026-10-28 (KEV catalogue 2026.10.27) |
-| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-104935 | Yes | 2026-10-13 | 2026-10-16 | Unknown | 0.86766 | 99.74 | 2026-10-28 (KEV catalogue 2026.10.27) |
+| [2026-10-28-beyondtrust-sawfly-bareclaw](hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw/) | CVE-2026-102764 | Yes | 2026-10-16 | 2026-10-19 | Unknown | 0.18950 | 97.29 | 2026-10-28 (KEV catalogue 2026.10.28) |
+| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-104935 | Yes | 2026-10-13 | 2026-10-16 | Unknown | 0.86766 | 99.74 | 2026-10-28 (KEV catalogue 2026.10.28) |
+| [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-46300 | Yes | 2026-10-28 | 2026-10-31 | Unknown | 0.10192 | 95.65 | 2026-10-28 (KEV catalogue 2026.10.28) |
+| [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-28 (KEV catalogue 2026.10.28) |
+| [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-28 (KEV catalogue 2026.10.28) |
 
 <!-- kev-epss:end -->
 
