@@ -1,0 +1,3 @@
+# proxy category + custom header fields: microsoft_xdr / sentinel_asim cannot
+# resolve header mismatch. Ship hand KQL (kql-microsoft-xdr.txt, kql-sentinel-waf.txt).
+-t splunk --without-pipeline
