@@ -1,5 +1,7 @@
 # PeopleSoft PSIGW→PSEMHUB (CVE-2026-35273)
 
+Full write-up: [PeopleSoft CVE-2026-35273 SSRF to RCE, mass-exploited](https://cyber-threat.net/peoplesoft-cve-2026-35273-ssrf-rce-mass-exploited/) on Cyber-Threat.net.
+
 > **Draft for review: untested.** Behavioural starting points from Oracle, Mandiant, ZDI and Trend public research. Not exploit signatures.
 
 | | |
