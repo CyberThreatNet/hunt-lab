@@ -1,0 +1,44 @@
+title: Linux PAM su Config Modified (Fragnesia Persistence Artefact)
+id: 9ea29083-4f77-48a4-a1ea-274740b3219c
+status: experimental
+description: |
+    Hunting starting point for Fragnesia (CVE-2026-46300) post-exploitation as
+    documented by Dream Research (26 October 2026) and Ubuntu security notes.
+    Dream reports the in-the-wild chain overwrites /etc/pam.d/su so that
+    authentication uses pam_permit.so (accept all), allowing passwordless
+    su to root after the PHP2Shell foothold. Flags create or change events on
+    /etc/pam.d/su and broader /etc/pam.d/ writes. Behaviour-based on the path,
+    not a content signature for pam_permit.so. Needs Sysmon for Linux event 11,
+    auditd, Elastic Defend file events, or Defender for Endpoint DeviceFileEvents.
+references:
+    - https://dreamgroup.com/blog/chained-php2shell-exploit-roots-25-servers
+    - https://ubuntu.com/security/CVE-2026-46300
+    - https://nvd.nist.gov/vuln/detail/CVE-2026-46300
+    - https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-28-php2shell-fragnesia-chain
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-28
+tags:
+    - attack.privilege-escalation
+    - attack.t1068
+    - attack.persistence
+    - attack.t1556.003
+    - cve.2026-46300
+    - cve.2026-109618
+    - cve.2026-109619
+logsource:
+    product: linux
+    category: file_event
+detection:
+    selection_su:
+        TargetFilename|endswith:
+            - '/etc/pam.d/su'
+            - '/pam.d/su'
+    selection_pam_dir:
+        TargetFilename|contains: '/etc/pam.d/'
+    condition: selection_su or selection_pam_dir
+falsepositives:
+    - Legitimate package upgrades that rewrite PAM stacks (pam, login, util-linux)
+    - Configuration management (Ansible, Puppet, Salt) applying pam.d templates
+    - Administrators editing PAM during hardening or MFA rollout
+level: high

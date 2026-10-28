@@ -1,0 +1,19 @@
+// DRAFT FOR REVIEW, untested: /etc/pam.d/su (and /etc/pam.d/) file create/change
+// Fragnesia (CVE-2026-46300) artefact per Dream Research — pam_permit.so overwrite of su.
+// Companion to query.kql in this folder. Not a content match for pam_permit.so.
+//
+// Hunt ID:   2026-10-28-php2shell-fragnesia-chain
+// Table:     DeviceFileEvents (Microsoft Defender for Endpoint on Linux).
+// ATT&CK:    T1068, T1556.003
+// Context:   CVE-2026-46300 (Fragnesia); chain with PHP2Shell CVE-2026-109618/109619
+// Source:    https://github.com/CyberThreatNet/hunt-lab
+// Licence:   MIT - see LICENSE.
+let lookback = 30d;
+DeviceFileEvents
+| where Timestamp > ago(lookback)
+| where ActionType in ("FileCreated", "FileModified", "FileRenamed")
+| where FolderPath has "/etc/pam.d" or FileName =~ "su" and FolderPath has "pam.d"
+| where FolderPath has "/etc/pam.d" or FilePath has "/etc/pam.d/"
+| project Timestamp, DeviceName, ActionType, FileName, FolderPath, FilePath,
+    InitiatingProcessFileName, InitiatingProcessCommandLine, InitiatingProcessAccountName
+| order by Timestamp desc

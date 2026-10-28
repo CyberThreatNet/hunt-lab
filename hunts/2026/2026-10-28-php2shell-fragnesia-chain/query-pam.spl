@@ -1,0 +1,13 @@
+```
+DRAFT FOR REVIEW, untested: /etc/pam.d/su and /etc/pam.d/ file events (Fragnesia artefact).
+Needs Sysmon for Linux, auditd, or an EDR sourcetype that maps file path fields.
+Hunt ID: 2026-10-28-php2shell-fragnesia-chain | ATT&CK: T1068, T1556.003
+Source: https://github.com/CyberThreatNet/hunt-lab | Licence: MIT
+Adjust index/sourcetype to your estate. Field names below are illustrative.
+```
+| search (index=* OR index=_*) ("/etc/pam.d/su" OR "/etc/pam.d/")
+| where like(file_path, "%/etc/pam.d/%") OR like(TargetFilename, "%/etc/pam.d/%") OR like(file_name, "su")
+| stats count min(_time) as FirstSeen max(_time) as LastSeen values(user) as Users
+    by dest, file_path, TargetFilename, action, process_name
+| convert ctime(FirstSeen) ctime(LastSeen)
+| sort - LastSeen
