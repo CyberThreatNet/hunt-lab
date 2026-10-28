@@ -1,0 +1,4 @@
+// Sentinel DnsEvents variant (hand-written; same IOC seed list as rule.yml)
+DnsEvents
+| where Name has_any ("lanhd6549tdhse.top", "jslibrary.net", "canevaslab.com")
+| project TimeGenerated, Computer, Name, ClientIP, QueryType

@@ -1,0 +1,2 @@
+Parsing Sigma rules
+query IN ("*lanhd6549tdhse.top*", "*jslibrary.net*", "*canevaslab.com*")
