@@ -1,0 +1,6 @@
+// Draft — untested
+DeviceNetworkEvents
+| where Timestamp > ago(7d)
+| where RemoteUrl has @"/ajax-api/3.0/mlflow/scorer/invoke"
+    or RemoteUrl has @"/ajax-api/3.0/mlflow/scorers"
+| project Timestamp, DeviceName, RemoteUrl, RemoteIP, InitiatingProcessAccountName
