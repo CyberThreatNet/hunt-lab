@@ -1,0 +1,11 @@
+// Draft — retarget columns to your HTTP/proxy schema. Untested.
+DeviceNetworkEvents
+| where Timestamp > ago(7d)
+| where RemoteUrl has @"/PSIGW/HttpListeningConnector"
+   or RemoteUrl has @"/%50SEMHUB"
+   or RemoteUrl has @"/PSEMHUB/hub"
+| where RemoteUrl has @"PSEMHUB"
+   or RemoteUrl has @"127.0.0.1"
+   or RemoteUrl has @"localhost"
+   or RemoteUrl has @"%50SEMHUB"
+| project Timestamp, DeviceName, InitiatingProcessAccountName, RemoteUrl, RemoteIP

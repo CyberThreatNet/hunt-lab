@@ -59,6 +59,7 @@ hunt-lab/
 | 2026-10-27 | [Magento PolyShell CMS loader domains (CVE-2026-48356)](hunts/2026/2026-10-27-magento-cms-loader-domains/) | T1071.001, T1505.003 | Draft, untested |
 | 2026-10-28 | [BeyondTrust SAWFLY / BARECLAW (CVE-2026-102764)](hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw/) | T1190, T1505.003, T1003, T1548.001, T1090, T1070.004 | Draft, untested |
 | 2026-10-28 | [Ivanti Connect Secure X-DSCGI-PATH (CVE-2026-104935)](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | T1190 | Draft, untested |
+| 2026-10-28 | [PeopleSoft PSIGW→PSEMHUB (CVE-2026-35273)](hunts/2026/2026-10-28-peoplesoft-psigw-psemhub/) | T1190, T1210, T1505.003 | Draft, untested |
 | 2026-10-28 | [PHP2Shell chained with Fragnesia (CVE-2026-109618 / 109619 / 46300)](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | T1190, T1059.004, T1068, T1556.003, T1505.003 | Draft, untested |
 
 ## Exploitation context: CISA KEV and FIRST EPSS
@@ -119,6 +120,7 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-10-27-testmetest-ide-hook-loader](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-28-beyondtrust-sawfly-bareclaw](hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw/) | CVE-2026-102764 | Yes | 2026-10-16 | 2026-10-19 | Unknown | 0.18950 | 97.29 | 2026-10-28 (KEV catalogue 2026.10.28) |
 | [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-104935 | Yes | 2026-10-13 | 2026-10-16 | Unknown | 0.86766 | 99.74 | 2026-10-28 (KEV catalogue 2026.10.28) |
+| [2026-10-28-peoplesoft-psigw-psemhub](hunts/2026/2026-10-28-peoplesoft-psigw-psemhub/) | CVE-2026-35273 | Yes | 2026-06-12 | 2026-06-15 | Known | 0.96678 | 99.88 | 2026-10-28 (KEV catalogue 2026.10.28) |
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-46300 | Yes | 2026-10-28 | 2026-10-31 | Unknown | 0.10192 | 95.65 | 2026-10-28 (KEV catalogue 2026.10.28) |
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-28 (KEV catalogue 2026.10.28) |
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-28 (KEV catalogue 2026.10.28) |

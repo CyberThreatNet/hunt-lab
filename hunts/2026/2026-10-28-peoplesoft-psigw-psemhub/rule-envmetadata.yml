@@ -1,0 +1,37 @@
+title: PeopleSoft envmetadata Path Receives Unexpected File Write
+id: b958f3af-3756-45cb-b689-bf9152fe0d75
+status: experimental
+description: |
+    Companion hunt for CVE-2026-35273 post-exploitation. Flags file creates
+    under PeopleSoft envmetadata trees (transactions, data/environment)
+    where ZDI and Trend document attacker-controlled writes used for
+    webshells or XMLDecoder payloads. Needs file-create telemetry on the
+    PeopleSoft host document root.
+references:
+    - https://www.zerodayinitiative.com/blog/2026/10/20/cve-2026-35273-ssrf-to-rce-in-oracle-peoplesoft
+    - https://www.trendmicro.com/en_us/research/26/f/PeopleTools.html
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-28-peoplesoft-psigw-psemhub
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-28
+modified: 2026-10-28
+tags:
+    - attack.persistence
+    - attack.t1505.003
+    - attack.execution
+    - cve.2026-35273
+logsource:
+    category: file_event
+detection:
+    selection:
+        TargetFilename|contains:
+            - '/envmetadata/transactions'
+            - '\envmetadata\transactions'
+            - '/envmetadata/data/environment'
+            - '\envmetadata\data\environment'
+            - '/envmetadata/config'
+            - '\envmetadata\config'
+    condition: selection
+falsepositives:
+    - Routine Environment Management Hub maintenance that writes under envmetadata
+    - Backup or migration tools touching the same trees
+level: high
