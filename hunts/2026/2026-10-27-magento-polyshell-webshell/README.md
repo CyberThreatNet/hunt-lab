@@ -1,5 +1,7 @@
 # Magento / Adobe Commerce PolyShell webshells (CVE-2026-48356)
 
+Full write-up: [Adobe Commerce / Magento CVE-2026-48356 PolyShell exploited](https://cyber-threat.net/adobe-commerce-magento-cve-2026-48356-polyshell-exploited/) on Cyber-Threat.net.
+
 
 | | |
 |---|---|

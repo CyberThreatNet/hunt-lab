@@ -1,5 +1,7 @@
 # PHP2Shell chained with Fragnesia (CVE-2026-109618 / 109619 / 46300)
 
+Full write-up: [PHP2Shell + Fragnesia: Dream 2.5 rooted servers](https://cyber-threat.net/php2shell-fragnesia-dream-25-rooted-servers/) on Cyber-Threat.net.
+
 
 | | |
 |---|---|

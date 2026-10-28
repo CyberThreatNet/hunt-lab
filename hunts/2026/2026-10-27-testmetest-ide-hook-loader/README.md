@@ -1,5 +1,7 @@
 # testmetest npm worm: .github/init.js loaders started by IDE and AI-assistant hooks, native-addon drops and persistence
 
+Full write-up: [testmetest npm worm: GitHub init.js hooks](https://cyber-threat.net/testmetest-npm-worm-github-init-js-hooks/) on Cyber-Threat.net.
+
 > **Draft for review: partly tested.** Both Sigma rules matched all their synthetic positive events (10/10 process, 11/11 file) and none of their synthetic negatives (0/13, 0/7), and produced no hits in the public Windows datasets (which contain no Node.js activity, so this proves only that they are quiet there). The file-search script passed 19 offline tests on synthetic fixtures and reported nothing on our analysis machine's own folders or on a fresh `npm install` of 185 real packages, once a false positive found in that run (bcrypt and sqlite3 `binding.gyp`) was fixed. It has only been run on Linux. No real infection telemetry or sample was used. See [Validation notes](#validation-notes).
 
 | | |
