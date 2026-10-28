@@ -1,5 +1,7 @@
 # Node2Shell (CVE-2026-111497): Node.js or Bun server processes spawning shells, plus crash and Brotli-request hunting notes
 
+Full write-up: [Node2Shell Brotli (CVE-2026-111497)](https://cyber-threat.net/node2shell-brotli-cve-2026-111497/) on Cyber-Threat.net.
+
 > **Draft for review: partly tested.** The Sigma rule matched all 7 synthetic positive events and none of the 18 synthetic negatives (including real npm, npx, yarn and pnpm parent command lines from Linux), and produced no hits in the public Windows datasets (which contain no Node.js activity, so this proves only that it is quiet there, not that it is quiet in your estate). No real exploitation telemetry exists publicly. The crash and Brotli-request hunts below are hypotheses with data-source notes only. See [Validation notes](#validation-notes).
 
 | | |

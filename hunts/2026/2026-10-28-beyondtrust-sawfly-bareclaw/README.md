@@ -1,5 +1,7 @@
 # BeyondTrust SAWFLY / BARECLAW (CVE-2026-102764)
 
+Full write-up: [Hunt: BeyondTrust ARMORY CASTLE SAWFLY / BARECLAW](https://cyber-threat.net/hunt-beyondtrust-armory-castle-sawfly-bareclaw/) on Cyber-Threat.net.
+
 > **Draft for review: untested.** Behavioural starting points from Mandiant GTIG and BeyondTrust BT26-05. Mandiant YARA is cited, not relicensed here.
 
 | | |
