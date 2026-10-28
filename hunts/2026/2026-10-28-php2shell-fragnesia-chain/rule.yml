@@ -36,7 +36,7 @@ logsource:
     category: process_creation
 detection:
     selection_parent_php:
-        ParentImage|re: '/php(-fpm|-cgi)?[0-9.]*$'
+        ParentImage|re: '.*/php(-fpm|-cgi)?[0-9.]*'
     selection_parent_web:
         ParentImage|endswith:
             - '/httpd'
