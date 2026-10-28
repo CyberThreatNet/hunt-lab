@@ -1,0 +1,49 @@
+title: Unexpected PHP Under BeyondTrust Remote Support Web Root
+id: 8bf2b81e-eda1-4705-9cda-30dec96a2ad3
+status: experimental
+description: |
+    Hunting starting point for post-exploitation of CVE-2026-102764
+    (BeyondTrust Remote Support). Mandiant documents ARMORY CASTLE staging
+    a PHP webshell under the site service account Laravel public web root
+    (observed as mangoapi.php / SAWFLY) after unauthenticated file operations.
+    Flags new .php creates under ingredi/app/laravel/public/ or similar
+    BeyondTrust site web roots. Behaviour-based path hunt, not a payload
+    signature. Prefer Mandiant YARA G_Hunting_Webshell_SAWFLY_1 from the
+    GTIG post for content matching; this rule covers hosts with file-create
+    telemetry only.
+references:
+    - https://cloud.google.com/blog/topics/threat-intelligence/armory-castle-exploits-beyondtrust/
+    - https://www.beyondtrust.com/blog/entry/bt26-05
+    - https://www.cisa.gov/news-events/alerts/2026/10/16/cisa-urges-patching-critical-vulnerability-beyondtrust-remote-support
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-28
+modified: 2026-10-28
+tags:
+    - attack.persistence
+    - attack.t1505.003
+    - attack.initial-access
+    - attack.t1190
+    - cve.2026-102764
+logsource:
+    category: file_event
+detection:
+    selection_webroot:
+        TargetFilename|contains:
+            - '/ingredi/app/laravel/public/'
+            - '/ingredi/app/laravel/public\\'
+            - '/bomgar/htdocs/'
+            - '\\bomgar\\htdocs\\'
+    selection_php:
+        TargetFilename|endswith:
+            - '.php'
+            - '.PHP'
+    selection_staging_name:
+        TargetFilename|contains:
+            - 'app_84304470'
+            - 'mangoapi.php'
+    condition: (selection_webroot and selection_php) or selection_staging_name
+falsepositives:
+    - Legitimate BeyondTrust patches or support that drop PHP under the site web root
+    - Backup or migration tools restoring appliance trees
+level: high
