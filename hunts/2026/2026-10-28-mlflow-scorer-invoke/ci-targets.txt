@@ -1,4 +1,5 @@
--t kusto -p microsoft_xdr
--t kusto -p sentinel_asim
+# proxy category + cs-uri-* fields: microsoft_xdr / sentinel_asim
+# cannot resolve a table / field mapping for this logsource; ecs-process-creation
+# pipeline does not map proxy fields. Ship hand KQL/ES|QL beside the rule
+# (kql-microsoft-xdr.txt, esql-ecs.txt) instead of failing CI on those backends.
 -t splunk --without-pipeline
--t esql -p pipelines/ecs-process-creation.yml
