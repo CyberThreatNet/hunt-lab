@@ -16,6 +16,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**Magento PolyShell CMS loader domains (CVE-2026-48356)**
+- `hunts/2026/2026-10-27-magento-cms-loader-domains/`
+- DNS-query Sigma for three Sansec-named loader hosts, with hand-written Defender XDR / Sentinel DNS KQL and Splunk conversion. Companion to the file-event webshell hunt.
+- Status: draft, untested. Sigma check clean; Kusto backends do not map dns_query in our tooling.
+
+
 **Magento / Adobe Commerce PolyShell webshells (CVE-2026-48356)**
 - `hunts/2026/2026-10-27-magento-polyshell-webshell/`
 - File-event Sigma for PHP/PHTML/PHAR under `*/media/custom_options/`, and for any path ending in `accesson.php`. KQL, ES|QL (ECS file_event) and Splunk conversions. Based on Adobe APSB26-73, CISA KEV and Sansec PolyShell research.

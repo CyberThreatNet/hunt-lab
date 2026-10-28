@@ -56,6 +56,7 @@ hunt-lab/
 | 2026-10-26 | [Shell spawned by a Node.js process (Node2Shell, CVE-2026-111497)](hunts/2026/2026-10-26-node2shell-brotli/) | T1190, T1059, T1499.004 | Test (public datasets) |
 | 2026-10-27 | [testmetest npm worm: `.github/init.js` loaders started by IDE and AI-assistant hooks, native-addon drops and persistence](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) | T1195.002, T1059.007, T1543.002, T1543.001, T1027, T1485 | Test (synthetic data; script tested on Linux) |
 | 2026-10-27 | [Magento / Adobe Commerce PolyShell webshells (CVE-2026-48356)](hunts/2026/2026-10-27-magento-polyshell-webshell/) | T1190, T1505.003 | Draft, untested |
+| 2026-10-27 | [Magento PolyShell CMS loader domains (CVE-2026-48356)](hunts/2026/2026-10-27-magento-cms-loader-domains/) | T1071.001, T1505.003 | Draft, untested |
 
 ## Exploitation context: CISA KEV and FIRST EPSS
 
@@ -104,12 +105,13 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 
 | Hunt | CVE | In KEV | KEV added | KEV due | Ransomware use (KEV) | EPSS (0-1) | EPSS percentile (0-100) | Checked |
 |---|---|---|---|---|---|---|---|---|
-| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-27 (KEV catalogue 2026.10.27) |
-| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-27 (KEV catalogue 2026.10.27) |
-| [2026-10-24-arista-cve-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | CVE-2026-7473 | Yes | 2026-06-09 | 2026-06-23 | Unknown | 0.01108 | 65.69 | 2026-10-27 (KEV catalogue 2026.10.27) |
+| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-28 (KEV catalogue 2026.10.27) |
+| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-28 (KEV catalogue 2026.10.27) |
+| [2026-10-24-arista-cve-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | CVE-2026-7473 | Yes | 2026-06-09 | 2026-06-23 | Unknown | 0.01108 | 65.69 | 2026-10-28 (KEV catalogue 2026.10.27) |
 | [2026-10-25-dcsync-replication-by-non-dc-account](hunts/2026/2026-10-25-dcsync-replication-by-non-dc-account/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-25-lsass-dump-via-lolbins](hunts/2026/2026-10-25-lsass-dump-via-lolbins/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-10-26-node2shell-brotli](hunts/2026/2026-10-26-node2shell-brotli/) | CVE-2026-111497 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.55483 | 99.03 | 2026-10-27 (KEV catalogue 2026.10.27) |
+| [2026-10-26-node2shell-brotli](hunts/2026/2026-10-26-node2shell-brotli/) | CVE-2026-111497 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.55483 | 99.03 | 2026-10-28 (KEV catalogue 2026.10.27) |
+| [2026-10-27-magento-cms-loader-domains](hunts/2026/2026-10-27-magento-cms-loader-domains/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.30582 | 98.23 | 2026-10-28 (KEV catalogue 2026.10.27) |
 | [2026-10-27-magento-polyshell-webshell](hunts/2026/2026-10-27-magento-polyshell-webshell/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.30582 | 98.23 | 2026-10-28 (KEV catalogue 2026.10.27) |
 | [2026-10-27-testmetest-ide-hook-loader](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) | n/a (no CVE) | n/a | | | | | | |
 
