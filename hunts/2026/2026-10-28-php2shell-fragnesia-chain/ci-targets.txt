@@ -1,0 +1,9 @@
+# Conversion targets for this hunt (read by the "Test conversions" CI step).
+# CI converts rule.yml; rule-pam.yml is checked by sigma check.
+# process_creation (rule.yml) + file_event (rule-pam.yml):
+#   azure_monitor omitted: SecurityEvent has no Linux process/file coverage here
+#   splunk_cim omitted for file_event path quirks; ship hand query-pam.spl
+-t kusto -p microsoft_xdr
+-t kusto -p sentinel_asim
+-t splunk --without-pipeline
+-t esql -p pipelines/ecs-process-creation.yml

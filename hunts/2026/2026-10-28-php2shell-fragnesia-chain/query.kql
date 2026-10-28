@@ -1,0 +1,24 @@
+// DRAFT FOR REVIEW, untested: PHP worker / web server spawning shell or interpreter
+// (PHP2Shell + Fragnesia chain). Companion to query-pam.kql in this folder.
+// Defender XDR advanced hunting. Starting point only: tune before use. Not an exploit signature.
+//
+// Hunt ID:   2026-10-28-php2shell-fragnesia-chain
+// Table:     DeviceProcessEvents (Microsoft Defender for Endpoint on Linux).
+// ATT&CK:    T1190, T1059.004, T1068, T1505.003
+// Context:   CVE-2026-109618, CVE-2026-109619, CVE-2026-46300 (Dream Research, 26 Oct 2026)
+// Source:    https://github.com/CyberThreatNet/hunt-lab
+// Licence:   MIT - see LICENSE. (Sigma rules in this repository are under DRL 1.1.)
+let lookback = 14d;
+let webServerProcs = dynamic(["httpd", "apache2", "nginx", "frankenphp", "lsphp", "appweb"]);
+let suspiciousChildren = dynamic(["sh", "bash", "dash", "curl", "wget", "nc", "ncat", "perl", "python", "python3", "base64", "su"]);
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where InitiatingProcessFileName matches regex @"^php(-fpm|-cgi)?[0-9.]*$"
+    or InitiatingProcessFileName in~ (webServerProcs)
+| where FileName in~ (suspiciousChildren)
+// Tuning: exclude known-good shell-outs, e.g.
+// | where not(ProcessCommandLine has "/usr/sbin/sendmail")
+| summarize Events = count(), FirstSeen = min(Timestamp), LastSeen = max(Timestamp),
+    Accounts = make_set(AccountName, 5), SampleCommands = make_set(ProcessCommandLine, 10)
+    by DeviceName, InitiatingProcessFileName, InitiatingProcessCommandLine, FileName
+| order by FirstSeen asc

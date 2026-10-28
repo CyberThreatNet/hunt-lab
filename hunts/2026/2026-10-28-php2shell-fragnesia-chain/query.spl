@@ -1,0 +1,21 @@
+```
+DRAFT FOR REVIEW, untested: PHP worker / web server spawning shell (PHP2Shell + Fragnesia).
+Splunk CIM Endpoint.Processes. Companion to query-pam.spl.
+Hunt ID: 2026-10-28-php2shell-fragnesia-chain | ATT&CK: T1190, T1059.004, T1068, T1505.003
+Source: https://github.com/CyberThreatNet/hunt-lab | Licence: MIT
+```
+| tstats summariesonly=false allow_old_summaries=true
+    count min(_time) as FirstSeen max(_time) as LastSeen
+    values(Processes.user) as Accounts values(Processes.process) as SampleCommands
+    from datamodel=Endpoint.Processes
+    where (Processes.parent_process_name="php*"
+        OR Processes.parent_process_name IN ("httpd", "apache2", "nginx", "frankenphp", "lsphp", "appweb"))
+      AND Processes.process_name IN ("sh", "bash", "dash", "curl", "wget", "nc", "ncat", "perl", "python", "python3", "base64", "su")
+    by Processes.dest Processes.parent_process_name Processes.parent_process Processes.process_name
+| rename "Processes.*" as "*"
+| where match(parent_process_name, "^php(-fpm|-cgi)?[0-9.]*$")
+    OR parent_process_name IN ("httpd", "apache2", "nginx", "frankenphp", "lsphp", "appweb")
+``` Tuning: | search NOT SampleCommands="*/usr/sbin/sendmail*" ```
+| convert ctime(FirstSeen) ctime(LastSeen)
+| sort 0 FirstSeen
+| table FirstSeen LastSeen dest parent_process_name parent_process process_name Accounts SampleCommands count
