@@ -1,0 +1,4 @@
+-t kusto -p microsoft_xdr
+-t kusto -p sentinel_asim
+-t splunk --without-pipeline
+-t esql -p pipelines/ecs-process-creation.yml
