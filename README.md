@@ -17,6 +17,23 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 > **Defensive content only.** No exploit code, no proofs of concept and no step-by-step exploitation. Indicators appear only where a cited source publishes them. They are never invented. Behavioural hunts are labelled as such.
 
+## Latest hunts
+
+| Date | Hunt | CVE | ATT&CK | Write-up | Folder |
+|---|---|---|---|---|---|
+| 2026-10-28 | PHP2Shell chained with Fragnesia (CVE-2026-109618 / 109619 / 46300) | CVE-2026-109618, CVE-2026-109619, CVE-2026-46300 | T1190, T1059.004, T1068, T1556.003, T1505.003 | [Article](https://cyber-threat.net/php2shell-fragnesia-dream-25-rooted-servers/) | [`2026-10-28-php2shell-fragnesia-chain`](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) |
+| 2026-10-28 | PeopleSoft PSIGW→PSEMHUB (CVE-2026-35273) | CVE-2026-35273 | T1190, T1210, T1505.003 | [Article](https://cyber-threat.net/peoplesoft-cve-2026-35273-ssrf-rce-mass-exploited/) | [`2026-10-28-peoplesoft-psigw-psemhub`](hunts/2026/2026-10-28-peoplesoft-psigw-psemhub/) |
+| 2026-10-28 | Ivanti Connect Secure X-DSCGI-PATH (CVE-2026-104935) | CVE-2026-104935 | T1190 | [Article](https://cyber-threat.net/hunt-ivanti-connect-secure-x-dscgi-path/) | [`2026-10-28-ivanti-ics-xdscgi`](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) |
+| 2026-10-28 | BeyondTrust SAWFLY / BARECLAW (CVE-2026-102764) | CVE-2026-102764 | T1190, T1505.003, T1003, T1548.001, T1090, T1070.004 | [Article](https://cyber-threat.net/hunt-beyondtrust-armory-castle-sawfly-bareclaw/) | [`2026-10-28-beyondtrust-sawfly-bareclaw`](hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw/) |
+| 2026-10-27 | testmetest npm worm: `.github/init.js` loaders started by IDE and A… | — | T1195.002, T1059.007, T1543.002, T1543.001, T1027, T1485 | [Article](https://cyber-threat.net/testmetest-npm-worm-github-init-js-hooks/) | [`2026-10-27-testmetest-ide-hook-loader`](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) |
+| 2026-10-27 | Magento / Adobe Commerce PolyShell webshells (CVE-2026-48356) | CVE-2026-48356 | T1190, T1505.003 | [Article](https://cyber-threat.net/adobe-commerce-magento-cve-2026-48356-polyshell-exploited/) | [`2026-10-27-magento-polyshell-webshell`](hunts/2026/2026-10-27-magento-polyshell-webshell/) |
+| 2026-10-27 | Magento PolyShell CMS loader domains (CVE-2026-48356) | CVE-2026-48356 | T1071.001, T1505.003 | [Article](https://cyber-threat.net/hunt-magento-polyshell-cms-loader-domains/) | [`2026-10-27-magento-cms-loader-domains`](hunts/2026/2026-10-27-magento-cms-loader-domains/) |
+| 2026-10-26 | Shell spawned by a Node.js process (Node2Shell, CVE-2026-111497) | CVE-2026-111497 | T1190, T1059, T1499.004 | [Article](https://cyber-threat.net/node2shell-brotli-cve-2026-111497/) | [`2026-10-26-node2shell-brotli`](hunts/2026/2026-10-26-node2shell-brotli/) |
+| 2026-10-24 | Arista EOS CVE-2026-7473 | CVE-2026-7473 | T1599, T1572 | [Article](https://cyber-threat.net/arista-eos-cve-2026-7473-no-fix-coming/) | [`2026-10-24-arista-cve-2026-7473`](hunts/2026/2026-10-24-arista-cve-2026-7473/) |
+| 2026-10-22 | Shell or download tool spawned by a PHP worker or web server (Linux) | CVE-2026-109618, CVE-2026-109619 | T1190, T1059.004, T1105, T1505.003 | [Article](https://cyber-threat.net/php2shell-patch-php-now-then-go-hunting/) | [`2026-10-22-php-web-server-spawning-shell`](hunts/2026/2026-10-22-php-web-server-spawning-shell/) |
+
+**[★ Star this repo](https://github.com/CyberThreatNet/hunt-lab)** · [Follow the site](https://cyber-threat.net/) · [RSS](https://cyber-threat.net/feed/) · [Hunt Lab category](https://cyber-threat.net/category/hunt-lab/) · [Hunt Lab RSS](https://cyber-threat.net/category/hunt-lab/feed/)
+
 ## Repository layout
 
 ```text

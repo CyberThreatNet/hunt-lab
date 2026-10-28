@@ -1,5 +1,7 @@
 # Magento PolyShell CMS loader domains (CVE-2026-48356)
 
+Full write-up: [Hunt: Magento PolyShell CMS loader domains](https://cyber-threat.net/hunt-magento-polyshell-cms-loader-domains/) on Cyber-Threat.net.
+
 
 | | |
 |---|---|
