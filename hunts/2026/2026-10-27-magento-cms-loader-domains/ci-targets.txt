@@ -1,0 +1,4 @@
+# dns_query: Splunk converts; microsoft_xdr/sentinel_asim kusto backends
+# did not map category dns_query in local sigma-cli 3.1.0 — ship hand KQL
+# (kql-microsoft-xdr.txt, kql-sentinel-dns.txt) instead of failing CI on -t kusto.
+-t splunk --without-pipeline

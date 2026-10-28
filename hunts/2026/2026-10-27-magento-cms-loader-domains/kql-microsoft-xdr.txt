@@ -1,0 +1,5 @@
+// Hand-written companion to rule.yml (dns_query).
+// sigma-cli kusto + microsoft_xdr could not map category dns_query here.
+DeviceNetworkEvents
+| where RemoteUrl has_any ("lanhd6549tdhse.top", "jslibrary.net", "canevaslab.com")
+| project Timestamp, DeviceName, ActionType, RemoteUrl, RemoteIP, InitiatingProcessFileName, InitiatingProcessCommandLine
