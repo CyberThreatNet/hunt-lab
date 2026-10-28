@@ -1,0 +1,4 @@
+| draft — retarget sourcetype. Untested.
+index=* ("/PSIGW/HttpListeningConnector" OR "/%50SEMHUB" OR "/PSEMHUB/hub")
+  ("PSEMHUB" OR "127.0.0.1" OR "localhost" OR "%50SEMHUB")
+| table _time host uri uri_query src_ip
