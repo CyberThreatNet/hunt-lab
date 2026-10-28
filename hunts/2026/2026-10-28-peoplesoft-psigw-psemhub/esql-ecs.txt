@@ -1,0 +1,10 @@
+// Draft ES|QL — retarget to your web/proxy index. Untested.
+FROM logs-*
+| WHERE url.path LIKE "*PSIGW/HttpListeningConnector*"
+    OR url.path LIKE "*%50SEMHUB*"
+    OR url.path LIKE "*PSEMHUB/hub*"
+| WHERE url.query LIKE "*PSEMHUB*"
+    OR url.query LIKE "*127.0.0.1*"
+    OR url.query LIKE "*localhost*"
+    OR url.path LIKE "*%50SEMHUB*"
+| KEEP @timestamp, host.name, url.path, url.query, source.ip
