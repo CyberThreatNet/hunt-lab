@@ -1,0 +1,9 @@
+| draft — retarget sourcetype. Untested. Three rules:
+| --- file (rule.yml) ---
+(TargetFilename IN ("*/ingredi/app/laravel/public/*", "*/ingredi/app/laravel/public\\*", "*/bomgar/htdocs/*", "*\\bomgar\\htdocs\\*") TargetFilename IN ("*.php", "*.PHP")) OR TargetFilename IN ("*app_84304470*", "*mangoapi.php*")
+
+| --- process (rule-process.yml) ---
+(Image="*/bt-secrets" CommandLine="*vault*") OR (CommandLine="*dbus-authd*" CommandLine="*chmod*") OR CommandLine IN ("*post_boot.d*", "*zz-root-persist*", "*sudoers.template*") OR (CommandLine="*--obfs*" CommandLine="*--token*" CommandLine IN ("*--ws-path*", "*--listen*")) OR (Image="*/ingredi_ws" CommandLine="*--listen*")
+
+| --- proxy (rule-proxy.yml) ---
+"cs-uri-stem" IN ("*app_84304470*", "*mangoapi.php*", "*/mangoapi*") OR "cs-uri-stem"="*/uidchanarge*"

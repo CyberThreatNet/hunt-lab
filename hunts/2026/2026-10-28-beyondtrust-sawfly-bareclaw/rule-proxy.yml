@@ -1,0 +1,40 @@
+title: BeyondTrust Remote Support Proxy Hits Unknown PHP or WebSocket Path
+id: fee083a1-9e3c-4b96-b626-c0c9b6cd7a76
+status: experimental
+description: |
+    Perimeter hunt for CVE-2026-102764 follow-on. Mandiant recommends watching
+    reverse-proxy or WAF logs for paths outside the known Remote Support set,
+    including unknown .php paths and unexpected WebSocket upgrades. Observed
+    staging path app_84304470%2Ephp and BARECLAW WebSocket path /uidchanarge
+    are included as seeds; treat path lists as ephemeral.
+references:
+    - https://cloud.google.com/blog/topics/threat-intelligence/armory-castle-exploits-beyondtrust/
+    - https://www.cisa.gov/news-events/alerts/2026/10/16/cisa-urges-patching-critical-vulnerability-beyondtrust-remote-support
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-28
+modified: 2026-10-28
+tags:
+    - attack.initial-access
+    - attack.t1190
+    - attack.persistence
+    - attack.t1505.003
+    - attack.command-and-control
+    - attack.t1090
+    - cve.2026-102764
+logsource:
+    category: proxy
+detection:
+    selection_php_staging:
+        cs-uri-stem|contains:
+            - 'app_84304470'
+            - 'mangoapi.php'
+            - '/mangoapi'
+    selection_ws_path:
+        cs-uri-stem|contains:
+            - '/uidchanarge'
+    condition: 1 of selection_*
+falsepositives:
+    - Scanners replaying Mandiant-published path strings
+    - Internal red-team exercises that reuse the same seeds
+level: high
