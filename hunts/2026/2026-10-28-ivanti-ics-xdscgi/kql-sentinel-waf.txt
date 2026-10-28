@@ -1,0 +1,14 @@
+// Sentinel / Microsoft Front Door WAF — retarget table to your Front Door / App Gateway diagnostic.
+// Example using AzureDiagnostics (FrontDoorWebApplicationFirewallLog) — column names vary by pipeline.
+
+AzureDiagnostics
+| where TimeGenerated > ago(14d)
+| where Category has_any ("FrontDoorWebApplicationFirewallLog", "ApplicationGatewayFirewallLog", "ApplicationGatewayAccessLog")
+| where requestUri_s has "/dana-na/" or originalRequestUriWithArgs_s has "/dana-na/"
+| extend uri = coalesce(requestUri_s, originalRequestUriWithArgs_s, tostring(column_ifexists("requestUri", "")))
+| extend headers = strcat(tostring(column_ifexists("requestHeader", "")), " ", tostring(column_ifexists("additionalDetails", "")))
+| where headers has "X-DSCGI-PATH"
+    or headers has "wu.cgi"
+    or headers has "/home/runtime/tmp/"
+    or (uri has "welcome.cgi" and isnotempty(headers))
+| project TimeGenerated, uri, clientIP_s, httpStatus_d, headers, ruleName_s, host_s
