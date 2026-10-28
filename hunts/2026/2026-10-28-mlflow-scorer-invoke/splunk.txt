@@ -1,0 +1,2 @@
+index=* "/ajax-api/3.0/mlflow/scorer"
+| table _time host uri src_ip
