@@ -1,0 +1,30 @@
+// Draft MDE / Microsoft XDR — retarget DeviceName filters to BeyondTrust RS hosts. Untested.
+// File creates under Laravel public / bomgar htdocs
+DeviceFileEvents
+| where Timestamp > ago(14d)
+| where ActionType in ("FileCreated", "FileRenamed")
+| where FileName endswith ".php"
+    and (
+        FolderPath has @"ingredi/app/laravel/public"
+        or FolderPath has @"bomgar/htdocs"
+        or FileName has "mangoapi"
+        or FileName has "app_84304470"
+    )
+| project Timestamp, DeviceName, ActionType, FolderPath, FileName, InitiatingProcessFileName, InitiatingProcessCommandLine, SHA256
+
+// Process: bt-secrets vault, SUID helper, post_boot persist, BARECLAW-like CLI
+DeviceProcessEvents
+| where Timestamp > ago(14d)
+| where
+    (FileName =~ "bt-secrets" and ProcessCommandLine has "vault")
+    or (ProcessCommandLine has "dbus-authd" and ProcessCommandLine has "chmod")
+    or (ProcessCommandLine has_any ("post_boot.d", "zz-root-persist", "sudoers.template"))
+    or (ProcessCommandLine has "--obfs" and ProcessCommandLine has "--token")
+    or (FileName =~ "ingredi_ws" and ProcessCommandLine has "--listen")
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, AccountName
+
+// Network: unexpected outbound from appliance-like hosts (tune DeviceName)
+// DeviceNetworkEvents
+// | where Timestamp > ago(14d)
+// | where DeviceName has_any ("beyondtrust", "bomgar", "remotesupport")
+// | where RemotePort in (19800, 8080, 8443) or RemoteUrl has "uidchanarge"
