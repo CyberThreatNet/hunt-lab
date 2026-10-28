@@ -1,0 +1,20 @@
+// Draft — needs CommonSecurityLog / WAF / Front Door / custom proxy that retains X-DSCGI-PATH.
+// MDE DeviceNetworkEvents alone will NOT see HTTP headers. Prefer Sentinel + WAF.
+
+// Azure Front Door / Application Gateway / WAF (CommonSecurityLog) — retarget ProductName.
+CommonSecurityLog
+| where TimeGenerated > ago(14d)
+| where RequestURL has "/dana-na/auth/"
+| extend Raw = strcat(Message, " ", RequestContext, " ", AdditionalExtensions)
+| where Raw has "X-DSCGI-PATH" or Raw has "x-dscgi-path"
+    or Raw has "wu.cgi"
+    or Raw has "/home/runtime/tmp/"
+| project TimeGenerated, DeviceName, SourceIP, RequestURL, RequestMethod, ResultCode, Raw
+
+// Burst of welcome.cgi without needing the header (weak signal; correlate)
+CommonSecurityLog
+| where TimeGenerated > ago(14d)
+| where RequestURL has "/dana-na/auth/url_default/welcome.cgi"
+| summarize hits=count(), ips=dcount(SourceIP) by bin(TimeGenerated, 5m), DeviceName, SourceIP
+| where hits >= 20
+| order by hits desc

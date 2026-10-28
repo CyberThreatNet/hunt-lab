@@ -1,0 +1,50 @@
+title: Ivanti Connect Secure X-DSCGI-PATH Auth-Bypass Indicators
+id: 7aa6bd8a-5316-4b2c-b41a-21e99a5dd975
+status: experimental
+description: |
+    Hunting starting point for CVE-2026-104935 on Ivanti Connect Secure.
+    Volexity documents an auth bypass where the public URL is
+    /dana-na/auth/url_default/welcome.cgi while the X-DSCGI-PATH request
+    header names a privileged CGI (observed wu.cgi) or a short-lived
+    /home/runtime/tmp/<md5> race target. This rule flags welcome.cgi
+    requests whose retained raw request, query or header fields also name
+    those targets. Prefer true URL-vs-header mismatch detection in your
+    WAF when you can; path lists will rotate. Needs proxy/WAF logs that
+    retain custom headers or raw request lines.
+references:
+    - https://www.volexity.com/blog/2026/10/13/a-series-of-unauthenticated-events-chained-exploitation-of-ivanti-connect-secure-zero-days/
+    - https://www.cisa.gov/news-events/alerts/2026/10/13/cisa-urges-patching-newly-exploited-vulnerability-ivanti-connect-secure
+    - https://www.ivanti.com/blog/october-2026-patch-tuesday
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-28-ivanti-ics-xdscgi
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-28
+modified: 2026-10-28
+tags:
+    - attack.initial-access
+    - attack.t1190
+    - attack.execution
+    - attack.t1059
+    - cve.2026-104935
+logsource:
+    category: proxy
+detection:
+    selection_welcome:
+        cs-uri-stem|contains:
+            - '/dana-na/auth/url_default/welcome.cgi'
+            - '/dana-na/auth/'
+    selection_pivot:
+        cs-uri-query|contains:
+            - 'X-DSCGI-PATH'
+            - 'x-dscgi-path'
+            - 'wu.cgi'
+            - '/home/runtime/tmp/'
+            - '/home/webserver/htdocs/dana/fb/smb/wu.cgi'
+    selection_stem_targets:
+        cs-uri-stem|contains:
+            - 'wu.cgi'
+            - '/home/runtime/tmp/'
+    condition: (selection_welcome and selection_pivot) or selection_stem_targets
+falsepositives:
+    - WAF or scanner probes that replay Volexity-published paths after disclosure
+    - Internal ICS health checks that set unusual query strings (tune allow-lists)
+level: high
