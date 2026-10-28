@@ -1,0 +1,50 @@
+title: PeopleSoft PSIGW HttpListeningConnector Request Forwarding to PSEMHUB or Loopback
+id: cef7f521-0f85-48df-b33a-ca04f20ec68f
+status: experimental
+description: |
+    Hunting starting point for CVE-2026-35273 exploitation. Flags proxy or
+    web-server requests to /PSIGW/HttpListeningConnector whose URL or body
+    also names PSEMHUB, localhost, 127.0.0.1, or the /%50SEMHUB/ WAF-bypass
+    encoding Mandiant documented. Behaviour-based on path tokens, not an
+    exploit signature. Needs HTTP access or proxy logs that retain raw URIs.
+references:
+    - https://www.oracle.com/security-alerts/alert-cve-2026-35273.html
+    - https://cloud.google.com/blog/topics/threat-intelligence/shinyhunters-renewed-mass-exploitation-campaign-targeting-oracle-peoplesoft
+    - https://www.zerodayinitiative.com/blog/2026/10/20/cve-2026-35273-ssrf-to-rce-in-oracle-peoplesoft
+    - https://www.trendmicro.com/en_us/research/26/f/PeopleTools.html
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-28-peoplesoft-psigw-psemhub
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-28
+modified: 2026-10-28
+tags:
+    - attack.initial-access
+    - attack.t1190
+    - attack.lateral-movement
+    - attack.t1210
+    - cve.2026-35273
+logsource:
+    category: proxy
+detection:
+    selection_psigw:
+        cs-uri-stem|contains:
+            - '/PSIGW/HttpListeningConnector'
+            - '/psigw/httplisteningconnector'
+    selection_pivot:
+        cs-uri-query|contains:
+            - 'PSEMHUB'
+            - 'psemhub'
+            - '127.0.0.1'
+            - 'localhost'
+            - '%50SEMHUB'
+            - '%50semhub'
+    selection_bypass:
+        cs-uri-stem|contains:
+            - '/%50SEMHUB'
+            - '/%50semhub'
+            - '/PSEMHUB/hub'
+            - '/psemhub/hub'
+    condition: (selection_psigw and selection_pivot) or selection_bypass
+falsepositives:
+    - Legitimate Integration Gateway traffic that forwards to approved internal hubs (tune allow-lists)
+    - WAF or scanner probes that replay public research paths
+level: high
