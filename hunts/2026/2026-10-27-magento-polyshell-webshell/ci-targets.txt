@@ -1,0 +1,9 @@
+# Conversion targets for this hunt (read by the "Test conversions" CI step).
+# CI converts rule.yml; rule-persistence.yml is checked by sigma check.
+# Both rules are file_event with no product:
+#   splunk_cim omitted: CIM pipeline expects product for some mappings
+#   azure_monitor omitted: SecurityEvent has no Linux file-create coverage here
+-t kusto -p microsoft_xdr
+-t kusto -p sentinel_asim
+-t splunk --without-pipeline
+-t esql -p pipelines/ecs-process-creation.yml

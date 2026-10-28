@@ -16,6 +16,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**Magento / Adobe Commerce PolyShell webshells (CVE-2026-48356)**
+- `hunts/2026/2026-10-27-magento-polyshell-webshell/`
+- File-event Sigma for PHP/PHTML/PHAR under `*/media/custom_options/`, and for any path ending in `accesson.php`. KQL, ES|QL (ECS file_event) and Splunk conversions. Based on Adobe APSB26-73, CISA KEV and Sansec PolyShell research.
+- Status: draft, untested. Sigma check clean; conversions clean, not engine-tested.
+
+
 **testmetest npm worm: `.github/init.js` loaders, native-addon drops and persistence**
 - `hunts/2026/2026-10-27-testmetest-ide-hook-loader/`
 - Process creation: node or bun running `.github/init.js`, a hidden `/tmp/.<pid>` or `%TEMP%\.nc<pid>.js` drop, or a `.b-*` stage; processes naming the `net-health-checker` or `pkg-runtime` persistence. File events: the persistence files, `.napi_cache` and the Windows drop. A read-only file-search script for workstations and runners, and GitHub tree-sweep commands. Based on JFrog and SafeDep research.

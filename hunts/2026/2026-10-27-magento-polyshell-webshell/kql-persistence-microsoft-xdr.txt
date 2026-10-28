@@ -1,0 +1,3 @@
+Parsing Sigma rules
+DeviceFileEvents
+| where FolderPath endswith "/accesson.php" or FolderPath endswith "\\accesson.php"

@@ -1,0 +1,3 @@
+Parsing Sigma rules
+DeviceFileEvents
+| where (FolderPath contains "/pub/media/custom_options/" or FolderPath contains "\\pub\\media\\custom_options\\" or FolderPath contains "/media/custom_options/" or FolderPath contains "\\media\\custom_options\\") and (FolderPath endswith ".php" or FolderPath endswith ".phtml" or FolderPath endswith ".phar" or FolderPath endswith ".PHP" or FolderPath endswith ".PHTML" or FolderPath endswith ".PHAR") and (not((FolderPath endswith "/.htaccess" or FolderPath endswith "\\.htaccess")))
