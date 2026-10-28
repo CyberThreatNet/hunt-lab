@@ -55,6 +55,7 @@ hunt-lab/
 | 2026-10-25 | [LSASS dumping with built-in Windows tools: comsvcs MiniDump and RdrLeakDiag](hunts/2026/2026-10-25-lsass-dump-via-lolbins/) | T1003.001, T1218.011 | Test (public datasets) |
 | 2026-10-26 | [Shell spawned by a Node.js process (Node2Shell, CVE-2026-111497)](hunts/2026/2026-10-26-node2shell-brotli/) | T1190, T1059, T1499.004 | Test (public datasets) |
 | 2026-10-27 | [testmetest npm worm: `.github/init.js` loaders started by IDE and AI-assistant hooks, native-addon drops and persistence](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) | T1195.002, T1059.007, T1543.002, T1543.001, T1027, T1485 | Test (synthetic data; script tested on Linux) |
+| 2026-10-27 | [Magento / Adobe Commerce PolyShell webshells (CVE-2026-48356)](hunts/2026/2026-10-27-magento-polyshell-webshell/) | T1190, T1505.003 | Draft, untested |
 
 ## Exploitation context: CISA KEV and FIRST EPSS
 
@@ -109,6 +110,7 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-10-25-dcsync-replication-by-non-dc-account](hunts/2026/2026-10-25-dcsync-replication-by-non-dc-account/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-25-lsass-dump-via-lolbins](hunts/2026/2026-10-25-lsass-dump-via-lolbins/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-26-node2shell-brotli](hunts/2026/2026-10-26-node2shell-brotli/) | CVE-2026-111497 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.55483 | 99.03 | 2026-10-27 (KEV catalogue 2026.10.27) |
+| [2026-10-27-magento-polyshell-webshell](hunts/2026/2026-10-27-magento-polyshell-webshell/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.30582 | 98.23 | 2026-10-28 (KEV catalogue 2026.10.27) |
 | [2026-10-27-testmetest-ide-hook-loader](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) | n/a (no CVE) | n/a | | | | | | |
 
 <!-- kev-epss:end -->

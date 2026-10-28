@@ -1,0 +1,32 @@
+title: Magento accesson.php Backdoor Created Outside the Upload Directory
+id: 64242b94-a59d-4263-9a04-aca382064d63
+status: experimental
+description: |
+    Companion to rule.yml in the same hunt. Sansec reports that after
+    PolyShell (CVE-2026-48356) code execution, operators spray a secondary
+    backdoor named accesson.php into assets/images/ folders under many
+    top-level Magento paths (var, lib, app, vendor, pub, bin, setup and
+    others). Flags creation of any file whose path ends with accesson.php.
+    File name comes from Sansec's public research and can change.
+references:
+    - https://sansec.io/research/magento-polyshell
+    - https://www.adobe.com/trust/security/products/commerce/apsb26-73.html
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-27-magento-polyshell-webshell
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-27
+tags:
+    - attack.persistence
+    - attack.t1505.003
+    - cve.2026-48356
+logsource:
+    category: file_event
+detection:
+    selection:
+        TargetFilename|endswith:
+            - '/accesson.php'
+            - '\accesson.php'
+    condition: selection
+falsepositives:
+    - Responders or test harnesses recreating this filename
+    - An unrelated application that ships a file literally named accesson.php (none known to us when written)
+level: high
