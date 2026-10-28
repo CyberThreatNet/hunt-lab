@@ -1,0 +1,5 @@
+DeviceProcessEvents
+| where Timestamp > ago(14d)
+| where (FileName =~ "certutil.exe" and ProcessCommandLine has_any ("-addstore","-importpfx","/addstore"))
+    or (FileName in ("powershell.exe","pwsh.exe") and ProcessCommandLine has_any ("Import-Certificate","Import-PfxCertificate","LocalMachine\\Root","LocalMachine\\CA"))
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine

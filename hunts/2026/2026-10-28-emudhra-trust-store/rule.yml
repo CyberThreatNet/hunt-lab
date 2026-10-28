@@ -1,0 +1,44 @@
+title: Windows Certificate Trust Store or CTL Modified After eMudhra Purge Window
+id: 037bf7e3-088e-4e0f-b2ac-14d75b99aa88
+status: experimental
+description: |
+    Hunting starting point around the October 2026 eMudhra intermediate-key
+    incident. Flags process activity commonly used to add or restore root/CA
+    certificates (certutil -addstore / -importpfx, Import-Certificate) after
+    Microsoft's Disallowed CTL and OOB trust-list removals. Not a signature
+    for forged certificates themselves. Tune to your change windows.
+references:
+    - https://www.microsoft.com/en-us/msrc/blog/2026/10/microsoft-response-to-compromised-emudhra-certificate-authority-keys
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-28-emudhra-trust-store
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-28
+modified: 2026-10-28
+tags:
+    - attack.stealth
+    - attack.t1553.004
+logsource:
+    category: process_creation
+detection:
+    selection_certutil:
+        Image|endswith:
+            - '\certutil.exe'
+        CommandLine|contains:
+            - '-addstore'
+            - '-importpfx'
+            - '-importcert'
+            - '/addstore'
+            - '/importpfx'
+    selection_powershell:
+        Image|endswith:
+            - '\powershell.exe'
+            - '\pwsh.exe'
+        CommandLine|contains:
+            - 'Import-Certificate'
+            - 'Import-PfxCertificate'
+            - 'Cert:\LocalMachine\Root'
+            - 'Cert:\LocalMachine\CA'
+    condition: selection_certutil or selection_powershell
+falsepositives:
+    - Legitimate PKI operations and Intune/GPO certificate deployment
+    - Helpdesk restoring customer-required roots (still review against eMudhra G3)
+level: medium
