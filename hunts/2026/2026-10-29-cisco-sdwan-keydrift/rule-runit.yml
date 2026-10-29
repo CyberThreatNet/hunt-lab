@@ -1,0 +1,39 @@
+title: Cisco SD-WAN Controller Runit Launcher Modification (KeyDrift)
+id: eef223e2-437a-43a0-989f-714b05857faf
+status: experimental
+description: |
+    Hunting starting point for KeyDrift persistence after CVE-2026-20127.
+    Talos documents modified runit launchers under /etc/sv/sshd/run and
+    /etc/sv/aaamgr/run used to start conf_sshd / aaamgrd. Behaviour-based
+    path hunt on controller hosts; not an exploit signature.
+references:
+    - https://blog.talosintelligence.com/uat-11473-keydrift/
+    - https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sdwan-rpa-EHchtZk
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-29-cisco-sdwan-keydrift
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-29
+modified: 2026-10-29
+tags:
+    - attack.persistence
+    - attack.t1543
+    - attack.initial-access
+    - attack.t1190
+    - cve.2026-20127
+logsource:
+    category: file_event
+    product: linux
+detection:
+    selection_runit:
+        TargetFilename|contains:
+            - '/etc/sv/sshd/run'
+            - '/etc/sv/aaamgr/run'
+            - '/etc/sv/sshd/'
+            - '/etc/sv/aaamgr/'
+    selection_rootfs:
+        TargetFilename|contains:
+            - '/rootfs.rw'
+    condition: selection_runit or selection_rootfs
+falsepositives:
+    - Vendor-supported controller upgrades rewriting runit scripts
+    - Authorised hardening changes under change control
+level: high

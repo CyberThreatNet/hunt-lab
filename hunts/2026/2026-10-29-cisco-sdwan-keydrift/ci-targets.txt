@@ -1,0 +1,3 @@
+# linux file/process: prefer splunk + elasticsearch; XDR mapping may need hand KQL
+-t splunk --without-pipeline
+-t es-qs --without-pipeline

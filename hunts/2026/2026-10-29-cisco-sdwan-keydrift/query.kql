@@ -1,0 +1,16 @@
+// Microsoft Defender XDR / Sentinel — KeyDrift controller artefacts (CVE-2026-20127)
+// Scope DeviceName to known Catalyst SD-WAN controllers where possible.
+let window = 30d;
+DeviceFileEvents
+| where Timestamp > ago(window)
+| where FolderPath has_any ("/etc/sv/sshd", "/etc/sv/aaamgr", "/var/tmp/vdaemon", "/tmp/system-vdaemon", "/rootfs.rw")
+    or FileName has_any ("vdaemon.bin", "vdaemon.conf", "libdssl.so", "libcommon.so", "conf_sshd")
+| project Timestamp, DeviceName, ActionType, FolderPath, FileName, InitiatingProcessFileName, InitiatingProcessCommandLine
+| union (
+    DeviceProcessEvents
+    | where Timestamp > ago(window)
+    | where FileName has_any ("conf_sshd", "rsshd", "aaamgrd")
+        or ProcessCommandLine has_any ("libdssl.so", "libcommon.so", "/tmp/system-vdaemon", "conf_sshd")
+    | project Timestamp, DeviceName, ActionType=tostring(ActionType), FolderPath=FolderPath, FileName, InitiatingProcessFileName, InitiatingProcessCommandLine=ProcessCommandLine
+)
+| sort by Timestamp desc

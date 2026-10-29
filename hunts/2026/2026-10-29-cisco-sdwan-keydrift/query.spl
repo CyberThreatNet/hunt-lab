@@ -1,0 +1,9 @@
+index=* (sourcetype=linux* OR sourcetype=*syslog*)
+    (
+        "/etc/sv/sshd/run" OR "/etc/sv/aaamgr/run" OR "/var/tmp/vdaemon.bin" OR "/var/tmp/vdaemon.conf"
+        OR conf_sshd OR rsshd OR libdssl.so OR libcommon.so OR "/tmp/system-vdaemon"
+        OR "Accepted publickey for vmanage-admin"
+    )
+| stats count min(_time) as first max(_time) as last values(sourcetype) as st by host
+| convert ctime(first) ctime(last)
+| sort -count

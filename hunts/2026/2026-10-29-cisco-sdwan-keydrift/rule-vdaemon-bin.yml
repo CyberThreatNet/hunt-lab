@@ -1,0 +1,35 @@
+title: Cisco SD-WAN LittleFilch Staging File vdaemon.bin
+id: 8673046a-2e77-479f-bc1d-2c54bdfbdfc2
+status: experimental
+description: |
+    Detects creation of /var/tmp/vdaemon.bin or /var/tmp/vdaemon.conf on a
+    Linux host. Talos documents these paths as LittleFilch staging for stolen
+    IPsec keying material after CVE-2026-20127 / KeyDrift. Behaviour-based
+    path hunt; confirm controller role before escalating.
+references:
+    - https://blog.talosintelligence.com/uat-11473-keydrift/
+    - https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sdwan-rpa-EHchtZk
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-29-cisco-sdwan-keydrift
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-29
+modified: 2026-10-29
+tags:
+    - attack.credential-access
+    - attack.t1552
+    - attack.collection
+    - cve.2026-20127
+logsource:
+    category: file_event
+    product: linux
+detection:
+    selection:
+        TargetFilename|endswith:
+            - '/var/tmp/vdaemon.bin'
+            - '/var/tmp/vdaemon.conf'
+            - '\var\tmp\vdaemon.bin'
+            - '\var\tmp\vdaemon.conf'
+    condition: selection
+falsepositives:
+    - Lab replay of Talos sample paths
+    - Unrelated software that reuses the same staging names (rare)
+level: high

@@ -1,0 +1,4 @@
+- https://blog.talosintelligence.com/uat-11473-keydrift/
+- https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sdwan-rpa-EHchtZk
+- https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+- https://cyber-threat.net/volt-typhoon-silent-train-relay-framework/
