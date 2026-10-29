@@ -1,0 +1,45 @@
+title: VMware ESXi Shell or Busybox Command Activity via Syslog
+id: f3a98772-547e-41f6-a477-7956a0eb4b3b
+status: experimental
+description: |
+    Detects ESXi host shell or busybox command activity in forwarded syslog.
+    Useful as a positive-control baseline for CVE-2026-41709 hunting: on a
+    patched host these operations should leave an audit trail. Behaviour-based
+    on common ESXi syslog tokens (shell, busybox, vim-cmd, esxcli), not an
+    exploit signature for the logging gap itself.
+references:
+    - https://support.broadcom.com/web/ecx/support-content-notification/-/external/content/SecurityAdvisories/0/38017
+    - https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+    - https://www.crowdstrike.com/en-us/blog/crowdstrike-2026-legal-threat-landscape-report/
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-29-esxi-audit-log-gaps
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-29
+modified: 2026-10-29
+tags:
+    - attack.stealth
+    - attack.t1070
+    - attack.privilege-escalation
+    - attack.t1078
+    - cve.2026-41709
+logsource:
+    product: vmware
+    service: esxi
+detection:
+    selection_shell:
+        Message|contains:
+            - 'shell'
+            - 'busybox'
+            - 'esxcli'
+            - 'vim-cmd'
+            - 'DCUI'
+    selection_host:
+        Message|contains:
+            - 'Hostd'
+            - 'hostd'
+            - 'vobd'
+            - 'Rhttpproxy'
+    condition: selection_shell and selection_host
+falsepositives:
+    - Legitimate administrator shell use during change windows
+    - Automated configuration management that shells into ESXi
+level: medium

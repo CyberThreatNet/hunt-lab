@@ -1,0 +1,38 @@
+// Draft — retarget tables/columns to your ESXi syslog and inventory schema. Untested.
+// 1) Unpatched / unknown ESXi build inventory (DeviceInfo or custom CMDB export)
+DeviceInfo
+| where Timestamp > ago(1d)
+| where DeviceType =~ "Server" or OSPlatform has_any ("VMware", "ESXi", "ESX")
+| extend Build = coalesce(OSVersion, DeviceOSVersion, "")
+| where Build has_any ("ESXi", "VMware", "8.0", "9.0", "9.1")
+| where not (Build has "ESXi80U3j-25429389"
+          or Build has "ESXi-9.0.2.0100"
+          or Build has "ESXi-9.1.0.0-25370933"
+          or Build has "5.2.4")
+| summarize LastSeen=max(Timestamp), Builds=make_set(Build) by DeviceName
+| sort by LastSeen desc
+
+// 2) Daily ESXi syslog volume — alert on hosts that went silent
+CommonSecurityLog
+| where TimeGenerated > ago(14d)
+| where DeviceVendor has "VMware" or DeviceProduct has_any ("ESXi","ESX","vSphere")
+   or Message has_any ("Hostd","hostd","vobd","esxcli")
+| summarize Count=count() by bin(TimeGenerated, 1d), DeviceName=coalesce(DeviceName, Computer, DeviceAddress)
+| where Count > 0
+| summarize Days=dcount(TimeGenerated), LastDay=max(TimeGenerated), Avg=avg(Count) by DeviceName
+| where LastDay < ago(2d) and Days >= 3
+
+// 3) Shell activity without auth in ±30m (join) — T1562.003 / T1070 hunt
+let shell = CommonSecurityLog
+| where TimeGenerated > ago(7d)
+| where Message has_any ("busybox","esxcli","vim-cmd") and Message has_any ("Hostd","hostd","shell")
+| project TimeGenerated, DeviceName=coalesce(DeviceName, Computer, DeviceAddress), Message;
+let auth = CommonSecurityLog
+| where TimeGenerated > ago(7d)
+| where Message has_any ("SSH login","SSH session","accepted password","Accepted publickey","User login")
+| project AuthTime=TimeGenerated, DeviceName=coalesce(DeviceName, Computer, DeviceAddress);
+shell
+| join kind=leftanti (auth) on DeviceName
+| where true // leftanti above is host-level; tighten with time window in your SIEM:
+// prefer: shell | join kind=leftouter auth on DeviceName | where isempty(AuthTime) or abs(datetime_diff('minute', TimeGenerated, AuthTime)) > 30
+| project TimeGenerated, DeviceName, Message

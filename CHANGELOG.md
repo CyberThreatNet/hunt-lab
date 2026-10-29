@@ -16,6 +16,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**ESXi audit-log gaps and unpatched inventory (CVE-2026-41709)**
+- `hunts/2026/2026-10-29-esxi-audit-log-gaps/`
+- Inventory, syslog-silence and shell-without-nearby-auth hunts for Broadcom VMSA-2026-0006 / CISA KEV CVE-2026-41709. Dual Sigma (shell/busybox baseline plus same-message auth-noise filter), hand KQL and SPL. Companion to the Cyber-Threat.net Alert.
+- Status: experimental, draft, untested. Keep experimental until sigma-cli conversion and a benign lab simulation are recorded in EVIDENCE.md.
+
 **Magento PolyShell CMS loader domains (CVE-2026-48356)**
 - `hunts/2026/2026-10-27-magento-cms-loader-domains/`
 - DNS-query Sigma for three Sansec-named loader hosts, with hand-written Defender XDR / Sentinel DNS KQL and Splunk conversion. Companion to the file-event webshell hunt.
