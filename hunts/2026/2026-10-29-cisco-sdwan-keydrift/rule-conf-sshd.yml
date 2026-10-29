@@ -1,0 +1,41 @@
+title: Cisco SD-WAN KeyDrift conf_sshd or rsshd Process
+id: c7178e9e-1225-4458-9866-dc136f1b08b0
+status: experimental
+description: |
+    Detects process names associated with the KeyDrift injector chain on
+    Catalyst SD-WAN controllers (conf_sshd, rsshd) or command lines referencing
+    libdssl.so / system-vdaemon. Talos documents these after CVE-2026-20127
+    exploitation by UAT-11473. Behaviour-based; not a memory signature.
+references:
+    - https://blog.talosintelligence.com/uat-11473-keydrift/
+    - https://sec.cloudapps.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-sdwan-rpa-EHchtZk
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-29-cisco-sdwan-keydrift
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-29
+modified: 2026-10-29
+tags:
+    - attack.execution
+    - attack.t1055
+    - attack.persistence
+    - cve.2026-20127
+logsource:
+    category: process_creation
+    product: linux
+detection:
+    selection_image:
+        Image|endswith:
+            - '/conf_sshd'
+            - '/rsshd'
+        Image|contains:
+            - 'conf_sshd'
+            - 'rsshd'
+    selection_cmd:
+        CommandLine|contains:
+            - 'libdssl.so'
+            - 'libcommon.so'
+            - '/tmp/system-vdaemon'
+            - 'conf_sshd'
+    condition: selection_image or selection_cmd
+falsepositives:
+    - Unrelated binaries that share short names on non-controller hosts (scope to SD-WAN controllers)
+level: high
