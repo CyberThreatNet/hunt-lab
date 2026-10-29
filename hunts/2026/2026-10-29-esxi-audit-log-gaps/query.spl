@@ -1,0 +1,23 @@
+COMMENT("Draft — retarget sourcetypes. Untested. Three separate searches below.")
+
+COMMENT("--- Unpatched inventory (example against a CMDB lookup) ---")
+| inputlookup esxi_inventory.csv
+| search NOT build_id IN ("ESXi80U3j-25429389","ESXi-9.0.2.0100-25595025","ESXi-9.1.0.0-25370933") NOT vcf_version="5.2.4"
+| table host, build_id, vcf_version, last_seen
+
+COMMENT("--- Syslog silence (hosts that normally log) ---")
+index=vmware OR sourcetype=*esxi* earliest=-14d
+| bin _time span=1d
+| stats count by _time, host
+| eventstats dc(_time) AS days, max(_time) AS last BY host
+| where last < relative_time(now(), "-2d") AND days >= 3
+
+COMMENT("--- Shell without nearby auth ---")
+index=vmware OR sourcetype=*esxi* (busybox OR esxcli OR vim-cmd) (Hostd OR hostd OR shell) earliest=-7d
+| eval kind="shell"
+| append [
+  search index=vmware OR sourcetype=*esxi* ("SSH login" OR "accepted password" OR "Accepted publickey" OR "User login") earliest=-7d
+  | eval kind="auth"
+]
+| transaction host maxspan=30m
+| search kind=shell NOT kind=auth
