@@ -1,0 +1,43 @@
+title: VMware ESXi Shell Activity Excluding Same-Message Auth Noise (Correlate in SIEM)
+id: f99f6306-9b14-4090-8480-be8ae9fb0acc
+status: experimental
+description: |
+    Hunting starting point for CVE-2026-41709-style audit gaps. This Sigma rule
+    alone is not a time-window join: it matches ESXi shell or busybox syslog
+    lines and excludes messages that themselves look like authentication or
+    login lines. The intended nearby-auth correlation (±30 minutes) lives in
+    query.kql and query.spl. Behaviour-based; not an exploit signature.
+references:
+    - https://support.broadcom.com/web/ecx/support-content-notification/-/external/content/SecurityAdvisories/0/38017
+    - https://www.crowdstrike.com/en-us/blog/crowdstrike-2026-legal-threat-landscape-report/
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-29-esxi-audit-log-gaps
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-29
+modified: 2026-10-29
+tags:
+    - attack.stealth
+    - attack.t1070
+    - cve.2026-41709
+logsource:
+    product: vmware
+    service: esxi
+detection:
+    selection:
+        Message|contains:
+            - 'shell'
+            - 'busybox'
+            - 'esxcli'
+    filter_auth_noise:
+        Message|contains:
+            - 'SSH login'
+            - 'SSH session'
+            - 'User login'
+            - 'accepted password'
+            - 'Accepted publickey'
+    condition: selection and not filter_auth_noise
+falsepositives:
+    - This rule is not a time-window join; SIEM correlation is still required
+    - Auth and shell lines split across indexes or delayed pipelines
+    - Local DCUI activity that does not emit SSH auth lines
+    - Clock skew between hosts and the collector
+level: medium

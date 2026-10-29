@@ -1,0 +1,2 @@
+# proxy/syslog style: prefer splunk conversion; XDR mapping may need hand KQL
+-t splunk --without-pipeline
