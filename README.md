@@ -21,6 +21,7 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-10-29 | Cisco SD-WAN KeyDrift / UAT-11473 (CVE-2026-20127) | CVE-2026-20127 | T1190, T1055, T1552, T1543 | — | [`2026-10-29-cisco-sdwan-keydrift`](hunts/2026/2026-10-29-cisco-sdwan-keydrift/) |
 | 2026-10-29 | ESXi audit-log gaps and unpatched inventory (CVE-2026-41709) | CVE-2026-41709 | T1562.003, T1070, T1078 | [Article](https://cyber-threat.net/esxi-cve-2026-41709-kev-logging-gap-zero-day/) | [`2026-10-29-esxi-audit-log-gaps`](hunts/2026/2026-10-29-esxi-audit-log-gaps/) |
 | 2026-10-28 | PHP2Shell chained with Fragnesia (CVE-2026-109618 / 109619 / 46300) | CVE-2026-109618, CVE-2026-109619, CVE-2026-46300 | T1190, T1059.004, T1068, T1556.003, T1505.003 | [Article](https://cyber-threat.net/php2shell-fragnesia-dream-25-rooted-servers/) | [`2026-10-28-php2shell-fragnesia-chain`](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) |
 | 2026-10-28 | PeopleSoft PSIGW→PSEMHUB (CVE-2026-35273) | CVE-2026-35273 | T1190, T1210, T1505.003 | [Article](https://cyber-threat.net/peoplesoft-cve-2026-35273-ssrf-rce-mass-exploited/) | [`2026-10-28-peoplesoft-psigw-psemhub`](hunts/2026/2026-10-28-peoplesoft-psigw-psemhub/) |
@@ -82,6 +83,7 @@ hunt-lab/
 | 2026-10-28 | [MLflow scorer invoke (CVE-2026-116692)](hunts/2026/2026-10-28-mlflow-scorer-invoke/) | T1190 | Draft, untested |
 | 2026-10-28 | [PHP2Shell chained with Fragnesia (CVE-2026-109618 / 109619 / 46300)](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | T1190, T1059.004, T1068, T1556.003, T1505.003 | Draft, untested |
 | 2026-10-29 | [ESXi audit-log gaps and unpatched inventory (CVE-2026-41709)](hunts/2026/2026-10-29-esxi-audit-log-gaps/) | T1562.003, T1070, T1078 | Experimental, draft, untested |
+| 2026-10-29 | [Cisco SD-WAN KeyDrift / UAT-11473 (CVE-2026-20127)](hunts/2026/2026-10-29-cisco-sdwan-keydrift/) | T1190, T1055, T1552, T1543 | Experimental, draft, untested |
 
 ## Exploitation context: CISA KEV and FIRST EPSS
 
@@ -148,6 +150,7 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-46300 | Yes | 2026-10-28 | 2026-10-31 | Unknown | 0.10192 | 95.65 | 2026-10-29 (KEV catalogue 2026.10.28) |
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-29 (KEV catalogue 2026.10.28) |
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-29 (KEV catalogue 2026.10.28) |
+| [2026-10-29-cisco-sdwan-keydrift](hunts/2026/2026-10-29-cisco-sdwan-keydrift/) | CVE-2026-20127 | Yes | 2026-02-25 | 2026-02-27 | Unknown | 0.89294 | 99.78 | 2026-10-29 (KEV catalogue 2026.10.28) |
 | [2026-10-29-esxi-audit-log-gaps](hunts/2026/2026-10-29-esxi-audit-log-gaps/) | CVE-2026-41709 | Yes | 2026-10-28 | 2026-11-11 | Unknown | 0.00297 | 22.29 | 2026-10-29 (KEV catalogue 2026.10.28) |
 
 <!-- kev-epss:end -->
