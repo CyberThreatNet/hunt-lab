@@ -9,7 +9,7 @@ description: |
     many legitimate pipelines rewrite CI YAML.
 references:
     - https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/
-    - https://alpinelinux.org/posts/2026-10-29-gitlab-cve-2026-97229.html
+    - https://alpinelinux.org/posts/GitLab-security-incident-CVE-2026-97229.html
     - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-30-gitlab-ci-regex-rce
 author: Cyber-Threat.net Hunt Lab
 date: 2026-10-30
