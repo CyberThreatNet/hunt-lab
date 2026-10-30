@@ -1,0 +1,41 @@
+// Microsoft Defender XDR / Sentinel — Cursor Marketplace SSH persistence hunt
+// Companion to Sigma rules in 2026-10-30-cursor-marketplace-ssh-persistence
+// Defensive only. IOCs from Cursor / OpenSourceMalware / Phorion.
+let window = 14d;
+let c2 = "134.209.82.225";
+DeviceFileEvents
+| where Timestamp > ago(window)
+| where FileName has_any ("authorized_keys", "administrators_authorized_keys", "com.apple.sysmond.plist", ".smt", ".smtk", "sysmon.cmd")
+    or FolderPath has_any (@"\.ssh\", "/.ssh/", @"\LaunchAgents\", "/LaunchAgents/", @"\.config\", "/.config/")
+    or FileName matches regex @"\.stk_[0-9a-f]{10}"
+| extend HuntSignal = case(
+    FileName has "authorized_keys" or FileName has "administrators_authorized_keys", "authorized_keys_path",
+    FileName has "com.apple.sysmond.plist", "macos_launchagent",
+    FileName in (".smt", ".smtk") or FolderPath has "/.config/", "macos_linux_helper",
+    FileName =~ "sysmon.cmd", "windows_sysmon_cmd",
+    "other_file")
+| project Timestamp, DeviceName, ActionType, HuntSignal, FileName, FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine
+| union (
+    DeviceProcessEvents
+    | where Timestamp > ago(window)
+    | where FileName has_any ("ssh", "ssh.exe", "autossh", "autossh.exe", "launchctl", "crontab", "schtasks.exe", "osascript")
+        or ProcessCommandLine has_any ("svc-telemetry", "StrictHostKeyChecking=no", "tunnel@134.209.82.225", c2, "com.apple.sysmond", "localhost:22", "-R ")
+    | extend HuntSignal = case(
+        ProcessCommandLine has "svc-telemetry", "svc_telemetry_cmdline",
+        ProcessCommandLine has c2 or ProcessCommandLine has "tunnel@134.209.82.225", "c2_ssh_cmdline",
+        ProcessCommandLine has "-R" and ProcessCommandLine has_any ("localhost:22", "127.0.0.1:22"), "reverse_tunnel",
+        ProcessCommandLine has "com.apple.sysmond", "launchagent_load",
+        FileName has_any ("ssh", "autossh"), "ssh_process",
+        "other_process")
+    | project Timestamp, DeviceName, ActionType, HuntSignal, FileName, FolderPath=FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine=ProcessCommandLine
+)
+| union (
+    DeviceNetworkEvents
+    | where Timestamp > ago(window)
+    | where RemoteIP == c2
+        or (RemotePort in (22, 8099) and RemoteIP == c2)
+        or RemoteUrl has c2
+    | extend HuntSignal = iff(RemotePort == 8099, "c2_beacon_8099", "c2_ssh_or_other")
+    | project Timestamp, DeviceName, ActionType=tostring(ActionType), HuntSignal, FileName=RemoteIP, FolderPath=strcat(RemoteIP, ":", RemotePort), InitiatingProcessFileName, InitiatingProcessCommandLine
+)
+| sort by Timestamp desc

@@ -21,6 +21,7 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-10-30 | Cursor Marketplace SSH persistence (Anthropic.claude-code 2.1.313) | — | T1195.002, T1098.004, T1543.001, T1053.003, T1053.005, T1572, T1071.001, T1071.002 | — | [`2026-10-30-cursor-marketplace-ssh-persistence`](hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence/) |
 | 2026-10-30 | GitLab CI regex unauthenticated RCE (CVE-2026-97229) | CVE-2026-97229 | T1190, T1059 | — | [`2026-10-30-gitlab-ci-regex-rce`](hunts/2026/2026-10-30-gitlab-ci-regex-rce/) |
 | 2026-10-29 | Cisco SD-WAN KeyDrift / UAT-11473 (CVE-2026-20127) | CVE-2026-20127 | T1190, T1055, T1552, T1543 | — | [`2026-10-29-cisco-sdwan-keydrift`](hunts/2026/2026-10-29-cisco-sdwan-keydrift/) |
 | 2026-10-29 | ESXi audit-log gaps and unpatched inventory (CVE-2026-41709) | CVE-2026-41709 | T1562.003, T1070, T1078 | [Article](https://cyber-threat.net/esxi-cve-2026-41709-kev-logging-gap-zero-day/) | [`2026-10-29-esxi-audit-log-gaps`](hunts/2026/2026-10-29-esxi-audit-log-gaps/) |
@@ -154,6 +155,7 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-10-30 (KEV catalogue 2026.10.29) |
 | [2026-10-29-cisco-sdwan-keydrift](hunts/2026/2026-10-29-cisco-sdwan-keydrift/) | CVE-2026-20127 | Yes | 2026-02-25 | 2026-02-27 | Unknown | 0.89294 | 99.78 | 2026-10-30 (KEV catalogue 2026.10.29) |
 | [2026-10-29-esxi-audit-log-gaps](hunts/2026/2026-10-29-esxi-audit-log-gaps/) | CVE-2026-41709 | Yes | 2026-10-28 | 2026-11-11 | Unknown | 0.00764 | 55.31 | 2026-10-30 (KEV catalogue 2026.10.29) |
+| [2026-10-30-cursor-marketplace-ssh-persistence](hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-30-gitlab-ci-regex-rce](hunts/2026/2026-10-30-gitlab-ci-regex-rce/) | CVE-2026-97229 | Yes | 2026-10-29 | 2026-11-01 | Unknown | 0.18427 | 97.23 | 2026-10-30 (KEV catalogue 2026.10.29) |
 
 <!-- kev-epss:end -->
