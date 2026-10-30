@@ -21,6 +21,7 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-10-30 | Cursor Marketplace SSH persistence (Anthropic.claude-code 2.1.313) | — | T1195.002, T1098.004, T1543.001, T1053.003, T1053.005, T1572, T1071.001, T1071.002 | — | [`2026-10-30-cursor-marketplace-ssh-persistence`](hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence/) |
 | 2026-10-30 | GitLab CI regex unauthenticated RCE (CVE-2026-97229) | CVE-2026-97229 | T1190, T1059 | — | [`2026-10-30-gitlab-ci-regex-rce`](hunts/2026/2026-10-30-gitlab-ci-regex-rce/) |
 | 2026-10-29 | Cisco SD-WAN KeyDrift / UAT-11473 (CVE-2026-20127) | CVE-2026-20127 | T1190, T1055, T1552, T1543 | — | [`2026-10-29-cisco-sdwan-keydrift`](hunts/2026/2026-10-29-cisco-sdwan-keydrift/) |
 | 2026-10-29 | ESXi audit-log gaps and unpatched inventory (CVE-2026-41709) | CVE-2026-41709 | T1562.003, T1070, T1078 | [Article](https://cyber-threat.net/esxi-cve-2026-41709-kev-logging-gap-zero-day/) | [`2026-10-29-esxi-audit-log-gaps`](hunts/2026/2026-10-29-esxi-audit-log-gaps/) |
