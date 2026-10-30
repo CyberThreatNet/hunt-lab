@@ -1,0 +1,30 @@
+// Microsoft Defender XDR / Sentinel — GitLab CVE-2026-97229 CI regex RCE hunt aids
+// Scope DeviceName to known self-managed GitLab hosts where possible.
+// Defensive only. No exploit replay.
+let window = 14d;
+DeviceProcessEvents
+| where Timestamp > ago(window)
+| where InitiatingProcessFolderPath has "/opt/gitlab"
+    or InitiatingProcessFileName has_any ("ruby", "puma", "sidekiq", "gitlab-workhorse", "gitlab-rails")
+| where FileName has_any ("sh", "bash", "dash", "zsh", "curl", "wget", "python", "python3", "perl", "nc", "ncat")
+    or ProcessCommandLine has_any ("/bin/sh", "/bin/bash", "curl ", "wget ")
+| project Timestamp, DeviceName, ActionType, FileName, FolderPath, ProcessCommandLine,
+    InitiatingProcessFileName, InitiatingProcessFolderPath, InitiatingProcessCommandLine
+| union (
+    DeviceFileEvents
+    | where Timestamp > ago(window)
+    | where FileName has_any (".gitlab-ci.yml", ".gitlab-ci.yaml", "gitlab-ci.yml")
+    | project Timestamp, DeviceName, ActionType=tostring(ActionType), FileName, FolderPath,
+        ProcessCommandLine=InitiatingProcessCommandLine,
+        InitiatingProcessFileName, InitiatingProcessFolderPath="", InitiatingProcessCommandLine=""
+)
+| union (
+    DeviceNetworkEvents
+    | where Timestamp > ago(window)
+    | where RemoteUrl has_any ("/ci/lint", "/api/v4/ci/lint", "/api/graphql")
+        or tostring(AdditionalFields) has_any ("/ci/lint", "ciLint")
+    | project Timestamp, DeviceName, ActionType=tostring(ActionType), FileName="", FolderPath=RemoteUrl,
+        ProcessCommandLine=InitiatingProcessCommandLine,
+        InitiatingProcessFileName, InitiatingProcessFolderPath="", InitiatingProcessCommandLine=""
+)
+| sort by Timestamp desc

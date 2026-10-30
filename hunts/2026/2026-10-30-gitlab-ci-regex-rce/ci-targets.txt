@@ -1,0 +1,2 @@
+# linux process / web: Splunk conversion; hand KQL ships in query.kql (XDR mapping)
+-t splunk --without-pipeline

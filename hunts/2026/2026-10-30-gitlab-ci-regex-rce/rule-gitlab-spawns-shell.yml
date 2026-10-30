@@ -1,0 +1,61 @@
+title: Shell or download tool spawned by a GitLab Ruby worker
+id: 7b9b1f6d-3079-4ddc-b6a9-14478f0e0626
+status: experimental
+description: |
+    Detects a shell, scripting interpreter or common download tool started by a GitLab
+    embedded Ruby / Puma / Sidekiq / workhorse process. CVE-2026-97229 is an
+    unauthenticated RCE in CI regex parsing (Ruby Onigmo). A successful exploit runs
+    attacker code inside the GitLab worker; a subsequent shell or curl/wget child is a
+    high-signal post-exploitation indicator. Pair with CI Lint / GraphQL access on the
+    same host. Alpine Linux reported worker crashes from crafted CI configs during an
+    attempted exploit of this CVE.
+references:
+    - https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/
+    - https://alpinelinux.org/posts/2026-10-29-gitlab-cve-2026-97229.html
+    - https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-30-gitlab-ci-regex-rce
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-30
+modified: 2026-10-30
+tags:
+    - attack.initial-access
+    - attack.execution
+    - attack.t1190
+    - attack.t1059
+    - cve.2026-97229
+logsource:
+    product: linux
+    category: process_creation
+detection:
+    selection_parent:
+        ParentImage|endswith:
+            - '/opt/gitlab/embedded/bin/ruby'
+            - '/opt/gitlab/embedded/bin/puma'
+            - '/opt/gitlab/embedded/bin/sidekiq'
+            - '/opt/gitlab/embedded/bin/gitlab-workhorse'
+            - '/bin/gitlab-workhorse'
+            - '/bin/puma'
+            - '/bin/sidekiq'
+    selection_child:
+        Image|endswith:
+            - '/bin/sh'
+            - '/bin/bash'
+            - '/bin/dash'
+            - '/bin/zsh'
+            - '/bin/curl'
+            - '/bin/wget'
+            - '/bin/python'
+            - '/bin/python3'
+            - '/bin/perl'
+            - '/bin/nc'
+            - '/bin/ncat'
+            - '/usr/bin/curl'
+            - '/usr/bin/wget'
+            - '/usr/bin/python3'
+            - '/usr/bin/bash'
+            - '/usr/bin/sh'
+    condition: selection_parent and selection_child
+falsepositives:
+    - GitLab backup, upgrade or rake tasks that shell out — join to change windows
+    - Custom GitLab hooks that intentionally invoke curl or a shell — baseline known hooks
+level: high
