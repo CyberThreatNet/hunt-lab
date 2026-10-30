@@ -1,0 +1,42 @@
+title: Cursor Marketplace Implant Persistence Paths
+id: a4c91e2f-6b30-4d8e-9f17-2e5c8a0b1d44
+status: experimental
+description: |
+    Flags creation of persistence artefacts reported for the trojanised
+    Anthropic.claude-code 2.1.313 Cursor Marketplace VSIX: macOS LaunchAgent
+    com.apple.sysmond.plist and helper ~/.config/.smt / .smtk; Linux @reboot
+    cron targeting .smt; Windows scheduled task or Startup sysmon.cmd. Pair
+    with process and network hunts in the same folder.
+references:
+    - https://cursor.com/blog/claude-code-extension-security-notice
+    - https://opensourcemalware.com/blog/trojanized-claude-code-extension-plants-persistent-ssh-backdoor
+    - https://phorion.io/blog/offical-claude-code-vsx-compromise/
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-30
+tags:
+    - attack.persistence
+    - attack.t1543.001
+    - attack.t1053.003
+    - attack.t1053.005
+logsource:
+    category: file_event
+detection:
+    selection_macos:
+        TargetFilename|endswith:
+            - '/LaunchAgents/com.apple.sysmond.plist'
+            - '/.config/.smt'
+            - '/.config/.smtk'
+    selection_windows:
+        TargetFilename|endswith:
+            - '\sysmon.cmd'
+            - '\Startup\sysmon.cmd'
+            - '/Startup/sysmon.cmd'
+    selection_tmp_key:
+        # Temporary SSH identity .stk_<10 hex> under TMPDIR
+        TargetFilename|re: '.*/\.stk_[0-9a-f]{10}$'
+    condition: 1 of selection_*
+falsepositives:
+    - Legitimate software named SysMon unrelated to this implant (review path and parent)
+    - Responders recreating paths during cleanup drills
+level: high

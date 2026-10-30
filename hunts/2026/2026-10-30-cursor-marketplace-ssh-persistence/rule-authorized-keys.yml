@@ -1,0 +1,41 @@
+title: Authorized Keys Entry Comment svc-telemetry
+id: 37b11712-c875-45a4-8f59-3360dec37a66
+status: experimental
+description: |
+    Flags file events that touch SSH authorized_keys paths where the content or
+    related command line references the comment svc-telemetry. Cursor and
+    OpenSourceMalware report that the trojanised Anthropic.claude-code 2.1.313
+    VSIX served from the Cursor Marketplace on 29 October 2026 appends an
+    Ed25519 public key with that comment. Many EDR file events do not include
+    file content; pair this rule with the process and network rules in the same
+    hunt, and with a host-side grep of authorized_keys.
+references:
+    - https://cursor.com/blog/claude-code-extension-security-notice
+    - https://opensourcemalware.com/blog/trojanized-claude-code-extension-plants-persistent-ssh-backdoor
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-30
+tags:
+    - attack.persistence
+    - attack.t1098.004
+    - attack.initial-access
+    - attack.t1195.002
+logsource:
+    category: file_event
+detection:
+    selection_path:
+        TargetFilename|endswith:
+            - '/.ssh/authorized_keys'
+            - '\.ssh\authorized_keys'
+            - '/ssh/administrators_authorized_keys'
+            - '\ssh\administrators_authorized_keys'
+    selection_comment:
+        TargetFilename|contains: 'svc-telemetry'
+    selection_cmdline:
+        # Some agents put content snippets or related commands on the event
+        CommandLine|contains: 'svc-telemetry'
+    condition: selection_path or selection_comment or selection_cmdline
+falsepositives:
+    - Responders grepping or editing authorized_keys while remediating
+    - Synthetic lab fixtures that recreate the comment
+level: high

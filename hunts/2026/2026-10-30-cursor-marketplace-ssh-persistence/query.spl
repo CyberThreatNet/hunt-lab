@@ -1,0 +1,10 @@
+index=* (134.209.82.225 OR svc-telemetry OR "com.apple.sysmond" OR "StrictHostKeyChecking=no" OR sysmon.cmd OR ".smt")
+| eval hunt_signal=case(
+    searchmatch("svc-telemetry"), "svc_telemetry",
+    searchmatch("134.209.82.225"), "c2_ip",
+    searchmatch("com.apple.sysmond"), "macos_launchagent",
+    searchmatch("sysmon.cmd"), "windows_sysmon_cmd",
+    searchmatch("StrictHostKeyChecking=no"), "insecure_ssh",
+    true(), "other")
+| table _time host hunt_signal sourcetype process command dest_ip dest_port file_path
+| sort - _time
