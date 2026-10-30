@@ -1,0 +1,32 @@
+title: Outbound Traffic to Cursor Marketplace Implant C2 134.209.82.225
+id: c8f3145b-02de-5e3f-b9f7-6d2e0a1c4e83
+status: experimental
+description: |
+    Flags network connections to 134.209.82.225, the C2 address Cursor and
+    OpenSourceMalware published for the trojanised Anthropic.claude-code
+    2.1.313 Cursor Marketplace implant (SSH reverse tunnel on TCP 22 and HTTP
+    beacon on TCP 8099 /beacon). Cursor reported the server was taken offline;
+    keep the hunt for historical telemetry and late reconnects.
+references:
+    - https://cursor.com/blog/claude-code-extension-security-notice
+    - https://opensourcemalware.com/blog/trojanized-claude-code-extension-plants-persistent-ssh-backdoor
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-30
+tags:
+    - attack.command-and-control
+    - attack.t1071.001
+    - attack.t1572
+logsource:
+    category: network_connection
+detection:
+    selection:
+        DestinationIp: '134.209.82.225'
+    selection_alt:
+        dst_ip: '134.209.82.225'
+    selection_url:
+        DestinationHostname|contains: '134.209.82.225'
+    condition: 1 of selection*
+falsepositives:
+    - None expected for this specific DigitalOcean-hosted address outside incident response lab replays
+level: critical

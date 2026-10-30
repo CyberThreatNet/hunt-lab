@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+**Cursor Marketplace SSH persistence (Anthropic.claude-code 2.1.313)**
+- `hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence/`
+- Sigma for `svc-telemetry` authorized_keys, LaunchAgent/cron/SysMon persistence paths, reverse SSH tunnel command lines, and egress to 134.209.82.225. Hand KQL, SPL and a read-only host-check script. Companion to the Cyber-Threat.net Alert (slug omits product brand from URL).
+- Status: experimental, draft, untested. IOCs only from Cursor / OpenSourceMalware / Phorion.
+
 ### Changed
 
 **KEV and EPSS refresh, 27 October 2026 (evening)**

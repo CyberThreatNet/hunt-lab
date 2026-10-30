@@ -1,0 +1,55 @@
+title: Reverse SSH Tunnel with StrictHostKeyChecking Disabled
+id: b7e2034a-91cf-4f2d-a8e6-5c1d9f0e3b72
+status: experimental
+description: |
+    Flags process creation of ssh or autossh that opens a reverse tunnel to
+    localhost:22 (or equivalent -R *:0:localhost:22) and/or disables host key
+    checking. Cursor and OpenSourceMalware report the Cursor Marketplace
+    implant connects as tunnel@134.209.82.225 with those flags. The C2 IP is
+    covered by the companion network rule; this rule catches behavioural
+    reverse-tunnel patterns even if the IP changes.
+references:
+    - https://cursor.com/blog/claude-code-extension-security-notice
+    - https://opensourcemalware.com/blog/trojanized-claude-code-extension-plants-persistent-ssh-backdoor
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-30
+tags:
+    - attack.command-and-control
+    - attack.t1572
+    - attack.t1071.002
+    - attack.persistence
+logsource:
+    category: process_creation
+detection:
+    selection_bin:
+        Image|endswith:
+            - '/ssh'
+            - '/autossh'
+            - '\ssh.exe'
+            - '\autossh.exe'
+        # Also catch bare FileName on Windows-style telemetry
+    selection_bin_name:
+        FileName|endswith:
+            - 'ssh'
+            - 'ssh.exe'
+            - 'autossh'
+            - 'autossh.exe'
+    selection_reverse:
+        CommandLine|contains:
+            - '-R'
+            - 'localhost:22'
+            - '127.0.0.1:22'
+    selection_insecure:
+        CommandLine|contains:
+            - 'StrictHostKeyChecking=no'
+            - 'StrictHostKeyChecking=accept-new'
+    selection_c2_user:
+        CommandLine|contains:
+            - 'tunnel@134.209.82.225'
+            - '134.209.82.225'
+    condition: (selection_bin or selection_bin_name) and (selection_reverse or selection_insecure or selection_c2_user)
+falsepositives:
+    - Administrators using autossh for legitimate reverse tunnels (baseline known jump hosts)
+    - DevOps tooling that disables StrictHostKeyChecking in ephemeral CI (review destination)
+level: high
