@@ -18,10 +18,10 @@ An attacker probing or exploiting CVE-2026-97229 against a self-managed GitLab i
 
 ## Threat context
 
-- GitLab (28 October 2026): CVE-2026-97229, unauthenticated RCE via crafted regex in CI configuration. Fixed in 19.2.8, 19.3.5, 19.4.2. Root cause in Ruby Onigmo. https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/
+- GitLab (12 October 2026): CVE-2026-97229, integer overflow in CI/CD regex compiler allowing unauthenticated RCE via crafted regex. Fixed in 19.2.8, 19.3.5, 19.4.2 (CE/EE 19.2/19.3/19.4 lines). Root cause in Ruby Onigmo. https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/
 - Ruby (23 October 2026): regexp engine fixes in 3.3.13, 3.4.12, 4.0.9. https://www.ruby-lang.org/en/news/2026/10/23/regexp-fixes-for-gitlab-cves
 - CISA KEV dateAdded 2026-10-29, due 2026-11-01, forensic triage Yes. https://www.cisa.gov/known-exploited-vulnerabilities-catalog
-- Alpine Linux (29 October 2026): attempted exploit; eight worker crashes. https://alpinelinux.org/posts/2026-10-29-gitlab-cve-2026-97229.html
+- Alpine Linux (28 October 2026): attempted exploit; eight worker crashes. https://alpinelinux.org/posts/GitLab-security-incident-CVE-2026-97229.html
 
 **IOCs:** None published by the vendors above for this CVE. Prefer behavioural detections. Defang any indicators that appear later in tickets.
 
