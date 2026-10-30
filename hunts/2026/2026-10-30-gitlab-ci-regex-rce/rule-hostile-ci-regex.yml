@@ -1,0 +1,34 @@
+title: GitLab CI configuration file created or modified
+id: 254ce2ec-7003-4187-8036-7116db318c8c
+status: experimental
+description: |
+    Flags creates or modifications of .gitlab-ci.yml on disk. GitLab and Alpine describe
+    crafted regular expressions in CI configuration as the trigger for CVE-2026-97229.
+    This is a low-severity aid for correlating CI file writes with CI Lint access and
+    GitLab worker child processes — not a signature of the exploit. Review every hit;
+    many legitimate pipelines rewrite CI YAML.
+references:
+    - https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/
+    - https://alpinelinux.org/posts/2026-10-29-gitlab-cve-2026-97229.html
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-30-gitlab-ci-regex-rce
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-30
+modified: 2026-10-30
+tags:
+    - attack.initial-access
+    - attack.t1190
+    - cve.2026-97229
+logsource:
+    product: linux
+    category: file_event
+detection:
+    selection:
+        TargetFilename|endswith:
+            - '/.gitlab-ci.yml'
+            - '/.gitlab-ci.yaml'
+            - '/gitlab-ci.yml'
+    condition: selection
+falsepositives:
+    - Normal developer edits to .gitlab-ci.yml — always review content; do not auto-block
+    - Bot or renovate commits that rewrite CI — baseline known bot authors
+level: low
