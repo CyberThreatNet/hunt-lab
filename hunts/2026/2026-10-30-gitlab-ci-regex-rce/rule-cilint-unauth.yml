@@ -1,0 +1,36 @@
+title: Unauthenticated GitLab CI Lint or GraphQL ciLint request
+id: 7f7a3a13-e2ba-4e2d-90ff-cf5847c88c87
+status: experimental
+description: |
+    Detects HTTP access to GitLab CI Lint endpoints or GraphQL operations that invoke
+    ciLint, which parse CI YAML (including regular expressions) before authentication.
+    CVE-2026-97229 is an unauthenticated RCE reached through these paths on vulnerable
+    self-managed GitLab. Pair hits with shell spawns from GitLab workers on the same
+    host. Tune to your reverse-proxy or GitLab nginx/workhorse access logs.
+references:
+    - https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/
+    - https://www.ruby-lang.org/en/news/2026/10/23/regexp-fixes-for-gitlab-cves
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-30-gitlab-ci-regex-rce
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-30
+modified: 2026-10-30
+tags:
+    - attack.initial-access
+    - attack.t1190
+    - cve.2026-97229
+logsource:
+    category: webserver
+detection:
+    selection_path:
+        cs-uri-stem|contains:
+            - '/ci/lint'
+            - '/-/ci/lint'
+            - '/api/v4/ci/lint'
+    selection_graphql:
+        cs-uri-stem|contains: '/api/graphql'
+        cs-uri-query|contains: 'ciLint'
+    condition: selection_path or selection_graphql
+falsepositives:
+    - Legitimate developers using CI Lint while signed in — join to session cookies or authenticated user IDs
+    - Internal automation that posts CI YAML to the lint API under a service account
+level: high

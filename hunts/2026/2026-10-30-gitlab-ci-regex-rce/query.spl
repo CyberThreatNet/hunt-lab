@@ -1,0 +1,12 @@
+// GitLab CVE-2026-97229 — worker child shells and CI Lint / GraphQL access (Splunk)
+// Defensive only. Scope index/host to self-managed GitLab.
+(index=* (sourcetype=linux* OR sourcetype=gitlab* OR sourcetype=nginx* OR sourcetype=access*))
+earliest=-14d
+| eval host_l=lower(host)
+| search host_l="*gitlab*" OR source="*/opt/gitlab/*" OR file="*/opt/gitlab/*"
+| eval shell_child=if(match(_raw, "(?i)(puma|sidekiq|gitlab-workhorse|embedded/bin/ruby).{0,80}(bin/sh|bin/bash|curl |wget )"), 1, 0)
+| eval cilint=if(match(_raw, "(?i)(/ci/lint|/api/v4/ci/lint|ciLint|/api/graphql)"), 1, 0)
+| eval ci_yml=if(match(_raw, "(?i)\\.gitlab-ci\\.ya?ml"), 1, 0)
+| where shell_child=1 OR cilint=1 OR ci_yml=1
+| table _time, host, sourcetype, shell_child, cilint, ci_yml, _raw
+| sort - _time
