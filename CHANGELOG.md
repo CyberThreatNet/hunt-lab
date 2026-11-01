@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**GhostAction and Gheist: malicious GitHub Actions stealing secrets**
+- `hunts/2026/2026-10-31-ghostaction-gheist/`
+- Sigma for GhostAction secret exfiltration and Gheist self-hosted runner activity, plus KQL.
+- Status: experimental, untested.
+
+**LiteLLM 1.107.0 cook.pth / sitecustomize credential theft**
+- `hunts/2026/2026-10-31-litellm-11070-startup-hooks/`
+- Sigma for Python startup-hook files and exfil domain, KQL and YARA for cook.pth.
+- Status: experimental, untested.
+
 **Cursor Marketplace SSH persistence (Anthropic.claude-code 2.1.313)**
 - `hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence/`
 - Sigma for `svc-telemetry` authorized_keys, LaunchAgent/cron/SysMon persistence paths, reverse SSH tunnel command lines, and egress to 134.209.82.225. Hand KQL, SPL and a read-only host-check script. Companion to the Cyber-Threat.net Alert (slug omits product brand from URL).

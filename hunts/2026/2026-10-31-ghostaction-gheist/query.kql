@@ -1,0 +1,29 @@
+// Microsoft Defender XDR — GhostAction + Gheist starting points
+// IOCs from GitGuardian (GhostAction) and Wiz (Gheist). Defensive only.
+let window = 30d;
+let ghostIp = "193.32.204.199";
+DeviceNetworkEvents
+| where Timestamp > ago(window)
+| where RemoteIP == ghostIp or RemoteUrl has ghostIp
+| extend HuntSignal = "ghostaction_exfil_ip"
+| project Timestamp, DeviceName, HuntSignal, RemoteIP, RemotePort, RemoteUrl, InitiatingProcessFileName, InitiatingProcessCommandLine
+| union (
+    DeviceFileEvents
+    | where Timestamp > ago(window)
+    | where FileName in (".gdmp_pat", ".gdmp_patg", ".gdmp_sweep")
+        or FolderPath has_any ("sync-check.yml", "security-audit.yml", "github_actions_security.yml", "security-check.yml")
+    | extend HuntSignal = iff(FileName startswith ".gdmp_", "gheist_selfhosted_helper", "actions_workflow_ioc_path")
+    | project Timestamp, DeviceName, HuntSignal, RemoteIP="", RemotePort=0, RemoteUrl=FolderPath, InitiatingProcessFileName, InitiatingProcessCommandLine
+)
+| union (
+    DeviceProcessEvents
+    | where Timestamp > ago(window)
+    | where ProcessCommandLine has_any ("gdmp-pivot", "toJSON(secrets)", "base32 -w 120", "ci: sync config", "gheist")
+        or ProcessCommandLine has ghostIp
+    | extend HuntSignal = "gheist_or_ghost_cmdline"
+    | project Timestamp, DeviceName, HuntSignal, RemoteIP="", RemotePort=0, RemoteUrl=ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine=ProcessCommandLine
+)
+| sort by Timestamp desc
+// Also (outside XDR): GitHub audit for actor user-agent "gheist",
+// workflow runs on branches matching ^ci-sync-[0-9a-z]{6}$ deleted within ~1 min,
+// and commits that add only .github/workflows/sync-check.yml or security-audit.yml.
