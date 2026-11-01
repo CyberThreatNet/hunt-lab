@@ -1,0 +1,30 @@
+title: Outbound Traffic to LiteLLM 1.107.0 Collector Domain litellm.dev
+id: 9d91e8a8-1a3b-457e-a2d9-6de3d628af44
+status: experimental
+description: |
+    Flags network connections to www.litellm.dev / litellm.dev, the exfiltration
+    host Microsoft documented for the PRIVCOLLECT stealer in compromised
+    LiteLLM 1.107.0. Prefer exact host match; reject suffix lookalikes in KQL.
+references:
+    - https://www.microsoft.com/en-us/security/blog/2026/10/23/inside-the-litellm-1-107-0-supply-chain-compromise-credential-theft-through-python-startup-hooks/
+    - https://docs.litellm.ai/blog/security-incident-oct-21-2026
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-31
+tags:
+    - attack.command-and-control
+    - attack.t1071.001
+    - attack.exfiltration
+    - attack.t1041
+logsource:
+    category: network_connection
+detection:
+    selection:
+        DestinationHostname:
+            - 'www.litellm.dev'
+            - 'litellm.dev'
+    selection_url:
+        DestinationHostname|endswith: '.litellm.dev'
+    condition: 1 of selection*
+falsepositives:
+    - None expected for this collector domain outside IR lab replays
+level: critical

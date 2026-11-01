@@ -1,0 +1,39 @@
+title: Gheist Self-Hosted Runner Helper Files (.gdmp_*)
+id: 7af6a835-eedd-43cb-a4f7-489bb53ac02b
+status: experimental
+description: |
+    Flags creation of .gdmp_pat, .gdmp_patg or .gdmp_sweep on a host. Wiz reports
+    these helper files from the Gheist sync-host job that targets GitHub Actions
+    self-hosted runners after planting sync-check.yml on ci-sync-* branches.
+    Treat the runner host and its instance role as compromised if confirmed.
+references:
+    - https://www.wiz.io/blog/gheist-attempted-scaled-abuse-of-stolen-github-tokens-stumbles
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-31-ghostaction-gheist
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-31
+tags:
+    - attack.credential-access
+    - attack.t1552.001
+    - attack.persistence
+    - attack.t1078
+    - attack.t1070
+logsource:
+    category: file_event
+detection:
+    selection:
+        TargetFilename|endswith:
+            - '/.gdmp_pat'
+            - '/.gdmp_patg'
+            - '/.gdmp_sweep'
+            - '\.gdmp_pat'
+            - '\.gdmp_patg'
+            - '\.gdmp_sweep'
+    selection_name:
+        FileName:
+            - '.gdmp_pat'
+            - '.gdmp_patg'
+            - '.gdmp_sweep'
+    condition: 1 of selection*
+falsepositives:
+    - Unlikely outside attacker tooling or IR reconstruction of published IOCs
+level: critical

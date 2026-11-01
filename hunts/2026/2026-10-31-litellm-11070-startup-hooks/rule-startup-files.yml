@@ -1,0 +1,47 @@
+title: LiteLLM 1.107.0 Malicious Python Startup Files (cook.pth / cook.py)
+id: 2ae2a357-cfc1-42ba-8f85-88fc64cc3da4
+status: experimental
+description: |
+    Flags creation of cook.pth or cook.py, the Python site-startup components
+    Microsoft documented in the compromised LiteLLM 1.107.0 wheels. These were
+    installed outside the litellm package directory so a normal uninstall can
+    leave them behind. Correlate with sitecustomize.py and published SHA-256
+    values before declaring a hit; generic sitecustomize.py alone is not enough.
+references:
+    - https://www.microsoft.com/en-us/security/blog/2026/10/23/inside-the-litellm-1-107-0-supply-chain-compromise-credential-theft-through-python-startup-hooks/
+    - https://docs.litellm.ai/blog/security-incident-oct-21-2026
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-31-litellm-11070-startup-hooks
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-31
+tags:
+    - attack.initial-access
+    - attack.t1195.001
+    - attack.t1195.002
+    - attack.persistence
+    - attack.t1546.018
+    - attack.execution
+    - attack.t1059.006
+    - attack.credential-access
+    - attack.t1552.001
+logsource:
+    category: file_event
+detection:
+    selection_cook:
+        FileName:
+            - 'cook.pth'
+            - 'cook.py'
+    selection_markers:
+        TargetFilename|endswith:
+            - '/remote_code_loader.lock'
+            - '/.pc_once_72129118c59f5636c0bb'
+            - '\remote_code_loader.lock'
+            - '\.pc_once_72129118c59f5636c0bb'
+    selection_marker_name:
+        FileName:
+            - 'remote_code_loader.lock'
+            - '.pc_once_72129118c59f5636c0bb'
+    condition: 1 of selection*
+falsepositives:
+    - IR or research drops of the published filenames
+    - Unrelated projects that happen to ship a file named cook.py (check path and hash)
+level: high
