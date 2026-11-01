@@ -1,0 +1,38 @@
+// Microsoft Defender XDR — LiteLLM 1.107.0 hunt (adapted from Microsoft public queries)
+// Do not run python/pip on suspect hosts. Defensive only.
+let window = 21d;
+let hashes = dynamic([
+    "9dd0a3926f96a37eb86cf1ee2310d9be93139cc4ebef3ef9e2efe9531390be25",
+    "03ac2a8b752605d1d7710979c17ff18b03dd978203ba23ba97fd8ce3d6f897ea",
+    "34bef04fe88ac9d0aae0475630b1738681d15b94f233ac8aa46eacf5968305fa",
+    "b6122440d0d9cb1eb1ade9933f49214da8c31288de7710c076c2680dfa528465",
+    "7f191632e7320705d154b85204f1ae546b543acbd7e8861229b76f5042b92bdb",
+    "84dc8c82c0a4a4a62552ef826b49fcc86d1a5c4a5d0f2c06665723f93d129d7d"
+]);
+DeviceFileEvents
+| where Timestamp > ago(window)
+| where SHA256 in~ (hashes)
+    or FileName in~ ("cook.pth", "cook.py")
+    or FileName in~ ("remote_code_loader.lock", ".pc_once_72129118c59f5636c0bb")
+    or FolderPath has @"litellm-1.107.0"
+| extend HuntSignal = "litellm_startup_or_marker"
+| project Timestamp, DeviceName, HuntSignal, FileName, FolderPath, SHA256, InitiatingProcessFileName
+| union (
+    DeviceNetworkEvents
+    | where Timestamp > ago(window)
+    | extend UrlForParsing = iff(RemoteUrl contains "://", RemoteUrl, strcat("http://", RemoteUrl))
+    | extend RemoteHost = trim_end(@"\.", tolower(tostring(parse_url(UrlForParsing).Host)))
+    | where RemoteHost in ("www.litellm.dev", "litellm.dev")
+    | extend HuntSignal = "litellm_exfil_domain"
+    | project Timestamp, DeviceName, HuntSignal, FileName=RemoteHost, FolderPath=RemoteUrl, SHA256="", InitiatingProcessFileName
+)
+| union (
+    DeviceProcessEvents
+    | where Timestamp > ago(window)
+    | where FileName in~ ("openssl", "openssl.exe")
+    | where ProcessCommandLine has ".pc_e_"
+        and (ProcessCommandLine has_all ("enc", "-aes-256-cbc") or ProcessCommandLine has "pkeyutl" or ProcessCommandLine has "rsautl")
+    | extend HuntSignal = "litellm_openssl_staging"
+    | project Timestamp, DeviceName, HuntSignal, FileName, FolderPath=ProcessCommandLine, SHA256="", InitiatingProcessFileName
+)
+| sort by Timestamp desc

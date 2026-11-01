@@ -1,0 +1,2 @@
+# network + file: Splunk conversion; hand KQL ships in query.kql
+-t splunk --without-pipeline
