@@ -161,33 +161,20 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t files < <(find . -type f \( -name '*.yar' -o -name '*.yara' \) ! -path './.git/*' | sort)
-          if (( ${#files[@]} == 0 )); then
-            echo "yara: no .yar files (pass)"
+          set +e
+          out=$(python scripts/compile_yara.py)
+          rc=$?
+          set -e
+          echo "$out"
+          count=$(echo "$out" | awk -F= '/^count=/{print $2}' | tail -1)
+          count=${count:-0}
+          if [[ $rc -eq 0 ]]; then
             echo "yara_result=pass" >> "$GITHUB_OUTPUT"
-            echo "yara_count=0" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          bad=0
-          for f in "${files[@]}"; do
-            if python -c 'import sys,yara
-p=sys.argv[1]
-try:
- yara.compile(filepath=p); print("ok  ", p)
-except yara.Error as e:
- print("FAIL", p, e); raise SystemExit(1)' "$f"; then
-              :
-            else
-              bad=$((bad + 1))
-            fi
-          done
-          if (( bad )); then
+          else
             echo "yara_result=fail" >> "$GITHUB_OUTPUT"
-            echo "yara_count=${#files[@]}" >> "$GITHUB_OUTPUT"
-            exit 1
           fi
-          echo "yara_result=pass" >> "$GITHUB_OUTPUT"
-          echo "yara_count=${#files[@]}" >> "$GITHUB_OUTPUT"
+          echo "yara_count=${count}" >> "$GITHUB_OUTPUT"
+          exit "$rc"
 
       - name: One-line CI summary
         if: always()
