@@ -1,0 +1,35 @@
+title: Outbound HTTP to GhostAction Exfiltration Host 193.32.204.199
+id: a241f13c-732d-47da-a77a-e2aa38c58d7f
+status: experimental
+description: |
+    Flags network connections to 193.32.204.199, the plain-HTTP exfiltration
+    address GitGuardian and Socket documented for the GhostAction GitHub Actions
+    secret-theft campaign (security-audit.yml / github_actions_security.yml
+    workflows posting stolen secrets). Distinct from the Gheist campaign, which
+    Wiz reports has no external C2.
+references:
+    - https://blog.gitguardian.com/ghostaction-github-actions-supply-chain-attack-returns/
+    - https://www.wiz.io/blog/gheist-attempted-scaled-abuse-of-stolen-github-tokens-stumbles
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-10-31-ghostaction-gheist
+author: Cyber-Threat.net Hunt Lab
+date: 2026-10-31
+tags:
+    - attack.exfiltration
+    - attack.t1041
+    - attack.initial-access
+    - attack.t1195.002
+    - attack.credential-access
+    - attack.t1552.001
+logsource:
+    category: network_connection
+detection:
+    selection_ip:
+        DestinationIp: '193.32.204.199'
+    selection_ip_alt:
+        dst_ip: '193.32.204.199'
+    selection_host:
+        DestinationHostname|contains: '193.32.204.199'
+    condition: 1 of selection*
+falsepositives:
+    - Incident-response or research lab replays of the published indicator
+level: high
