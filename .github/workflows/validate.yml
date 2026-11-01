@@ -77,6 +77,7 @@ jobs:
         run: python scripts/tests/test_check_elastic_fields.py
 
       - name: sigma check (fail on errors and issues)
+        id: sigma_check
         # Hunt rule files are named rule.yml or rule-<topic>.yml inside each dated hunt folder, not by
         # SigmaHQ's naming convention, so the filename-convention validators are excluded.
         run: |
@@ -150,6 +151,55 @@ jobs:
             echo "::endgroup::"
           done
           exit "${fail}"
+
+      - name: Install yara-python
+        run: |
+          python -m pip install yara-python==4.5.1
+
+      - name: Compile all YARA rules
+        id: yara
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t files < <(find . -type f \( -name '*.yar' -o -name '*.yara' \) ! -path './.git/*' | sort)
+          if (( ${#files[@]} == 0 )); then
+            echo "yara: no .yar files (pass)"
+            echo "yara_result=pass" >> "$GITHUB_OUTPUT"
+            echo "yara_count=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          bad=0
+          for f in "${files[@]}"; do
+            if python -c 'import sys,yara
+p=sys.argv[1]
+try:
+ yara.compile(filepath=p); print("ok  ", p)
+except yara.Error as e:
+ print("FAIL", p, e); raise SystemExit(1)' "$f"; then
+              :
+            else
+              bad=$((bad + 1))
+            fi
+          done
+          if (( bad )); then
+            echo "yara_result=fail" >> "$GITHUB_OUTPUT"
+            echo "yara_count=${#files[@]}" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          echo "yara_result=pass" >> "$GITHUB_OUTPUT"
+          echo "yara_count=${#files[@]}" >> "$GITHUB_OUTPUT"
+
+      - name: One-line CI summary
+        if: always()
+        shell: bash
+        run: |
+          yara_r="${{ steps.yara.outputs.yara_result }}"
+          yara_n="${{ steps.yara.outputs.yara_count }}"
+          overall="pass"
+          if [[ "${{ job.status }}" != "success" ]]; then overall="fail"; fi
+          line="CI ${overall}: sigma + yara(${yara_n:-0} files ${yara_r:-n/a})"
+          echo "$line" >> "$GITHUB_STEP_SUMMARY"
+          echo "$line"
 
       - name: Upload sigma check report
         if: always()
