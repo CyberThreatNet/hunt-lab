@@ -1,4 +1,6 @@
 // Draft — needs CommonSecurityLog / WAF / Front Door / custom proxy that retains X-DSCGI-PATH.
+// Covers CVE-2026-104935 auth-bypass and CVE-2026-118527 predictable /home/runtime/tmp/<md5> race.
+// CVE-2026-111357 (dsinvoked local privilege escalation) is not visible in HTTP headers.
 // MDE DeviceNetworkEvents alone will NOT see HTTP headers. Prefer Sentinel + WAF.
 
 // Azure Front Door / Application Gateway / WAF (CommonSecurityLog) — retarget ProductName.
