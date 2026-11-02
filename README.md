@@ -150,6 +150,8 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108014 | No | – | – | – | 0.00128 | 2.46 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108015 | No | – | – | – | 0.00128 | 2.46 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-104935 | Yes | 2026-10-13 | 2026-10-16 | Unknown | 0.86766 | 99.74 | 2026-11-02 (KEV catalogue 2026.10.30) |
+| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-111357 | Yes | 2026-10-30 | 2026-11-02 | Unknown | 0.00533 | 45.02 | 2026-11-02 (KEV catalogue 2026.10.30) |
+| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-118527 | Yes | 2026-10-30 | 2026-11-13 | Unknown | not yet scored | – | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-mlflow-scorer-invoke](hunts/2026/2026-10-28-mlflow-scorer-invoke/) | CVE-2026-116692 | No | – | – | – | 0.00704 | 53.34 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-peoplesoft-psigw-psemhub](hunts/2026/2026-10-28-peoplesoft-psigw-psemhub/) | CVE-2026-35273 | Yes | 2026-06-12 | 2026-06-15 | Known | 0.96678 | 99.88 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-46300 | Yes | 2026-10-28 | 2026-10-31 | Unknown | 0.16130 | 96.93 | 2026-11-02 (KEV catalogue 2026.10.30) |
