@@ -1,2 +1,2 @@
-| draft — retarget sourcetype. Untested.
+| draft — retarget sourcetype. Untested. Covers CVE-2026-104935 / CVE-2026-118527 network race; not CVE-2026-111357.
 ("cs-uri-stem" IN ("*/dana-na/auth/url_default/welcome.cgi*", "*/dana-na/auth/*") "cs-uri-query" IN ("*X-DSCGI-PATH*", "*x-dscgi-path*", "*wu.cgi*", "*/home/runtime/tmp/*", "*/home/webserver/htdocs/dana/fb/smb/wu.cgi*")) OR "cs-uri-stem" IN ("*wu.cgi*", "*/home/runtime/tmp/*")
