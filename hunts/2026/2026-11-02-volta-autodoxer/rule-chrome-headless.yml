@@ -1,0 +1,46 @@
+title: Chrome or Chromium Launched with Headless Switch
+id: 9ab508d4-13d4-422e-8219-1d4de96c1587
+status: experimental
+description: |
+    Supporting hunt for VOLTA and similar stealers that bypass Chromium
+    App-Bound Encryption by launching Chrome with --headless. Cisco Talos
+    lists this path in VOLTA countermeasures and recommends restricting which
+    processes may start Chrome headless. High false-positive rate in developer
+    estates; tune Image/ParentImage allowlists before alerting.
+references:
+    - https://blog.talosintelligence.com/appraisal-by-ai-model-driven-victim-prioritization-in-the-volta-infostealer/
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-02-volta-autodoxer
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-02
+modified: 2026-11-02
+tags:
+    - attack.credential-access
+    - attack.t1555.003
+    - attack.stealth
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        Image|endswith:
+            - '\chrome.exe'
+            - '\msedge.exe'
+            - '\chromium.exe'
+    selection_cli:
+        CommandLine|contains:
+            - '--headless'
+    filter_parents:
+        ParentImage|endswith:
+            - '\code.exe'
+            - '\devenv.exe'
+            - '\idea64.exe'
+            - '\pycharm64.exe'
+            - '\WindowsTerminal.exe'
+            - '\powershell.exe'
+            - '\pwsh.exe'
+            - '\cmd.exe'
+    condition: selection_img and selection_cli and not filter_parents
+falsepositives:
+    - Automated UI tests, crawlers and CI jobs that start headless Chrome
+    - Browser-based automation frameworks (Puppeteer, Playwright, Selenium)
+level: medium

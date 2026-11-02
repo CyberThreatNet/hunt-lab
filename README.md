@@ -21,6 +21,9 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-11-02 | VOLTA-AUTODOXER OpenRouter triage and artefacts | — | T1555.003, T1539, T1555, T1552.001, T1113, T1589, T1071.001, T1041, T1070.004 | — | [`2026-11-02-volta-autodoxer`](hunts/2026/2026-11-02-volta-autodoxer/) |
+| 2026-11-02 | LXD trust store and HTTPS API exposure (CVE-2026-112816) | CVE-2026-112816 | T1190, T1098, T1556 | [Alert](https://cyber-threat.net/lxd-cve-2026-112816-auth-bypass/) | [`2026-11-02-lxd-trust-store-cve-2026-112816`](hunts/2026/2026-11-02-lxd-trust-store-cve-2026-112816/) |
+| 2026-11-02 | Agent-driven intrusion: machine-speed discovery and bulk collection | — | T1595.002, T1190, T1059.006, T1082, T1033, T1016, T1083, T1087.004, T1213, T1119, T1078 | — | [`2026-11-02-agentic-intrusion-machine-speed`](hunts/2026/2026-11-02-agentic-intrusion-machine-speed/) |
 | 2026-10-31 | LiteLLM 1.107.0 cook.pth / sitecustomize credential theft | — | T1195.001, T1195.002, T1059.006, T1546.018, T1552.001 | [Write-up](https://cyber-threat.net/litellm-1-107-0-poisoned-rotate-secrets/) | [`2026-10-31-litellm-11070-startup-hooks`](hunts/2026/2026-10-31-litellm-11070-startup-hooks/) |
 | 2026-10-31 | GhostAction and Gheist: malicious GitHub Actions stealing secrets | — | T1195.002, T1552.001, T1078, T1070 | — | [`2026-10-31-ghostaction-gheist`](hunts/2026/2026-10-31-ghostaction-gheist/) |
 | 2026-10-30 | Cursor Marketplace SSH persistence (Anthropic.claude-code 2.1.313) | — | T1195.002, T1098.004, T1543.001, T1053.003, T1053.005, T1572, T1071.001, T1071.002 | — | [`2026-10-30-cursor-marketplace-ssh-persistence`](hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence/) |
@@ -72,6 +75,9 @@ hunt-lab/
 
 | Date | Hunt | ATT&CK | Status |
 |---|---|---|---|
+| 2026-11-02 | [VOLTA-AUTODOXER OpenRouter triage and artefacts](hunts/2026/2026-11-02-volta-autodoxer/) | T1555.003, T1539, T1555, T1552.001, T1113, T1589, T1071.001, T1041, T1070.004 | Experimental, draft, untested |
+| 2026-11-02 | [LXD trust store and HTTPS API exposure (CVE-2026-112816)](hunts/2026/2026-11-02-lxd-trust-store-cve-2026-112816/) | T1190, T1098, T1556 | Experimental, draft, untested |
+| 2026-11-02 | [Agent-driven intrusion: machine-speed discovery and bulk collection](hunts/2026/2026-11-02-agentic-intrusion-machine-speed/) | T1595.002, T1190, T1059.006, T1082, T1033, T1016, T1083, T1087.004, T1213, T1119, T1078 | Experimental, draft, untested |
 | 2026-10-30 | [GitLab CI regex unauthenticated RCE (CVE-2026-97229)](hunts/2026/2026-10-30-gitlab-ci-regex-rce/) | T1190, T1059 | Experimental, draft, untested |
 | 2026-10-22 | [Shell or download tool spawned by a PHP worker or web server (Linux)](hunts/2026/2026-10-22-php-web-server-spawning-shell/) (CVE-2026-109618, CVE-2026-109619) | T1190, T1059.004, T1105, T1505.003 | Draft, untested |
 | 2026-10-24 | [Arista EOS CVE-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | T1599, T1572 | Draft, untested |
@@ -150,19 +156,22 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108014 | No | – | – | – | 0.00128 | 2.46 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108015 | No | – | – | – | 0.00128 | 2.46 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-104935 | Yes | 2026-10-13 | 2026-10-16 | Unknown | 0.86766 | 99.74 | 2026-11-02 (KEV catalogue 2026.10.30) |
-| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-111357 | Yes | 2026-10-30 | 2026-11-02 | Unknown | 0.00533 | 45.02 | 2026-11-02 (KEV catalogue 2026.10.30) |
+| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-111357 | Yes | 2026-10-30 | 2026-11-02 | Unknown | 0.00533 | 45.01 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-118527 | Yes | 2026-10-30 | 2026-11-13 | Unknown | not yet scored | – | 2026-11-02 (KEV catalogue 2026.10.30) |
-| [2026-10-28-mlflow-scorer-invoke](hunts/2026/2026-10-28-mlflow-scorer-invoke/) | CVE-2026-116692 | No | – | – | – | 0.00704 | 53.34 | 2026-11-02 (KEV catalogue 2026.10.30) |
+| [2026-10-28-mlflow-scorer-invoke](hunts/2026/2026-10-28-mlflow-scorer-invoke/) | CVE-2026-116692 | No | – | – | – | 0.00704 | 53.32 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-peoplesoft-psigw-psemhub](hunts/2026/2026-10-28-peoplesoft-psigw-psemhub/) | CVE-2026-35273 | Yes | 2026-06-12 | 2026-06-15 | Known | 0.96678 | 99.88 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-46300 | Yes | 2026-10-28 | 2026-10-31 | Unknown | 0.16130 | 96.93 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-29-cisco-sdwan-keydrift](hunts/2026/2026-10-29-cisco-sdwan-keydrift/) | CVE-2026-20127 | Yes | 2026-02-25 | 2026-02-27 | Unknown | 0.89294 | 99.78 | 2026-11-02 (KEV catalogue 2026.10.30) |
-| [2026-10-29-esxi-audit-log-gaps](hunts/2026/2026-10-29-esxi-audit-log-gaps/) | CVE-2026-41709 | Yes | 2026-10-28 | 2026-11-11 | Unknown | 0.00689 | 52.75 | 2026-11-02 (KEV catalogue 2026.10.30) |
+| [2026-10-29-esxi-audit-log-gaps](hunts/2026/2026-10-29-esxi-audit-log-gaps/) | CVE-2026-41709 | Yes | 2026-10-28 | 2026-11-11 | Unknown | 0.00689 | 52.74 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-30-cursor-marketplace-ssh-persistence](hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-30-gitlab-ci-regex-rce](hunts/2026/2026-10-30-gitlab-ci-regex-rce/) | CVE-2026-97229 | Yes | 2026-10-29 | 2026-11-01 | Unknown | 0.27300 | 98.06 | 2026-11-02 (KEV catalogue 2026.10.30) |
 | [2026-10-31-ghostaction-gheist](hunts/2026/2026-10-31-ghostaction-gheist/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-31-litellm-11070-startup-hooks](hunts/2026/2026-10-31-litellm-11070-startup-hooks/) | n/a (no CVE) | n/a | | | | | | |
+| [2026-11-02-agentic-intrusion-machine-speed](hunts/2026/2026-11-02-agentic-intrusion-machine-speed/) | n/a (no CVE) | n/a | | | | | | |
+| [2026-11-02-lxd-trust-store-cve-2026-112816](hunts/2026/2026-11-02-lxd-trust-store-cve-2026-112816/) | CVE-2026-112816 | No | – | – | – | 0.00303 | 23.13 | 2026-11-02 (KEV catalogue 2026.10.30) |
+| [2026-11-02-volta-autodoxer](hunts/2026/2026-11-02-volta-autodoxer/) | n/a (no CVE) | n/a | | | | | | |
 
 <!-- kev-epss:end -->
 

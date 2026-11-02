@@ -8,6 +8,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**VOLTA-AUTODOXER OpenRouter triage and artefacts**
+- `hunts/2026/2026-11-02-volta-autodoxer/`
+- Sigma for OpenRouter chat-completions egress, named VOLTA report/zip/debug artefacts, and headless Chrome/Chromium cue; hand KQL for Defender XDR. Includes the OpenRouter allowlist caveat.
+- Status: experimental, untested. Behavioural cues from Cisco Talos (31 October 2026); no sample detonated.
+
+**LXD trust store and HTTPS API exposure (CVE-2026-112816)**
+- `hunts/2026/2026-11-02-lxd-trust-store-cve-2026-112816/`
+- Sigma for LXD lifecycle trust/membership changes over TLS and newer security-event identity changes; hand KQL and a host-check script. Companion to the Cyber-Threat.net Alert.
+- Status: experimental, untested. No known exploitation as of 2 November 2026.
+
+**Agent-driven intrusion: machine-speed discovery and bulk collection**
+- `hunts/2026/2026-11-02-agentic-intrusion-machine-speed/`
+- Sigma correlation for interpreter-spawned discovery bursts, plus hand KQL for bulk Graph reads, even-timed probing and password-reset clusters. General guidance after the Chainalysis disclosure; no incident IOCs.
+- Status: experimental, untested.
+
+### Changed
+
+**KEV and EPSS refresh, 2 November 2026 (evening)**
+- FIRST EPSS scores and check dates refreshed for all CVE hunts; catalogue still 2026.10.30. Added `cve-context.yaml` for CVE-2026-112816 (not in KEV; EPSS 0.00303).
+
+### Added
+
 **GhostAction and Gheist: malicious GitHub Actions stealing secrets**
 - `hunts/2026/2026-10-31-ghostaction-gheist/`
 - Sigma for GhostAction secret exfiltration and Gheist self-hosted runner activity, plus KQL.

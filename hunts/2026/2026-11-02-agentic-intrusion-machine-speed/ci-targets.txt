@@ -1,0 +1,4 @@
+# Convert only rules with a detection section (rule.yml). pySigma backends do not
+#   support Sigma correlation rules; rule-correlation.yml is validated by sigma check only.
+# Hand-written KQL for Defender XDR and Sentinel is in query.kql.
+-t splunk --without-pipeline
