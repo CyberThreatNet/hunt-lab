@@ -1,0 +1,47 @@
+title: VOLTA-AUTODOXER Report and Archive Artefacts Written
+id: 70ec00b8-1acd-4dda-846c-01a2183c6edd
+status: experimental
+description: |
+    Flags creation of files Cisco Talos associates with VOLTA-AUTODOXER after
+    collection and AI triage: Identity_Report.txt (local dossier),
+    AI_Analysis.txt (model response), volta_dox.zip (AI-stage exfil archive),
+    plus volta_log.zip, volta_doxnet.zip and volta_debug.txt harvest log under
+    APPDATA. Filename-based; rename variants will miss. Needs Sysmon event 11,
+    Elastic Defend file events, or equivalent.
+references:
+    - https://blog.talosintelligence.com/appraisal-by-ai-model-driven-victim-prioritization-in-the-volta-infostealer/
+    - https://thehackernews.com/2026/11/new-volta-infostealer-uses-claude.html
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-02-volta-autodoxer
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-02
+modified: 2026-11-02
+tags:
+    - attack.collection
+    - attack.t1589
+    - attack.exfiltration
+    - attack.t1041
+    - attack.credential-access
+    - attack.t1555
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection_names:
+        TargetFilename|endswith:
+            - '\Identity_Report.txt'
+            - '/Identity_Report.txt'
+            - '\AI_Analysis.txt'
+            - '/AI_Analysis.txt'
+            - '\volta_dox.zip'
+            - '/volta_dox.zip'
+            - '\volta_log.zip'
+            - '/volta_log.zip'
+            - '\volta_doxnet.zip'
+            - '/volta_doxnet.zip'
+            - '\volta_debug.txt'
+            - '/volta_debug.txt'
+    condition: selection_names
+falsepositives:
+    - Analysts recreating Talos artefact names during a drill
+    - Unrelated software that coincidentally uses the same filenames (unlikely for volta_*.zip)
+level: high

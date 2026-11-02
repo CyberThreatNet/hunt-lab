@@ -1,0 +1,51 @@
+// Agent-driven intrusion hunts (Cyber-Threat.net Hunt Lab, 2 November 2026)
+// General hunting guidance. Chainalysis has not published the techniques used against it.
+
+// Q1 (Defender XDR, DeviceProcessEvents): one interpreter process spawning many distinct discovery or
+// staging tools within two minutes. Mirrors rule.yml. ATT&CK T1059.006, T1082, T1033, T1016, T1083, T1119.
+let tools = dynamic(["whoami","id","uname","hostname","env","printenv","ip","ss","netstat","ps","find","curl","wget","cat","ls",
+                     "whoami.exe","hostname.exe","ipconfig.exe","netstat.exe","tasklist.exe","nltest.exe","net.exe","curl.exe"]);
+DeviceProcessEvents
+| where Timestamp > ago(7d)
+| where InitiatingProcessFileName in~ ("python","python3","python.exe","node","node.exe","bun","deno","pwsh","powershell.exe")
+| where FileName in~ (tools)
+| summarize Tools = dcount(FileName), ToolList = make_set(FileName, 30), Cmds = make_set(ProcessCommandLine, 30),
+            Start = min(Timestamp), End = max(Timestamp)
+          by DeviceName, AccountName, InitiatingProcessId, InitiatingProcessCommandLine, bin(Timestamp, 2m)
+| where Tools >= 6
+| extend Seconds = datetime_diff("second", End, Start)
+| order by Tools desc
+
+// Q2 (Sentinel, MicrosoftGraphActivityLogs): one app or user pulling directory data in bulk.
+// The data Chainalysis says was accessed (names, emails, role labels) is directory-type data. ATT&CK T1087.004, T1213.
+MicrosoftGraphActivityLogs
+| where TimeGenerated > ago(7d)
+| where RequestMethod == "GET" and ResponseStatusCode between (200 .. 299)
+| where RequestUri has_any ("/users", "/groups", "/directoryRoles", "/roleManagement", "/members")
+| summarize Calls = count(), DistinctUris = dcount(RequestUri), IPs = make_set(IPAddress, 10), UAs = make_set(UserAgent, 5)
+          by AppId, UserId, ServicePrincipalId, bin(TimeGenerated, 10m)
+| where Calls > 500 or DistinctUris > 200
+| order by Calls desc
+
+// Q3 (web or API gateway logs, here W3CIISLog; adapt to AppGW/Front Door/your proxy): machine-speed probing.
+// Many distinct paths, a high share of 4xx, and very even gaps between requests. ATT&CK T1595.002, T1190.
+W3CIISLog
+| where TimeGenerated > ago(1d)
+| project TimeGenerated, cIP, csUriStem, scStatus, csUserAgent
+| order by cIP asc, TimeGenerated asc
+| extend Gap = iff(prev(cIP) == cIP, datetime_diff("millisecond", TimeGenerated, prev(TimeGenerated)), long(null))
+| summarize Requests = count(), Paths = dcount(csUriStem),
+            Err4xx = countif(scStatus between (400 .. 499)), OK = countif(scStatus between (200 .. 299)),
+            MedianGapMs = percentile(Gap, 50), GapStdevMs = stdev(Gap), UAs = make_set(csUserAgent, 5)
+          by cIP, bin(TimeGenerated, 15m)
+| extend ErrShare = round(todouble(Err4xx) / Requests, 2)
+| where Paths > 100 and ErrShare > 0.5 and OK > 0
+| order by Paths desc
+
+// Q4 (Entra ID, AuditLogs): unexpected password resets, the follow-on Chainalysis tells customers to watch for.
+AuditLogs
+| where TimeGenerated > ago(14d)
+| where OperationName has_any ("Reset password", "Reset user password", "Change user password")
+| summarize Resets = count(), Targets = make_set(tostring(TargetResources[0].userPrincipalName), 50)
+          by InitiatedByIP = tostring(InitiatedBy.user.ipAddress), bin(TimeGenerated, 1h)
+| where Resets > 5

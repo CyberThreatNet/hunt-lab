@@ -1,0 +1,31 @@
+// Draft MDE / Microsoft XDR - VOLTA-AUTODOXER hunts from Talos (31 Oct 2026). Untested.
+// 1) Non-browser process to OpenRouter chat-completions
+// OpenRouter allowlist caveat: IDE extensions, dev tools and scripts call OpenRouter legitimately; allowlist sanctioned AI clients and expect false positives.
+DeviceNetworkEvents
+| where Timestamp > ago(14d)
+| where RemoteUrl has "openrouter.ai"
+| where RemoteUrl has "/api/v1/chat/completions" or RemoteUrl has "openrouter.ai"
+| where InitiatingProcessFileName !in~ ("chrome.exe","msedge.exe","firefox.exe","brave.exe","opera.exe")
+| project Timestamp, DeviceName, ActionType, RemoteUrl, RemoteIP, InitiatingProcessFileName, InitiatingProcessCommandLine, InitiatingProcessAccountName
+
+// 2) Named artefacts
+DeviceFileEvents
+| where Timestamp > ago(14d)
+| where ActionType in ("FileCreated","FileRenamed")
+| where FileName in~ ("Identity_Report.txt","AI_Analysis.txt","volta_dox.zip","volta_log.zip","volta_doxnet.zip","volta_debug.txt")
+    or FolderPath has @"volta_debug.txt"
+| project Timestamp, DeviceName, ActionType, FolderPath, FileName, InitiatingProcessFileName, InitiatingProcessCommandLine, SHA256
+
+// 3) Headless Chrome / Edge from unexpected parents (tune allowlist)
+DeviceProcessEvents
+| where Timestamp > ago(14d)
+| where FileName in~ ("chrome.exe","msedge.exe","chromium.exe")
+| where ProcessCommandLine has "--headless"
+| where InitiatingProcessFileName !in~ ("code.exe","devenv.exe","idea64.exe","pycharm64.exe","WindowsTerminal.exe","powershell.exe","pwsh.exe","cmd.exe","node.exe")
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine, AccountName
+
+// 4) Optional hash match for the Talos sample
+DeviceFileEvents
+| where Timestamp > ago(30d)
+| where SHA256 =~ "57ef4242666d78c50df145b34023df564f0fad38812d6a580e66433d427e2279"
+| project Timestamp, DeviceName, ActionType, FolderPath, FileName, InitiatingProcessFileName

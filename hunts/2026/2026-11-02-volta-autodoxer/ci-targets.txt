@@ -1,0 +1,4 @@
+# network_connection + file_event + process_creation.
+# Hand KQL in kql-microsoft-xdr.txt (path match for OpenRouter completions).
+# Validate with: sigma check (if available); do not treat conversions as tested.
+-t splunk --without-pipeline
