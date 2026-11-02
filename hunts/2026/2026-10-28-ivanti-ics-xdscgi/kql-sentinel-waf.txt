@@ -1,4 +1,5 @@
 // Sentinel / Microsoft Front Door WAF — retarget table to your Front Door / App Gateway diagnostic.
+// Covers CVE-2026-104935 and CVE-2026-118527 network artefacts; not CVE-2026-111357.
 // Example using AzureDiagnostics (FrontDoorWebApplicationFirewallLog) — column names vary by pipeline.
 
 AzureDiagnostics
