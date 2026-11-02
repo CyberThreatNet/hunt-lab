@@ -2,7 +2,7 @@
 
 | Hunt ID | Date | Status | Platforms | ATT&CK | CVEs | Files |
 |---|---|---|---|---|---|---|
-| 2026-11-02-agentic-intrusion-machine-speed | 2026-11-02 | Experimental | Linux, Windows; Splunk; Microsoft Defender XDR / Sentinel | T1595.002, T1190, T1059.006, T1082, T1033, T1016, T1083, T1087.004, T1213, T1119, T1078 | None | rule.yml, query.kql, ci-targets.txt, sources.md |
+| 2026-11-02-agentic-intrusion-machine-speed | 2026-11-02 | Experimental | Linux, Windows; Splunk; Microsoft Defender XDR / Sentinel | T1595.002, T1190, T1059.006, T1082, T1033, T1016, T1083, T1087.004, T1213, T1119, T1078 | None | rule.yml, rule-correlation.yml, query.kql, ci-targets.txt, sources.md |
 
 ## Hypothesis
 
@@ -14,7 +14,7 @@ On 30 October 2026 Chainalysis disclosed that "this month" an external actor use
 
 ## Hunts
 
-1. **Machine-speed discovery** (`rule.yml`, `query.kql` Q1). One interpreter process (Python, Node.js, Bun, Deno, PowerShell) spawns six or more distinct discovery or staging tools within two minutes.
+1. **Machine-speed discovery** (`rule.yml` base + `rule-correlation.yml`, `query.kql` Q1). One interpreter process (Python, Node.js, Bun, Deno, PowerShell) spawns six or more distinct discovery or staging tools within two minutes.
 2. **Bulk directory reads** (`query.kql` Q2). One app or user reads hundreds of user, group or role objects through Microsoft Graph in ten minutes.
 3. **Even-timed probing** (`query.kql` Q3). One client hits more than 100 distinct paths in 15 minutes, mostly 4xx, with some successes. Look at the gap spread: very low variance points to automation.
 4. **Unexpected password resets** (`query.kql` Q4). Clusters of resets, the follow-on Chainalysis tells customers to watch for.
@@ -23,7 +23,7 @@ On 30 October 2026 Chainalysis disclosed that "this month" an external actor use
 
 | Source | Used by |
 |---|---|
-| Linux or Windows process creation (Sysmon, auditd, Defender `DeviceProcessEvents`) | rule.yml, Q1 |
+| Linux or Windows process creation (Sysmon, auditd, Defender `DeviceProcessEvents`) | rule.yml, rule-correlation.yml, Q1 |
 | Microsoft Graph activity logs | Q2 |
 | Web server, WAF or API gateway logs | Q3 |
 | Entra ID audit logs | Q4 |

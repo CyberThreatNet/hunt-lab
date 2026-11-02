@@ -6,7 +6,7 @@ description: |
   Base rule for the machine-speed discovery correlation in this folder. Matches common Linux
   discovery and staging commands whose parent is a script interpreter (Python, Node.js, Bun,
   Deno). Agent frameworks often run tools through such an interpreter. On its own this rule is
-  noisy; use it through the correlation rule below it in this file.
+  noisy; use it through rule-correlation.yml in this folder.
 references:
   - https://www.chainalysis.com/blog/security-incident-october-30/
   - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-02-agentic-intrusion-machine-speed
@@ -53,36 +53,3 @@ falsepositives:
   - Build systems, configuration management and monitoring agents written in Python or Node.js
   - Developer workstations
 level: low
----
-title: Machine-Speed Discovery Burst From One Interpreter Process
-id: 052b5be8-1b41-492a-97b5-8662c2e20fb0
-status: experimental
-description: |
-  Fires when a single script interpreter process on one host spawns many distinct discovery or
-  staging commands within two minutes. Agent-driven intrusions tend to chain tools faster and
-  more systematically than a human at a keyboard. This is general hunting guidance; Chainalysis
-  has not published the techniques used against it.
-references:
-  - https://www.chainalysis.com/blog/security-incident-october-30/
-  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-02-agentic-intrusion-machine-speed
-author: Cyber-Threat.net Hunt Lab
-date: 2026-11-02
-tags:
-  - attack.discovery
-  - attack.t1082
-  - attack.collection
-  - attack.t1119
-correlation:
-  type: value_count
-  rules:
-    - linux_discovery_from_interpreter
-  group-by:
-    - Computer
-    - ParentProcessId
-  timespan: 2m
-  condition:
-    field: Image
-    gte: 6
-falsepositives:
-  - Inventory or monitoring scripts that run many commands at once
-level: medium

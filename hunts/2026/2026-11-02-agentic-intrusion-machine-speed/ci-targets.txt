@@ -1,3 +1,4 @@
-# Kusto omitted: pySigma's Kusto backend does not support Sigma correlation rules, and rule.yml
-#   carries a value_count correlation. Hand-written KQL for Defender XDR and Sentinel is in query.kql.
+# Convert only rules with a detection section (rule.yml). pySigma backends do not
+#   support Sigma correlation rules; rule-correlation.yml is validated by sigma check only.
+# Hand-written KQL for Defender XDR and Sentinel is in query.kql.
 -t splunk --without-pipeline
