@@ -23,10 +23,10 @@ Exploit traffic hits public `welcome.cgi` while `X-DSCGI-PATH` names a privilege
 | CVE | Component / path | Covered by this hunt? | Why |
 |---|---|---|---|
 | CVE-2026-104935 | Auth bypass: public `welcome.cgi` URL vs attacker-controlled `X-DSCGI-PATH` (observed target `wu.cgi`) | Yes | Same artefacts the Sigma/KQL/Splunk queries flag. |
-| CVE-2026-118527 | Predictable upload path: `wu.cgi` writes to `/home/runtime/tmp/<MD5(filename)>`; race via `X-DSCGI-PATH` | Yes (network race) | Queries already match `wu.cgi` and `/home/runtime/tmp/`. Alone it needs an authenticated session; in the wild chain, 104935 supplies that access. |
+| CVE-2026-118527 | Predictable upload path: `wu.cgi` writes to `/home/runtime/tmp/<MD5(filename)>`; race via `X-DSCGI-PATH` (mapped from KEV description + Volexity race; Volexity does not name this CVE) | Yes (network race) | Queries already match `wu.cgi` and `/home/runtime/tmp/`. Alone it needs an authenticated session; in the wild chain, 104935 supplies that access. Mapping: KEV short description (predictable identifiers / upload to a known location) + Volexity's wu.cgi/tmp race. |
 | CVE-2026-111357 | Local privilege escalation: `dsinvoked` trusts attacker-modified DSCache / in-memory `libdsplibs.so` | No (partial pack) | Host/memory forensics, not HTTP headers. No new proxy/WAF rule added: primary sources do not publish reliable network observables for this step. |
 
-Primary sources used for the coverage decision: CISA KEV entries and 13/30 Oct alert, Volexity chain write-up (updated for CVE-2026-111357), Ivanti advisory link via KEV notes, CCB Belgium and NHS England summaries.
+Primary sources used for the coverage decision: CISA KEV entries and 13/30 Oct alert, Volexity chain write-up (updated for CVE-2026-111357; does not name CVE-2026-118527), Ivanti advisory link via KEV notes, CCB Belgium and NHS England CC-4866 (both read 2 Nov 2026; confirm chain and CVSS, not CWE IDs).
 
 ## Notes
 
