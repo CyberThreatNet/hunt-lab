@@ -1,0 +1,49 @@
+title: Non-Browser Process Contacts OpenRouter API Host
+id: f3ba9c11-14f7-4602-b7d5-63d07c4e2ee7
+status: experimental
+description: |
+    Hunting starting point for VOLTA-AUTODOXER (VOLTA) AI triage. Cisco Talos
+    documents the stealer POSTing a structured victim bundle to
+    openrouter.ai/api/v1/chat/completions (Claude Opus 4.6, falling back to
+    Kimi K2 then Gemini 2.5 Flash). Flags network connections to openrouter.ai.
+    OpenRouter allowlist caveat: developer tools, IDE extensions and scripts
+    call OpenRouter legitimately. Allowlist sanctioned AI clients and known
+    browsers, and expect false positives. Prefer URL/path telemetry that shows
+    /api/v1/chat/completions when available (see KQL companion).
+references:
+    - https://blog.talosintelligence.com/appraisal-by-ai-model-driven-victim-prioritization-in-the-volta-infostealer/
+    - https://thehackernews.com/2026/11/new-volta-infostealer-uses-claude.html
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-02-volta-autodoxer
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-02
+modified: 2026-11-02
+tags:
+    - attack.command-and-control
+    - attack.t1071.001
+    - attack.exfiltration
+    - attack.t1041
+    - attack.collection
+    - attack.t1589
+logsource:
+    category: network_connection
+    product: windows
+detection:
+    selection_host:
+        DestinationHostname|endswith:
+            - 'openrouter.ai'
+    selection_host_alt:
+        DestinationHostname|contains:
+            - 'openrouter.ai'
+    filter_browsers:
+        Image|endswith:
+            - '\chrome.exe'
+            - '\msedge.exe'
+            - '\firefox.exe'
+            - '\brave.exe'
+            - '\opera.exe'
+            - '\iexplore.exe'
+    condition: (selection_host or selection_host_alt) and not filter_browsers
+falsepositives:
+    - Legitimate developer tools, IDE extensions or scripts that call OpenRouter (allowlist sanctioned AI clients)
+    - Security products or sandboxes replaying stealer traffic
+level: high

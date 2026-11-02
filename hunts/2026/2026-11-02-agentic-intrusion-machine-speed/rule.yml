@@ -1,0 +1,88 @@
+title: Linux Discovery Commands Spawned By A Script Interpreter
+id: 37f33e13-b18f-4a5d-9bf6-4fd87d23276d
+name: linux_discovery_from_interpreter
+status: experimental
+description: |
+  Base rule for the machine-speed discovery correlation in this folder. Matches common Linux
+  discovery and staging commands whose parent is a script interpreter (Python, Node.js, Bun,
+  Deno). Agent frameworks often run tools through such an interpreter. On its own this rule is
+  noisy; use it through the correlation rule below it in this file.
+references:
+  - https://www.chainalysis.com/blog/security-incident-october-30/
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-02-agentic-intrusion-machine-speed
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-02
+tags:
+  - attack.discovery
+  - attack.t1082
+  - attack.t1033
+  - attack.t1016
+  - attack.t1083
+  - attack.execution
+  - attack.t1059.006
+logsource:
+  product: linux
+  category: process_creation
+detection:
+  selection_parent:
+    ParentImage|endswith:
+      - '/python'
+      - '/python3'
+      - '/node'
+      - '/bun'
+      - '/deno'
+  selection_child:
+    Image|endswith:
+      - '/whoami'
+      - '/id'
+      - '/uname'
+      - '/hostname'
+      - '/env'
+      - '/printenv'
+      - '/ip'
+      - '/ss'
+      - '/netstat'
+      - '/ps'
+      - '/find'
+      - '/curl'
+      - '/wget'
+      - '/cat'
+      - '/ls'
+  condition: all of selection_*
+falsepositives:
+  - Build systems, configuration management and monitoring agents written in Python or Node.js
+  - Developer workstations
+level: low
+---
+title: Machine-Speed Discovery Burst From One Interpreter Process
+id: 052b5be8-1b41-492a-97b5-8662c2e20fb0
+status: experimental
+description: |
+  Fires when a single script interpreter process on one host spawns many distinct discovery or
+  staging commands within two minutes. Agent-driven intrusions tend to chain tools faster and
+  more systematically than a human at a keyboard. This is general hunting guidance; Chainalysis
+  has not published the techniques used against it.
+references:
+  - https://www.chainalysis.com/blog/security-incident-october-30/
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-02-agentic-intrusion-machine-speed
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-02
+tags:
+  - attack.discovery
+  - attack.t1082
+  - attack.collection
+  - attack.t1119
+correlation:
+  type: value_count
+  rules:
+    - linux_discovery_from_interpreter
+  group-by:
+    - Computer
+    - ParentProcessId
+  timespan: 2m
+  condition:
+    field: Image
+    gte: 6
+falsepositives:
+  - Inventory or monitoring scripts that run many commands at once
+level: medium
