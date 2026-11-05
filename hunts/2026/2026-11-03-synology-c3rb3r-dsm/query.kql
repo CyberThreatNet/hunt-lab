@@ -1,0 +1,30 @@
+// Synology C3RB3R / outdated DSM hunts (Cyber-Threat.net Hunt Lab, 3 November 2026)
+
+// Q1: inbound accepts to DSM management ports from public addresses (Microsoft Defender / Sentinel)
+DeviceNetworkEvents
+| where Timestamp > ago(14d)
+| where ActionType == "InboundConnectionAccepted"
+| where LocalPort in (5000, 5001, 5005, 5006)
+| where RemoteIPType == "Public"
+| summarize Connections = count(), RemoteIPs = dcount(RemoteIP),
+            SampleIPs = make_set(RemoteIP, 10),
+            FirstSeen = min(Timestamp), LastSeen = max(Timestamp)
+            by DeviceName, LocalIP, LocalPort
+| order by RemoteIPs desc
+
+// Q2: C3RB3R-style file artefacts on endpoints that see NAS shares
+DeviceFileEvents
+| where Timestamp > ago(14d)
+| where ActionType in ("FileCreated", "FileRenamed")
+| where FileName endswith ".L0CK3D" or FileName =~ "read-me3.txt"
+| project Timestamp, DeviceName, ActionType, FolderPath, FileName, InitiatingProcessFileName, InitiatingProcessAccountName
+| order by Timestamp desc
+
+// Q3: mass deletes that may indicate backup or snapshot destruction on a host syncing from NAS.
+// Tune the threshold for your estate. Review hits against backup product logs.
+DeviceFileEvents
+| where Timestamp > ago(7d)
+| where ActionType == "FileDeleted"
+| summarize Deletes = count(), SampleFiles = make_set(FileName, 10) by bin(Timestamp, 5m), DeviceName, FolderPath
+| where Deletes >= 100
+| order by Deletes desc

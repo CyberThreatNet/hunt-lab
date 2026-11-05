@@ -8,6 +8,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**Synology C3RB3R / outdated DSM exposure and encryption artefacts**
+- `hunts/2026/2026-11-03-synology-c3rb3r-dsm/`
+- Sigma for `.L0CK3D` / `read-me3.txt` artefacts and inbound DSM management-port exposure; hand KQL and a DSM host-check script. Companion to the Cyber-Threat.net Alert (post 1450).
+- Status: experimental, untested. Synology confirmed ransomware against outdated DSM on 29 October 2026 (Synology-SA-24:20 / CVE-2024-10441 linked).
+
+### Changed
+
+**KEV and EPSS refresh, 5 November 2026**
+- FIRST EPSS scores and check dates refreshed for all CVE hunts; CISA KEV catalogue 2026.11.04. Added `cve-context.yaml` for CVE-2024-10441 (not in KEV; EPSS 0.01251).
+
+### Added
+
 **VOLTA-AUTODOXER OpenRouter triage and artefacts**
 - `hunts/2026/2026-11-02-volta-autodoxer/`
 - Sigma for OpenRouter chat-completions egress, named VOLTA report/zip/debug artefacts, and headless Chrome/Chromium cue; hand KQL for Defender XDR. Includes the OpenRouter allowlist caveat.
