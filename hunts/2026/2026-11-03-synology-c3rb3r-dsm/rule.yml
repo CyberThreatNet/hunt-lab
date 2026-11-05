@@ -1,0 +1,43 @@
+title: Synology C3RB3R Style File Encryption Artefacts
+id: 7f3c1a2e-9b54-4d8e-a6c1-0e2f8b9d41a7
+status: experimental
+description: |
+  Detects creation of files matching C3RB3R artefacts reported against Synology NAS
+  victims: a .L0CK3D extension on encrypted files, or a ransom note named read-me3.txt.
+  Synology confirmed ransomware against outdated DSM on 29 October 2026 and linked
+  Synology-SA-24:20. Correlate hits with DSM version and internet exposure of the
+  management interface.
+references:
+  - https://www.synology.com/en-global/company/news/article/C3RB3R
+  - https://www.synology.com/en-global/security/advisory/Synology_SA_24_20
+  - https://www.bleepingcomputer.com/news/security/synology-warns-customers-of-ongoing-c3rb3r-ransomware-attacks/
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-03-synology-c3rb3r-dsm
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-03
+tags:
+  - attack.impact
+  - attack.t1486
+  - attack.initial-access
+  - attack.t1190
+  - cve.2024-10441
+logsource:
+  category: file_event
+  product: windows
+  definition: 'Also apply on Linux file create events from NAS sync clients or file servers that mirror Synology shares'
+detection:
+  selection_ext:
+    TargetFilename|endswith: '.L0CK3D'
+  selection_note:
+    TargetFilename|endswith: '\read-me3.txt'
+  selection_note_posix:
+    TargetFilename|endswith: '/read-me3.txt'
+  condition: 1 of selection_*
+fields:
+  - TargetFilename
+  - Image
+  - User
+  - Computer
+falsepositives:
+  - Rare benign files that happen to use the same extension or note name
+  - Security lab samples and intentional detonation folders
+level: high
