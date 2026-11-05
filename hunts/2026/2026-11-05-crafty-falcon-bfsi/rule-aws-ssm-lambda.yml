@@ -1,0 +1,50 @@
+title: High-Risk AWS SSM or Lambda Management API Calls
+id: 384d5ee3-45e3-4f3f-b099-f2f0c88b94d0
+status: experimental
+description: |
+  Detects cloud management API calls that CERT-In CIAD-2026-0058 associates with
+  CRAFTY FALCON abuse of AWS Systems Manager and Lambda: remote command
+  execution, interactive sessions, function code updates, and creation of users,
+  roles or access keys. Tune against approved automation principals.
+references:
+  - https://www.cert-in.org.in/s2cMainServlet?pageid=PUBVLNOTES02&VLCODE=CIAD-2026-0058
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-05-crafty-falcon-bfsi
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-05
+tags:
+  - attack.execution
+  - attack.t1651
+  - attack.persistence
+  - attack.t1078
+  - detection.emerging-threats
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection_ssm:
+    eventName:
+      - SendCommand
+      - StartSession
+  selection_lambda:
+    eventName:
+      - UpdateFunctionCode20150331v2
+      - UpdateFunctionCode
+      - CreateFunction20150331
+      - CreateFunction
+  selection_iam:
+    eventName:
+      - CreateAccessKey
+      - CreateUser
+      - CreateRole
+  condition: 1 of selection_*
+fields:
+  - eventName
+  - userIdentity.arn
+  - sourceIPAddress
+  - awsRegion
+  - requestParameters
+falsepositives:
+  - Continuous deployment pipelines that update Lambda code
+  - Approved break-glass Systems Manager sessions
+  - Identity provisioning automation
+level: medium

@@ -1,0 +1,48 @@
+title: AI Offensive Framework Artefacts (ARTEX PentAGI Cairn CyberStrikeAI)
+id: 1a8c6037-ee5d-45a4-a1b0-8f5154f3c3c2
+status: experimental
+description: |
+  Detects process or command-line artefacts associated with publicly available
+  AI-driven offensive security tools named in CERT-In advisory CIAD-2026-0058
+  (CRAFTY FALCON): ARTEX, PentAGI, Cairn and CyberStrikeAI. Authorised
+  penetration tests with written scope will also match; correlate with change
+  tickets before containment.
+references:
+  - https://www.cert-in.org.in/s2cMainServlet?pageid=PUBVLNOTES02&VLCODE=CIAD-2026-0058
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-05-crafty-falcon-bfsi
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-05
+tags:
+  - attack.resource-development
+  - attack.t1588.007
+  - attack.execution
+  - attack.t1059
+  - detection.emerging-threats
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    CommandLine|contains:
+      - 'artex'
+      - 'pentagi'
+      - 'PentAGI'
+      - 'cairn'
+      - 'CyberStrikeAI'
+      - 'cyberstrikeai'
+  filter_benign_docs:
+    CommandLine|contains:
+      - 'crafty-falcon'
+      - 'CIAD-2026-0058'
+  condition: selection and not filter_benign_docs
+fields:
+  - CommandLine
+  - Image
+  - ParentImage
+  - User
+  - Computer
+falsepositives:
+  - Authorised red-team or bug-bounty engagements with written approval
+  - Security research and malware analysis sandboxes
+  - Documentation or advisory text that happens to sit on a command line
+level: medium

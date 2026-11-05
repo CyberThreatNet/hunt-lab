@@ -1,0 +1,61 @@
+// CRAFTY FALCON / CERT-In CIAD-2026-0058 hunts (Cyber-Threat.net Hunt Lab, 5 November 2026)
+// Q1 is a TEMPLATE: map Amount, BeneficiaryId, Timestamp and PaymentPath to your payment schema.
+
+// Q1: micro-value credit then high-value credit to the same beneficiary (tune thresholds)
+// let MicroMax = 1.0;   // Rs. 1 or your smallest genuine fee band
+// let HighMin  = 10000.0;
+// PaymentTransactions
+// | where Timestamp > ago(14d)
+// | where Amount > 0
+// | summarize
+//     Micros = countif(Amount <= MicroMax),
+//     Highs  = countif(Amount >= HighMin),
+//     FirstMicro = minif(Timestamp, Amount <= MicroMax),
+//     FirstHigh  = minif(Timestamp, Amount >= HighMin),
+//     SampleAmounts = make_set(Amount, 10)
+//     by BeneficiaryId, PaymentPath
+// | where Micros >= 1 and Highs >= 1 and FirstHigh >= FirstMicro
+// | where datetime_diff('hour', FirstHigh, FirstMicro) <= 24
+// | order by Highs desc
+
+// Q2: staging/UAT-named devices reaching production-like URLs or private payment paths
+DeviceNetworkEvents
+| where Timestamp > ago(14d)
+| where DeviceName has_any ("uat", "staging", "stage", "test", "qa")
+| where RemoteUrl has_any ("prod", "payment", "settle", "disburse", "payout", "wallet")
+    or (RemoteIPType == "Private" and RemotePort in (443, 8443, 8080))
+| summarize Hits = count(),
+            Remotes = make_set(RemoteUrl, 10),
+            Processes = make_set(InitiatingProcessFileName, 10)
+            by DeviceName
+| order by Hits desc
+
+// Q3: AWS CloudTrail high-risk management events (Sentinel AWS connector table names vary)
+AWSCloudTrail
+| where TimeGenerated > ago(14d)
+| where EventName in ("SendCommand", "StartSession", "UpdateFunctionCode",
+                      "CreateFunction", "CreateAccessKey", "CreateUser", "CreateRole")
+| summarize Events = count(),
+            Names = make_set(EventName, 10),
+            SourceIPs = make_set(SourceIpAddress, 10)
+            by bin(TimeGenerated, 1h), UserIdentityArn
+| where Events >= 3
+| order by Events desc
+
+// Q4: ARTEX / PentAGI / Cairn / CyberStrikeAI process artefacts
+DeviceProcessEvents
+| where Timestamp > ago(30d)
+| where FileName has_any ("artex", "pentagi", "cairn", "cyberstrikeai")
+    or FolderPath has_any ("artex", "pentagi", "cairn", "cyberstrikeai")
+    or ProcessCommandLine has_any ("artex", "pentagi", "cairn", "CyberStrikeAI", "cyberstrikeai")
+| project Timestamp, DeviceName, FileName, FolderPath, ProcessCommandLine, AccountName
+| order by Timestamp desc
+
+// Q5: web requests to ARTEX login that include a captcha field (requires body logging)
+CommonSecurityLog
+| where TimeGenerated > ago(14d)
+| where RequestMethod == "POST"
+| where RequestURL has "/api/auth/login"
+| where Message has "captcha" or AdditionalExtensions has "captcha"
+| project TimeGenerated, SourceIP, RequestURL, RequestClientApplication, Message
+| order by TimeGenerated desc

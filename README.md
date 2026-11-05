@@ -21,6 +21,7 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-11-05 | CRAFTY FALCON (CERT-In CIAD-2026-0058): BFSI API abuse and AI pentest artefacts | — | T1588.007, T1190, T1078, T1552, T1059, T1505.003, T1651, T1105, T1059.004 | — | [`2026-11-05-crafty-falcon-bfsi`](hunts/2026/2026-11-05-crafty-falcon-bfsi/) |
 | 2026-11-03 | Synology C3RB3R / outdated DSM exposure and encryption artefacts | CVE-2024-10441 | T1190, T1486, T1490 | [Alert](https://cyber-threat.net/synology-c3rb3r-ransomware-outdated-dsm/) | [`2026-11-03-synology-c3rb3r-dsm`](hunts/2026/2026-11-03-synology-c3rb3r-dsm/) |
 | 2026-11-02 | VOLTA-AUTODOXER OpenRouter triage and artefacts | — | T1555.003, T1539, T1555, T1552.001, T1113, T1589, T1071.001, T1041, T1070.004 | — | [`2026-11-02-volta-autodoxer`](hunts/2026/2026-11-02-volta-autodoxer/) |
 | 2026-11-02 | LXD trust store and HTTPS API exposure (CVE-2026-112816) | CVE-2026-112816 | T1190, T1098, T1556 | [Alert](https://cyber-threat.net/lxd-cve-2026-112816-auth-bypass/) | [`2026-11-02-lxd-trust-store-cve-2026-112816`](hunts/2026/2026-11-02-lxd-trust-store-cve-2026-112816/) |
@@ -76,6 +77,7 @@ hunt-lab/
 
 | Date | Hunt | ATT&CK | Status |
 |---|---|---|---|
+| 2026-11-05 | [CRAFTY FALCON (CERT-In CIAD-2026-0058): BFSI API abuse and AI pentest artefacts](hunts/2026/2026-11-05-crafty-falcon-bfsi/) | T1588.007, T1190, T1078, T1552, T1059, T1505.003, T1651, T1105, T1059.004 | Experimental, draft, untested |
 | 2026-11-03 | [Synology C3RB3R / outdated DSM exposure and encryption artefacts](hunts/2026/2026-11-03-synology-c3rb3r-dsm/) | T1190, T1486, T1490 | Experimental, draft, untested |
 | 2026-11-02 | [VOLTA-AUTODOXER OpenRouter triage and artefacts](hunts/2026/2026-11-02-volta-autodoxer/) | T1555.003, T1539, T1555, T1552.001, T1113, T1589, T1071.001, T1041, T1070.004 | Experimental, draft, untested |
 | 2026-11-02 | [LXD trust store and HTTPS API exposure (CVE-2026-112816)](hunts/2026/2026-11-02-lxd-trust-store-cve-2026-112816/) | T1190, T1098, T1556 | Experimental, draft, untested |
