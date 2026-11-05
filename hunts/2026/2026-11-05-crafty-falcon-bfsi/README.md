@@ -1,5 +1,7 @@
 # CRAFTY FALCON / CERT-In CIAD-2026-0058: BFSI API abuse and AI pentest artefacts
 
+Full write-up: [Hunt: CRAFTY FALCON Rs.1 tests, staging pivots and ARTEX](https://cyber-threat.net/hunt-crafty-falcon-rs1-staging-artex/) on Cyber-Threat.net.
+
 | Hunt ID | Date | Status | Platforms | ATT&CK | CVEs | Files |
 |---|---|---|---|---|---|---|
 | 2026-11-05-crafty-falcon-bfsi | 2026-11-05 | Experimental | Payment logs; AWS CloudTrail; Windows/Linux endpoints; Docker hosts; Splunk; Microsoft Sentinel / Defender | T1588.007, T1190, T1078, T1552, T1059, T1505.003, T1651, T1105, T1059.004 | None (campaign advisory) | rule.yml, rule-aws-ssm-lambda.yml, rule-artex-login-captcha.yml, query.kql, host-checks.sh, ci-targets.txt, sources.md |
