@@ -1,0 +1,46 @@
+title: Internet Access To Synology DSM Management Ports
+id: b41e6d90-2c77-4f0a-9a1e-55d8c3e7a012
+status: experimental
+description: |
+  Detects inbound connections from public or untrusted networks to common Synology
+  DSM management ports (5000 HTTP, 5001 HTTPS, and common alternates 5005/5006).
+  Synology advises blocking internet access to the management web interface while
+  C3RB3R activity targets outdated DSM. This is an exposure signal, not proof of
+  exploitation.
+references:
+  - https://www.synology.com/en-global/company/news/article/C3RB3R
+  - https://www.synology.com/en-global/security/advisory/Synology_SA_24_20
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-03-synology-c3rb3r-dsm
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-03
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - cve.2024-10441
+logsource:
+  category: proxy
+  product: generic
+  definition: 'Firewall, reverse-proxy, VPN concentrator or load-balancer accept/allow logs'
+detection:
+  selection_ports:
+    dst_port:
+      - 5000
+      - 5001
+      - 5005
+      - 5006
+  selection_action:
+    action:
+      - allowed
+      - accept
+      - permit
+  condition: all of selection_*
+fields:
+  - src_ip
+  - dst_ip
+  - dst_port
+  - user
+  - url
+falsepositives:
+  - Intentional remote admin over the open internet (still discouraged)
+  - Site-to-site VPN ranges misclassified as public
+level: medium

@@ -1,0 +1,3 @@
+# Hand-written KQL is in query.kql (Defender DeviceNetworkEvents / DeviceFileEvents).
+# Proxy rule uses generic proxy fields; Splunk conversion is best-effort.
+-t splunk --without-pipeline
