@@ -177,6 +177,7 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-11-02-lxd-trust-store-cve-2026-112816](hunts/2026/2026-11-02-lxd-trust-store-cve-2026-112816/) | CVE-2026-112816 | No | – | – | – | 0.00303 | 23.25 | 2026-11-05 (KEV catalogue 2026.11.04) |
 | [2026-11-02-volta-autodoxer](hunts/2026/2026-11-02-volta-autodoxer/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-03-synology-c3rb3r-dsm](hunts/2026/2026-11-03-synology-c3rb3r-dsm/) | CVE-2024-10441 | No | – | – | – | 0.01251 | 69.51 | 2026-11-05 (KEV catalogue 2026.11.04) |
+| [2026-11-05-crafty-falcon-bfsi](hunts/2026/2026-11-05-crafty-falcon-bfsi/) | n/a (no CVE) | n/a | | | | | | |
 
 <!-- kev-epss:end -->
 
