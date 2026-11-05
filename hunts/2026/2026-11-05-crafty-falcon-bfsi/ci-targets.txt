@@ -1,0 +1,4 @@
+# Convert only rules with a detection section.
+# Hand-written KQL for Defender XDR and Sentinel is in query.kql.
+# Host checks are manual (host-checks.sh) and are not converted.
+-t splunk --without-pipeline

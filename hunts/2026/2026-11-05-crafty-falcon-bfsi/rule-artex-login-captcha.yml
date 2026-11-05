@@ -1,0 +1,44 @@
+title: ARTEX Login Request With Captcha Field
+id: cea6af4c-9379-43dd-bd49-1795e7821877
+status: experimental
+description: |
+  Detects HTTP POST bodies to an ARTEX-style /api/auth/login route that include
+  a captcha JSON key. BadByte reports that the trojanised tomicdd/artex Docker
+  image runs shell commands from that field as root before credential checks.
+  Official ARTEX clients send only username and password. The secret marker is
+  not published here.
+references:
+  - https://badbyte.io/artex-backdoor-docker-image/
+  - https://thehackernews.com/2026/11/backdoored-docker-image-for-artex-ai.html
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-05-crafty-falcon-bfsi
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-05
+tags:
+  - attack.execution
+  - attack.t1059.004
+  - attack.initial-access
+  - attack.t1190
+  - detection.emerging-threats
+logsource:
+  category: webserver
+  definition: 'Reverse proxy, WAF or application logs that retain JSON request bodies for /api/auth/login'
+detection:
+  selection_path:
+    cs-uri-stem|contains: '/api/auth/login'
+  selection_method:
+    cs-method: POST
+  selection_body:
+    cs-body|contains:
+      - 'captcha'
+      - 'Captcha'
+      - 'CAPTCHA'
+  condition: all of selection_*
+fields:
+  - c-ip
+  - cs-uri-stem
+  - cs-user-agent
+  - cs-body
+falsepositives:
+  - Custom forks that added a real captcha field (verify against BadByte build ID and binary hash)
+  - Security scanners replaying public write-ups after disclosure
+level: high
