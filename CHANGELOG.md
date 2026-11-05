@@ -8,6 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**CRAFTY FALCON (CERT-In CIAD-2026-0058): BFSI API abuse and AI pentest artefacts**
+- `hunts/2026/2026-11-05-crafty-falcon-bfsi/`
+- Sigma for AI offensive framework artefacts (ARTEX, PentAGI, Cairn, CyberStrikeAI), high-risk AWS SSM / Lambda management calls, and ARTEX login requests carrying a captcha field; hand KQL for micro-value transfer precursors, staging-to-production access and the trojanised ARTEX Docker image, plus an inspect-only Docker host-check script. Companion to the Cyber-Threat.net Alert.
+- Status: experimental, untested. Campaign advisory with no CVE, so no `cve-context.yaml`. ARTEX Docker checks follow BadByte (4 November 2026) and are not attributed to CRAFTY FALCON.
+
+### Added
+
 **Synology C3RB3R / outdated DSM exposure and encryption artefacts**
 - `hunts/2026/2026-11-03-synology-c3rb3r-dsm/`
 - Sigma for `.L0CK3D` / `read-me3.txt` artefacts and inbound DSM management-port exposure; hand KQL and a DSM host-check script. Companion to the Cyber-Threat.net Alert (post 1450).
