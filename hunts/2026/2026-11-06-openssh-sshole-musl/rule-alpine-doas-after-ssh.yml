@@ -1,0 +1,43 @@
+title: Alpine User doas Elevation After SSH Session
+id: 9f4b1d82-3c7e-4a90-b2d5-6e8f0a1c2b33
+status: experimental
+description: |
+  Detects doas (or sudo) elevation by the alpine user, which on Alpine tiny-cloud
+  images often has passwordless doas. Useful as a follow-on signal after a
+  suspected CVE-2026-123158 password login as alpine. Not proof of exploitation
+  on its own.
+references:
+  - https://www.alpinelinux.org/posts/2026-11-05-openssh-password-authentication-bypass/
+  - https://sshhole.com/
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-06-openssh-sshole-musl
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-06
+tags:
+  - attack.privilege-escalation
+  - attack.t1548
+  - cve.2026-123158
+  - detection.emerging-threats
+logsource:
+  category: process_creation
+  product: linux
+detection:
+  selection_user:
+    user: alpine
+  selection_doas:
+    Image|endswith:
+      - '/doas'
+      - '/sudo'
+    CommandLine|contains:
+      - 'doas'
+      - 'sudo'
+  condition: selection_user and selection_doas
+fields:
+  - user
+  - CommandLine
+  - Image
+  - ParentImage
+  - hostname
+falsepositives:
+  - Legitimate alpine-user administration on cloud images
+  - Configuration management running as alpine
+level: medium
