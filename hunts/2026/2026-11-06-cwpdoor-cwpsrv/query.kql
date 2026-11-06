@@ -1,0 +1,24 @@
+// CWPdoor hunts (Cyber-Threat.net Hunt Lab, 6 November 2026)
+// Q1: network to XLab-reported C2
+DeviceNetworkEvents
+| where Timestamp > ago(30d)
+| where RemoteIP == "136.0.141.71" or RemoteUrl has "136.0.141.71"
+| project Timestamp, DeviceName, RemoteIP, RemoteUrl, RemotePort,
+          InitiatingProcessFileName, InitiatingProcessCommandLine, AccountName
+| order by Timestamp desc
+
+// Q2: DNS / URL with cwpsrv_update path
+DeviceNetworkEvents
+| where Timestamp > ago(30d)
+| where RemoteUrl has_any ("cwpsrv_update.sh", "cwpsrv_1.15.10", "cwpsrv_1.24.0")
+    or RemoteUrl has "136.0.141.71/static/"
+| project Timestamp, DeviceName, RemoteUrl, InitiatingProcessFileName
+| order by Timestamp desc
+
+// Q3: file events on cwpsrv path (tune to your EDR)
+DeviceFileEvents
+| where Timestamp > ago(30d)
+| where FolderPath has "/usr/local/cwpsrv/bin"
+| where FileName has "cwpsrv"
+| project Timestamp, DeviceName, ActionType, FolderPath, FileName, MD5, SHA256, InitiatingProcessFileName
+| order by Timestamp desc

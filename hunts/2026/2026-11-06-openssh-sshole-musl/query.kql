@@ -1,0 +1,24 @@
+// OpenSSH *sshole CVE-2026-123158 hunts (Cyber-Threat.net Hunt Lab, 6 November 2026)
+// Q1: successful password auth for common star-shadow account names
+Syslog
+| where TimeGenerated > ago(14d)
+| where ProcessName has "sshd" or Facility == "auth"
+| where SyslogMessage has "Accepted password for"
+| extend User = extract(@"Accepted password for ([^ ]+)", 1, SyslogMessage)
+| where User in ("alpine", "root", "deploy", "git", "nobody")
+| project TimeGenerated, Computer, HostIP, User, SyslogMessage
+| order by TimeGenerated desc
+
+// Q2: inventory hint - scripted sshd -T collection (adapt to your config table)
+// DeviceProcessEvents
+// | where Timestamp > ago(7d)
+// | where FileName == "sshd" and ProcessCommandLine has "-T"
+// | project Timestamp, DeviceName, ProcessCommandLine, AccountName
+
+// Q3: alpine user running doas/sudo
+DeviceProcessEvents
+| where Timestamp > ago(14d)
+| where AccountName =~ "alpine"
+| where FileName in ("doas", "sudo") or ProcessCommandLine has_any ("doas ", "sudo ")
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, AccountName, InitiatingProcessFileName
+| order by Timestamp desc
