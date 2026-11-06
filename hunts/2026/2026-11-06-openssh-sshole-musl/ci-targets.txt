@@ -1,0 +1,3 @@
+# Convert only rules with a detection section.
+# Hand-written KQL is in query.kql. Host checks are manual.
+-t splunk --without-pipeline

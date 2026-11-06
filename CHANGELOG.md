@@ -8,6 +8,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**OpenSSH *sshole musl / Alpine password bypass (CVE-2026-123158)**
+- `hunts/2026/2026-11-06-openssh-sshole-musl/`
+- Sigma for successful password auth to common `*` shadow accounts and Alpine `alpine`+doas elevation after SSH; hand KQL and an inspect-only host-check script for PasswordAuthentication/UsePAM/musl exposure. Companion to the Cyber-Threat.net Alert.
+- Status: experimental, untested. CVE ID and CVSS from GHSA/NVD; OpenSSH and Alpine advisories assigned none. Not in KEV catalogue 2026.11.04; EPSS not yet scored.
+
+**CWPdoor: trojanised Control Web Panel cwpsrv**
+- `hunts/2026/2026-11-06-cwpdoor-cwpsrv/`
+- YARA for `X-Ngx-Integrity-*` / `ngx_http_integrity_helper` strings and known MD5s; Sigma for C2 `136.0.141.71`; hand KQL and host checks for the integrity socket and binary. Companion to the Cyber-Threat.net Alert.
+- Status: experimental, untested. No CVE in the XLab write-up.
+
+### Changed
+
+**KEV and EPSS refresh, 6 November 2026**
+- FIRST EPSS scores and check dates refreshed for all CVE hunts; CISA KEV catalogue 2026.11.04. Added `cve-context.yaml` for CVE-2026-123158 (not in KEV; EPSS not yet scored).
+
+### Added
+
 **CRAFTY FALCON (CERT-In CIAD-2026-0058): BFSI API abuse and AI pentest artefacts**
 - `hunts/2026/2026-11-05-crafty-falcon-bfsi/`
 - Sigma for AI offensive framework artefacts (ARTEX, PentAGI, Cairn, CyberStrikeAI), high-risk AWS SSM / Lambda management calls, and ARTEX login requests carrying a captcha field; hand KQL for micro-value transfer precursors, staging-to-production access and the trojanised ARTEX Docker image, plus an inspect-only Docker host-check script. Companion to the Cyber-Threat.net Alert.

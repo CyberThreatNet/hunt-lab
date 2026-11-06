@@ -1,0 +1,3 @@
+# Convert only rules with a detection section.
+# YARA and host-checks are manual / CI-separate.
+-t splunk --without-pipeline

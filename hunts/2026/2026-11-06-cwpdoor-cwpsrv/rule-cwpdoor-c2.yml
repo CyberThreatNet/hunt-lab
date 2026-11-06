@@ -1,0 +1,34 @@
+title: CWPdoor C2 IP 136.0.141.71
+id: 2e8c4f71-9a05-4d3b-b6c1-7f0e2a9d5b18
+status: experimental
+description: |
+  Detects network connections to 136.0.141.71, the host XLab observed serving
+  cwpsrv_update.sh and trojanised cwpsrv builds for CWPdoor. Correlate with
+  Control Web Panel (CWP) hosts. Legitimate traffic to this IP is unexpected.
+references:
+  - https://blog.xlab.qianxin.com/cwpdoor-the-invisible-backdoor-living-inside-control-web-panel/
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-06-cwpdoor-cwpsrv
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-06
+tags:
+  - attack.command-and-control
+  - attack.t1071
+  - attack.persistence
+  - attack.t1554
+  - detection.emerging-threats
+logsource:
+  category: firewall
+  product: any
+detection:
+  selection:
+    dst_ip: 136.0.141.71
+  condition: selection
+fields:
+  - src_ip
+  - dst_ip
+  - dst_port
+  - user
+  - url
+falsepositives:
+  - Rare; investigate any hit on a CWP or Linux hosting estate
+level: high
