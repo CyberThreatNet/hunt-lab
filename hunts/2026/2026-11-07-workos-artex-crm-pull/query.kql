@@ -1,0 +1,43 @@
+// WorkOS ARTEX agent hunts (Cyber-Threat.net Hunt Lab, 7 November 2026)
+// Source: WorkOS bulletin, 6 November 2026
+let artex_uas = dynamic(["compatible; ArtEx/1.0", "compatible; infra-hunt/1.0", "artex-enrich/1.0", "norma/0.4", "verify-911-probe/1.0"]);
+let artex_ips = dynamic(["154.64.252.77", "183.1.65.106", "95.169.20.166", "203.190.1.60", "240e:3b2:1959:e4b0:b282:e2ff:fe48:d1ca", "240e:3b2:195a:8b20:b282:e2ff:fe48:d1ca"]);
+let artex_ja4 = dynamic(["t13d3013h1_1d37bd780c83_8537cf56674e", "t13d3013h2_1d37bd780c83_8537cf56674e", "t13d3014h1_1d37bd780c83_5ae85263eb3b"]);
+let crm_paths = dynamic(["/api/crm", "/api/accounts", "/api/contacts", "/api/tickets"]); // set to your routes
+// Q1: ARTEX user agents (Azure WAF / App Gateway; adapt to your proxy table)
+AzureDiagnostics
+| where TimeGenerated > ago(30d)
+| where Category in ("ApplicationGatewayAccessLog", "FrontDoorAccessLog")
+| where userAgent_s has_any (artex_uas)
+| project TimeGenerated, clientIP_s, host_s, requestUri_s, httpStatus_d, userAgent_s
+| order by TimeGenerated desc;
+// Q2: WorkOS-published IPs and JA4 (retro-hunt 25-30 Oct 2026)
+CommonSecurityLog
+| where TimeGenerated between (datetime(2026-10-20) .. now())
+| where SourceIP in (artex_ips) or AdditionalExtensions has_any (artex_ja4)
+| project TimeGenerated, DeviceVendor, SourceIP, DestinationIP, DestinationPort, RequestURL, RequestClientApplication
+| order by TimeGenerated desc;
+// Q3: bulk pulls from CRM-facing APIs, client volume far above baseline
+AzureDiagnostics
+| where TimeGenerated > ago(14d)
+| where Category == "ApplicationGatewayAccessLog"
+| where requestUri_s has_any (crm_paths) and httpStatus_d == 200
+| summarize reqs = count(), bytes = sum(sentBytes_d) by clientIP_s, bin(TimeGenerated, 1h)
+| join kind=inner (
+    AzureDiagnostics
+    | where TimeGenerated > ago(14d)
+    | where Category == "ApplicationGatewayAccessLog" and requestUri_s has_any (crm_paths)
+    | summarize hourly = count() by clientIP_s, bin(TimeGenerated, 1h)
+    | summarize p95 = percentile(hourly, 95) by clientIP_s
+  ) on clientIP_s
+| where reqs > 500 and reqs > 10 * p95
+| order by reqs desc;
+// Q4: many auth failures then success on the same API from one source
+AzureDiagnostics
+| where TimeGenerated > ago(14d)
+| where Category == "ApplicationGatewayAccessLog"
+| summarize fails = countif(httpStatus_d in (401, 403)), wins = countif(httpStatus_d == 200),
+            first_fail = minif(TimeGenerated, httpStatus_d in (401, 403)), first_win = minif(TimeGenerated, httpStatus_d == 200)
+    by clientIP_s, host_s
+| where fails >= 20 and wins > 0 and first_win > first_fail
+| order by fails desc
