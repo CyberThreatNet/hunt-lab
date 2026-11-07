@@ -1,0 +1,40 @@
+title: SonicWall SSL-VPN Zone Remote User Login Allowed (Hunt Baseline, CVE-2026-19868)
+id: 3f6a2c18-7d4e-4b91-a5c0-8e2d19b7f604
+status: experimental
+description: |
+  Collects SonicOS SSL-VPN successful logins (log event ID 1080, "SSL VPN zone
+  remote user login allowed") as the input for the CVE-2026-19868 hunt. On its
+  own this is a baseline, not an alert: correlate each login with a SAML
+  sign-in at your identity provider (query.kql Q1). A login with no matching
+  IdP sign-in for a SAML user is the lead. Fields m and msg are the raw SonicOS
+  syslog keys; map them if your parser renames them.
+references:
+  - https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2026-0014
+  - https://docs.rapid7.com/insightidr/sonicwall-firewall/
+  - https://arcticwolf.com/resources/blog/smash-and-grab-aggressive-akira-campaign-targets-sonicwall-vpns/
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-07
+tags:
+  - attack.initial-access
+  - attack.t1133
+  - attack.persistence
+  - attack.t1078
+  - cve.2026-19868
+  - detection.emerging-threats
+logsource:
+  product: sonicwall
+  service: syslog
+detection:
+  selection:
+    m: 1080
+    msg: 'SSL VPN zone remote user login allowed'
+  condition: selection
+fields:
+  - usr
+  - src
+  - sess
+  - note
+falsepositives:
+  - Every legitimate SSL-VPN login matches. Use as hunt input and correlate with IdP sign-ins.
+level: low
