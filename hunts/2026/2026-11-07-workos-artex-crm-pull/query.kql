@@ -17,21 +17,24 @@ CommonSecurityLog
 | where SourceIP in (artex_ips) or AdditionalExtensions has_any (artex_ja4)
 | project TimeGenerated, DeviceVendor, SourceIP, DestinationIP, DestinationPort, RequestURL, RequestClientApplication
 | order by TimeGenerated desc;
-// Q3: bulk pulls from CRM-facing APIs, client volume far above baseline
-AzureDiagnostics
+// Q3: bulk pulls from CRM-facing APIs. The baseline is the client's earlier hours, so the
+// spike is excluded. Clients with no earlier history (new IPs) are flagged on volume alone.
+// Set q3_window to the period you are hunting.
+let q3_window = 1d;
+let Hourly = AzureDiagnostics
 | where TimeGenerated > ago(14d)
-| where Category == "ApplicationGatewayAccessLog"
-| where requestUri_s has_any (crm_paths) and httpStatus_d == 200
-| summarize reqs = count(), bytes = sum(sentBytes_d) by clientIP_s, bin(TimeGenerated, 1h)
-| join kind=inner (
-    AzureDiagnostics
-    | where TimeGenerated > ago(14d)
-    | where Category == "ApplicationGatewayAccessLog" and requestUri_s has_any (crm_paths)
-    | summarize hourly = count() by clientIP_s, bin(TimeGenerated, 1h)
-    | summarize p95 = percentile(hourly, 95) by clientIP_s
-  ) on clientIP_s
-| where reqs > 500 and reqs > 10 * p95
-| order by reqs desc;
+| where Category == "ApplicationGatewayAccessLog" and requestUri_s has_any (crm_paths)
+| summarize reqs = count(), ok_reqs = countif(httpStatus_d == 200), bytes = sum(sentBytes_d) by clientIP_s, hour = bin(TimeGenerated, 1h);
+let Baseline = Hourly
+| where hour < ago(q3_window)
+| summarize p95 = percentile(reqs, 95), hist_hours = count() by clientIP_s;
+Hourly
+| where hour >= ago(q3_window) and ok_reqs > 500
+| join kind=leftouter Baseline on clientIP_s
+| extend new_client = isnull(p95)
+| where new_client or ok_reqs > 10 * p95
+| project hour, clientIP_s, ok_reqs, bytes, p95, hist_hours, new_client
+| order by ok_reqs desc;
 // Q4: many auth failures then success on the same API from one source
 AzureDiagnostics
 | where TimeGenerated > ago(14d)
