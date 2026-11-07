@@ -1,0 +1,11 @@
+// TEMPLATE, NOT DEPLOYABLE.
+// Q2: SSL-VPN logins recorded under a non-SAML auth method.
+// No documented SonicOS log field records the SSL-VPN authentication method for
+// event 1080, so auth_method below is a placeholder. Validate on your own firewall
+// (one known SAML login, one known local/LDAP login) before using.
+CommonSecurityLog
+| where TimeGenerated > ago(30d)
+| where DeviceVendor == "SonicWall" and DeviceEventClassID == "1080"
+| extend auth_method = "<PLACEHOLDER: map to a validated field>"
+| where auth_method !~ "saml"
+| summarize first_seen = min(TimeGenerated), last_seen = max(TimeGenerated), count() by SourceUserName, auth_method, SourceIP, DeviceName
