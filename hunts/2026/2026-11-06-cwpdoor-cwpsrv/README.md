@@ -1,5 +1,7 @@
 # CWPdoor: trojanised Control Web Panel cwpsrv
 
+Full write-up: [Hunt: CWPdoor integrity socket, strings and C2](https://cyber-threat.net/hunt-cwpdoor-integrity-socket-c2/) on Cyber-Threat.net.
+
 | Hunt ID | Date | Status | Platforms | ATT&CK | CVEs | Files |
 |---|---|---|---|---|---|---|
 | 2026-11-06-cwpdoor-cwpsrv | 2026-11-06 | Experimental | Linux CWP hosts; network/DNS; EDR file scan; Splunk; Microsoft Sentinel / Defender | T1554, T1071, T1036, T1070 | None assigned in XLab write-up | cwpdoor.yar, rule-cwpdoor-c2.yml, query.kql, host-checks.sh, ci-targets.txt, sources.md |
