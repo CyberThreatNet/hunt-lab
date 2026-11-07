@@ -1,0 +1,46 @@
+# TEMPLATE, NOT DEPLOYABLE. auth_method, event_outcome and vpn_user are placeholders.
+# No documented SonicOS log field records the SSL-VPN authentication method. Kept out of CI
+# by the .template suffix. Do not deploy until you have validated a field on your own firewall.
+title: SonicWall SSL-VPN Login Without SAML For SAML-Enforced User (CVE-2026-19868)
+id: 7d3b9e42-5c1a-4f6e-8a20-3b9c1d7e4f53
+status: unsupported
+description: |
+  Detects successful SonicOS SSL-VPN logins recorded with a non-SAML
+  authentication method. CVE-2026-19868 lets valid credentials for an
+  alternate method bypass SAML and SAML-enforced MFA when SAML is enabled for
+  SSL-VPN. Field names are placeholders: map auth_method, event_outcome and
+  vpn_user to your SonicOS syslog parser, and scope to users who should only
+  use SAML.
+references:
+  - https://psirt.global.sonicwall.com/vuln-detail/SNWLID-2026-0014
+  - https://www.cisa.gov/news-events/alerts/2026/11/06/cisa-adds-one-known-exploited-vulnerability-catalog
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-07
+tags:
+  - attack.initial-access
+  - attack.t1133
+  - attack.persistence
+  - attack.t1078
+  - attack.credential-access
+  - attack.t1556
+  - cve.2026-19868
+  - detection.emerging-threats
+logsource:
+  product: sonicwall
+  service: sslvpn
+detection:
+  selection:
+    event_outcome: success
+  saml:
+    auth_method|contains: saml
+  condition: selection and not saml
+fields:
+  - vpn_user
+  - auth_method
+  - src_ip
+  - event_outcome
+falsepositives:
+  - Documented break-glass local accounts
+  - Users legitimately allowed to use non-SAML methods
+level: high

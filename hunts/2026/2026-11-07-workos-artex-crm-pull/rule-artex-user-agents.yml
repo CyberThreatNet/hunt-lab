@@ -1,0 +1,37 @@
+title: ARTEX Offensive Agent User Agents (WorkOS Incident)
+id: 4a9e1c37-2b8d-4f05-9c6a-e1d27b58f3a0
+status: experimental
+description: |
+  Detects HTTP requests with user agents WorkOS published from the ARTEX
+  autonomous pentest agent that reached its internal sales tool in
+  October 2026. User agents are easy to change; treat hits as leads.
+references:
+  - https://workos.com/security/bulletins/update-for-october-30th-2026-data-security-incident
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-07-workos-artex-crm-pull
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-07
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - attack.collection
+  - attack.t1119
+  - detection.emerging-threats
+logsource:
+  category: webserver
+detection:
+  selection:
+    cs-user-agent|contains:
+      - 'compatible; ArtEx/1.0'
+      - 'compatible; infra-hunt/1.0'
+      - 'artex-enrich/1.0'
+      - 'norma/0.4'
+      - 'verify-911-probe/1.0'
+  condition: selection
+fields:
+  - c-ip
+  - cs-uri-stem
+  - sc-status
+  - cs-user-agent
+falsepositives:
+  - Authorised internal testing with ARTEX (WorkOS itself began this on 3 November 2026)
+level: high

@@ -1,0 +1,2 @@
+# Convert only rules with a detection section.
+-t splunk --without-pipeline

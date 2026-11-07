@@ -1,0 +1,34 @@
+// SonicWall SSL-VPN SAML/MFA bypass hunts, CVE-2026-19868
+// Cyber-Threat.net Hunt Lab, 7 November 2026
+// Validated mapping: SonicOS log event ID 1080 "SSL VPN zone remote user login allowed"
+// (Rapid7 SonicWALL event table; Arctic Wolf SonicOS log samples). In Sentinel CEF
+// (CommonSecurityLog), the SonicOS event ID is DeviceEventClassID and the user is
+// SourceUserName or susr in AdditionalExtensions (Microsoft ASIM SonicWall parser).
+// Hunt queries: review every result. No accounts are excluded by default.
+let lookback = 30d;
+let window = 5m;
+let VpnLogins = CommonSecurityLog
+| where TimeGenerated > ago(lookback)
+| where DeviceVendor == "SonicWall"
+| where DeviceEventClassID == "1080"
+| extend susr = extract(@"(?:^|;)susr=([^;]+)", 1, AdditionalExtensions)
+| extend vpn_user = tolower(coalesce(SourceUserName, susr, DestinationUserName))
+| project VpnTime = TimeGenerated, vpn_user, SourceIP, DeviceName, Activity;
+// Q1: SSL-VPN login (1080) with no successful IdP sign-in for the same user within the window.
+// Usernames may differ in format (sAMAccountName vs UPN); normalise vpn_user to match your IdP.
+let IdP = SigninLogs
+| where TimeGenerated > ago(lookback)
+| where ResultType == "0"
+| extend vpn_user = tolower(UserPrincipalName)
+| project IdpTime = TimeGenerated, vpn_user;
+VpnLogins
+| join kind=leftouter IdP on vpn_user
+| extend matched = iff(isnotempty(IdpTime) and abs(datetime_diff('second', VpnTime, IdpTime)) <= 300, 1, 0)
+| summarize matched = max(matched) by VpnTime, vpn_user, SourceIP, DeviceName
+| where matched == 0
+| order by VpnTime desc;
+// Q3: first-seen public source IP per SSL-VPN user in the last 7 days
+VpnLogins
+| summarize first_seen = min(VpnTime) by vpn_user, SourceIP
+| where first_seen > ago(7d)
+| order by first_seen desc

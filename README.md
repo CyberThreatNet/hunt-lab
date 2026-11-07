@@ -21,6 +21,8 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-11-07 | SonicWall SSL-VPN logins that skipped SAML/MFA (CVE-2026-19868) | CVE-2026-19868 | T1133, T1078, T1556 | — | [`2026-11-07-sonicwall-sslvpn-saml-bypass`](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) |
+| 2026-11-07 | WorkOS breach: ARTEX agent user agents and bulk CRM pulls | — | T1190, T1078.001, T1110, T1213, T1119 | — | [`2026-11-07-workos-artex-crm-pull`](hunts/2026/2026-11-07-workos-artex-crm-pull/) |
 | 2026-11-06 | OpenSSH *sshole musl / Alpine password bypass (CVE-2026-123158) | CVE-2026-123158 | T1078, T1110, T1548 | — | [`2026-11-06-openssh-sshole-musl`](hunts/2026/2026-11-06-openssh-sshole-musl/) |
 | 2026-11-06 | CWPdoor: trojanised Control Web Panel cwpsrv | — | T1554, T1071, T1036, T1070 | — | [`2026-11-06-cwpdoor-cwpsrv`](hunts/2026/2026-11-06-cwpdoor-cwpsrv/) |
 | 2026-11-05 | CRAFTY FALCON (CERT-In CIAD-2026-0058): BFSI API abuse and AI pentest artefacts | — | T1588.007, T1190, T1078, T1552, T1059, T1505.003, T1651, T1105, T1059.004 | [Article](https://cyber-threat.net/hunt-crafty-falcon-rs1-staging-artex/) | [`2026-11-05-crafty-falcon-bfsi`](hunts/2026/2026-11-05-crafty-falcon-bfsi/) |
@@ -79,6 +81,8 @@ hunt-lab/
 
 | Date | Hunt | ATT&CK | Status |
 |---|---|---|---|
+| 2026-11-07 | [SonicWall SSL-VPN logins that skipped SAML/MFA (CVE-2026-19868)](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) | T1133, T1078, T1556 | Experimental, draft, untested |
+| 2026-11-07 | [WorkOS breach: ARTEX agent user agents and bulk CRM pulls](hunts/2026/2026-11-07-workos-artex-crm-pull/) | T1190, T1078.001, T1110, T1213, T1119 | Experimental, draft, untested |
 | 2026-11-06 | [OpenSSH *sshole musl / Alpine password bypass (CVE-2026-123158)](hunts/2026/2026-11-06-openssh-sshole-musl/) | T1078, T1110, T1548 | Experimental, draft, untested |
 | 2026-11-06 | [CWPdoor: trojanised Control Web Panel cwpsrv](hunts/2026/2026-11-06-cwpdoor-cwpsrv/) | T1554, T1071, T1036, T1070 | Experimental, draft, untested |
 | 2026-11-05 | [CRAFTY FALCON (CERT-In CIAD-2026-0058): BFSI API abuse and AI pentest artefacts](hunts/2026/2026-11-05-crafty-falcon-bfsi/) | T1588.007, T1190, T1078, T1552, T1059, T1505.003, T1651, T1105, T1059.004 | Experimental, draft, untested |
@@ -184,6 +188,8 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-11-05-crafty-falcon-bfsi](hunts/2026/2026-11-05-crafty-falcon-bfsi/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-06-cwpdoor-cwpsrv](hunts/2026/2026-11-06-cwpdoor-cwpsrv/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-06-openssh-sshole-musl](hunts/2026/2026-11-06-openssh-sshole-musl/) | CVE-2026-123158 | No | – | – | – | not yet scored | – | 2026-11-06 (KEV catalogue 2026.11.04) |
+| [2026-11-07-sonicwall-sslvpn-saml-bypass](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) | CVE-2026-19868 | Yes | 2026-11-06 | 2026-11-20 | Unknown | not yet scored | – | 2026-11-07 (KEV catalogue 2026.11.06) |
+| [2026-11-07-workos-artex-crm-pull](hunts/2026/2026-11-07-workos-artex-crm-pull/) | n/a (no CVE) | n/a | | | | | | |
 
 <!-- kev-epss:end -->
 
