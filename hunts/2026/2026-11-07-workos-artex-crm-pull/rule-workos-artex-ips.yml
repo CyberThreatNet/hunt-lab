@@ -1,0 +1,35 @@
+title: Connections From WorkOS-Published ARTEX Agent Addresses
+id: 9b2f6d81-3e4c-4a7b-8d15-6c0a2e9f7b44
+status: experimental
+description: |
+  Detects inbound traffic from IP addresses WorkOS published for the ARTEX
+  agent activity of 25 to 30 October 2026. Best used for retro-hunting that
+  window.
+references:
+  - https://workos.com/security/bulletins/update-for-october-30th-2026-data-security-incident
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-07
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - detection.emerging-threats
+logsource:
+  category: firewall
+  product: any
+detection:
+  selection:
+    src_ip:
+      - 154.64.252.77
+      - 183.1.65.106
+      - 95.169.20.166
+      - 203.190.1.60
+      - 240e:3b2:1959:e4b0:b282:e2ff:fe48:d1ca
+      - 240e:3b2:195a:8b20:b282:e2ff:fe48:d1ca
+  condition: selection
+fields:
+  - src_ip
+  - dst_ip
+  - dst_port
+falsepositives:
+  - Reassigned addresses outside the incident window
+level: medium
