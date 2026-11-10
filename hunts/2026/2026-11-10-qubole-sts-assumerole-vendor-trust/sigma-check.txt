@@ -1,0 +1,10 @@
+# sigma-cli check (10 November 2026)
+
+Command: sigma check --fail-on-issues -x filename_length -x duplicate_filename hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/
+
+Result: no rule errors, no condition errors, no issues. The vendor-account rule matches 805246085872 with an anchored regular expression so the account ID stays a string (a quoted numeric literal is flagged as NumberAsStringIssue by sigma-cli 3.1.0).
+
+Splunk conversion (--without-pipeline) succeeded for both rules:
+
+- rule-assume-role-actor-iam-user.yml -> userIdentity.principalId="*AIDA3W7DIFLYOLTK63SFS*"
+- rule-assume-role-qubole-account.yml -> eventName="AssumeRole" | regex userIdentity.accountId="^805246085872$"

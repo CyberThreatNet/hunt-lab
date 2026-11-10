@@ -1,0 +1,35 @@
+# Qubole vendor-account AssumeRole and actor IAM user (DRAFT FOR REVIEW, untested)
+# Hunt ID:   2026-11-10-qubole-sts-assumerole-vendor-trust
+# Sourcetype: aws:cloudtrail
+# ATT&CK:    T1199, T1078.004, T1550.001, T1526, T1552, T1530
+# Context:   Wiz, 9 November 2026
+# Licence:   MIT
+#
+# T1550.001 is pack context for later use of stolen Entra and Okta tokens,
+# not a mapping for sts:AssumeRole itself.
+
+# Q1 actor-only IAM user
+index=* sourcetype=aws:cloudtrail earliest=10/01/2026:00:00:00
+  userIdentity.principalId="AIDA3W7DIFLYOLTK63SFS"
+| table _time, eventName, sourceIPAddress, userIdentity.accountId, userIdentity.principalId, userIdentity.arn, recipientAccountId, userAgent, errorCode
+
+# Q2 vendor-account AssumeRole (includes legitimate Qubole traffic; tune on source IP)
+index=* sourcetype=aws:cloudtrail earliest=10/01/2026:00:00:00
+  eventName=AssumeRole userIdentity.accountId=805246085872
+| eval sessionName=coalesce('requestParameters.roleSessionName', "")
+| eval looksLikeActorSession=if(match(sessionName, "quiam-"), 1, 0)
+| eval indicatorIp=if(like(sourceIPAddress, "2001:41d0:70d:7800:%") OR sourceIPAddress IN ("45.83.220.211", "57.129.54.120", "185.209.199.73", "89.37.63.175"), 1, 0)
+| table _time, eventName, sourceIPAddress, userIdentity.accountId, userIdentity.principalId, userIdentity.arn, recipientAccountId, userAgent, sessionName, looksLikeActorSession, indicatorIp, errorCode
+
+# Q3 follow-on activity from the published identifiers.
+# The quiam- ARN match is a starting filter, not a complete session join.
+# Still join follow-on events to the Q1/Q2 sessions in your own workspace.
+index=* sourcetype=aws:cloudtrail earliest=10/01/2026:00:00:00
+  eventName IN ("GetSecretValue", "ListSecrets", "GetParameter", "GetParameters", "GetParametersByPath", "DescribeParameters", "GetFunctionConfiguration", "ListFunctions", "ListBuckets", "ListObjects", "ListObjectsV2", "HeadObject", "GetObject", "GetCallerIdentity")
+AND (
+  userIdentity.arn="*quiam-*"
+  OR like(sourceIPAddress, "2001:41d0:70d:7800:%")
+  OR sourceIPAddress IN ("45.83.220.211", "57.129.54.120", "185.209.199.73", "89.37.63.175")
+  OR userIdentity.principalId="AIDA3W7DIFLYOLTK63SFS"
+)
+| table _time, eventName, sourceIPAddress, userIdentity.accountId, userIdentity.principalId, userIdentity.arn, recipientAccountId, userAgent, errorCode
