@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**Qubole vendor-account AssumeRole and stale third-party trust**
+- `hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/`
+- Sigma for AssumeRole from the Qubole vendor account and the actor-only IAM user; hand KQL, Splunk SPL and Athena SQL for follow-on secret, parameter, Lambda and S3 activity; IAM Access Analyzer and CLI audit for stale trust. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
+- Status: experimental, untested. Identifiers from Wiz (9 November 2026). No CVE, so no `cve-context.yaml`.
+
 **OpenSSH *sshole musl / Alpine password bypass (CVE-2026-123158)**
 - `hunts/2026/2026-11-06-openssh-sshole-musl/`
 - Sigma for successful password auth to common `*` shadow accounts and Alpine `alpine`+doas elevation after SSH; hand KQL and an inspect-only host-check script for PasswordAuthentication/UsePAM/musl exposure. Companion to the Cyber-Threat.net Alert.
