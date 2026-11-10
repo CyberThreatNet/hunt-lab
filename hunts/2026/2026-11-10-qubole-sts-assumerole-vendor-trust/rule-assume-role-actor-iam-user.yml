@@ -1,0 +1,33 @@
+title: AWS AssumeRole or API activity from Qubole actor IAM user
+id: c7dc9847-53cf-496d-8cb9-9fd9fd744fcd
+status: experimental
+description: |
+  Detects AWS CloudTrail events where the calling principal ID is
+  AIDA3W7DIFLYOLTK63SFS, an IAM user in Qubole-associated account
+  805246085872. Wiz reported on 9 November 2026 that, in the environments
+  it observed, this user appeared only in threat actor activity during a
+  campaign that assumed customer integration roles between 14 and 26
+  October 2026. Any match warrants investigation. This is a reported
+  indicator from Wiz, not a generic pattern.
+references:
+  - https://www.wiz.io/blog/qubole-cross-account-access-abused-in-the-wild
+  - https://www.theregister.com/security/2026/11/09/attackers-backdoor-trusted-aws-integrations-to-steal-secrets/5308553
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-10
+tags:
+  - attack.initial-access
+  - attack.t1199
+  - attack.privilege-escalation
+  - attack.t1078.004
+  - detection.emerging-threats
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    userIdentity.principalId|contains: 'AIDA3W7DIFLYOLTK63SFS'
+  condition: selection
+falsepositives:
+  - None expected if Wiz's observation holds that this user is not used for legitimate Qubole platform traffic. Confirm in your own baseline before auto-closing.
+level: high

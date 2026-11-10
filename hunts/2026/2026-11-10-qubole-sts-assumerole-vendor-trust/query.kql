@@ -1,0 +1,76 @@
+// Qubole vendor-account AssumeRole and actor IAM user (DRAFT FOR REVIEW, untested)
+// Hunt ID:   2026-11-10-qubole-sts-assumerole-vendor-trust
+// Table:     AWSCloudTrail (Microsoft Sentinel AWS connector)
+// ATT&CK:    T1199, T1078.004, T1550.001, T1526, T1552, T1530
+// T1550.001 is pack context for later use of stolen Entra and Okta tokens, not for sts:AssumeRole itself.
+// Context:   Wiz, 9 November 2026: https://www.wiz.io/blog/qubole-cross-account-access-abused-in-the-wild
+// Source:    https://github.com/CyberThreatNet/hunt-lab
+// Licence:   MIT - see LICENSE. (Sigma rules in this repository are under DRL 1.1.)
+//
+// Confirm column names in your workspace. Some tenants use UserIdentityPrincipalId
+// rather than UserIdentityPrincipalid. CloudTrail management events do not include
+// S3 GetObject; use data events or server access logs for object reads.
+// Review from 1 October 2026 as Wiz recommends.
+
+let startTime = datetime(2026-10-01);
+let quboleAccount = "805246085872";
+let actorUser = "AIDA3W7DIFLYOLTK63SFS";
+let mixedUser = "AIDAJYRRH5Y3A7AAJM2HW";
+let actorIps = dynamic([
+    "45.83.220.211",
+    "57.129.54.120",
+    "185.209.199.73",
+    "89.37.63.175"
+]);
+// Q1: actor-only IAM user (high signal in Wiz's dataset)
+AWSCloudTrail
+| where TimeGenerated >= startTime
+| where UserIdentityPrincipalid has actorUser
+    or UserIdentityArn has actorUser
+    or tostring(RequestParameters) has actorUser
+| extend Hunt = "Q1_actor_iam_user"
+| project TimeGenerated, EventName, SourceIpAddress, UserIdentityAccountId,
+    UserIdentityPrincipalid, UserIdentityArn, UserIdentityType, RecipientAccountId,
+    UserAgent, ErrorCode, RequestParameters, ResponseElements, Hunt
+;
+
+// Q2: AssumeRole from the Qubole account, or from the mixed IAM user (tune on source IP; the query does not itself exclude AWS addresses)
+AWSCloudTrail
+| where TimeGenerated >= startTime
+| where EventName == "AssumeRole"
+| where UserIdentityAccountId == quboleAccount
+    or UserIdentityPrincipalid has mixedUser
+| extend Hunt = "Q2_vendor_assumerole"
+| extend SessionName = extract(@"roleSessionName"":""([^""]+)", 1, tostring(RequestParameters))
+| extend LooksLikeActorSession = SessionName has "quiam-"
+| extend IndicatorIp = SourceIpAddress in (actorIps) or SourceIpAddress startswith "2001:41d0:70d:7800:"
+| project TimeGenerated, EventName, SourceIpAddress, UserIdentityAccountId,
+    UserIdentityPrincipalid, UserIdentityArn, RecipientAccountId, UserAgent,
+    SessionName, LooksLikeActorSession, IndicatorIp, ErrorCode, RequestParameters,
+    ResponseElements, Hunt
+;
+
+// Q3: follow-on secret, inventory and storage API calls often seen after a hit.
+// The quiam- ARN match is a starting filter, not a complete session join.
+// Still join follow-on events to the Q1/Q2 sessions in your own workspace.
+AWSCloudTrail
+| where TimeGenerated >= startTime
+| where EventName in (
+    "GetSecretValue", "ListSecrets",
+    "GetParameter", "GetParameters", "GetParametersByPath", "DescribeParameters",
+    "GetFunctionConfiguration", "ListFunctions",
+    "ListBuckets", "ListObjects", "ListObjectsV2", "HeadObject", "GetObject",
+    "GetCallerIdentity",
+    "ListRoles", "ListKeys", "DescribeKey", "GetKeyPolicy",
+    "DescribeInstances", "DescribeDBInstances", "GetDatabases", "ListTables"
+    )
+| where UserIdentityAccountId == quboleAccount
+    or UserIdentityPrincipalid has actorUser
+    or UserIdentityPrincipalid has mixedUser
+    or UserIdentityArn has "quiam-"
+    or SourceIpAddress in (actorIps)
+    or SourceIpAddress startswith "2001:41d0:70d:7800:"
+| extend Hunt = "Q3_follow_on"
+| project TimeGenerated, EventName, SourceIpAddress, UserIdentityAccountId,
+    UserIdentityPrincipalid, UserIdentityArn, RecipientAccountId, UserAgent,
+    ErrorCode, RequestParameters, Hunt

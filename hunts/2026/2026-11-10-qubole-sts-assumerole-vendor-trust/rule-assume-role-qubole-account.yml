@@ -1,0 +1,38 @@
+title: AWS AssumeRole from Qubole vendor account 805246085872
+id: 3ade6915-283d-4435-97d4-3d4c37685d51
+status: experimental
+description: |
+  Detects sts:AssumeRole calls where the calling account is 805246085872,
+  the AWS account Wiz observes Qubole's platform using to assume customer
+  integration roles. A threat actor used credentials from this account
+  against customer roles between 14 and 26 October 2026. Legitimate
+  Qubole platform traffic also uses this account and, in Wiz's observations,
+  came from AWS infrastructure. Investigate non-AWS source addresses,
+  session names with a quiam- prefix, and the second IAM user
+  AIDAJYRRH5Y3A7AAJM2HW when the source is not an AWS address. This is
+  reported activity from Wiz, not a generic vendor-trust signature.
+references:
+  - https://www.wiz.io/blog/qubole-cross-account-access-abused-in-the-wild
+  - https://www.theregister.com/security/2026/11/09/attackers-backdoor-trusted-aws-integrations-to-steal-secrets/5308553
+  - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-10
+tags:
+  - attack.initial-access
+  - attack.t1199
+  - attack.privilege-escalation
+  - attack.t1078.004
+  - detection.emerging-threats
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: AssumeRole
+    # Anchored regex keeps the account ID a string (sigma-cli 3.1.0 NumberAsStringIssue
+    # flags a quoted 12-digit value) and is still an exact match.
+    userIdentity.accountId|re: '^805246085872$'
+  condition: selection
+falsepositives:
+  - Legitimate Qubole platform AssumeRole traffic from AWS infrastructure. Tune by excluding source addresses in the current AWS IP ranges, then investigate the remainder.
+level: medium
