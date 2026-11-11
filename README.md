@@ -21,6 +21,7 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-11-11 | Barracuda ESG CVE-2026-116606 and CVE-2026-111560: config-import bypass to root | CVE-2026-111560, CVE-2026-116606 | T1190, T1059.004, T1562.001 | n/a | [`2026-11-11-barracuda-esg-cve-2026-116606-config-import`](hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/) |
 | 2026-11-10 | Qubole vendor-account AssumeRole and stale third-party trust | — | T1199, T1078.004, T1550.001, T1526, T1552, T1530 | — | [`2026-11-10-qubole-sts-assumerole-vendor-trust`](hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/) |
 | 2026-11-07 | SonicWall SSL-VPN logins that skipped SAML/MFA (CVE-2026-19868) | CVE-2026-19868 | T1133, T1078, T1556 | — | [`2026-11-07-sonicwall-sslvpn-saml-bypass`](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) |
 | 2026-11-07 | WorkOS breach: ARTEX agent user agents and bulk CRM pulls | — | T1190, T1078.001, T1110, T1213, T1119 | — | [`2026-11-07-workos-artex-crm-pull`](hunts/2026/2026-11-07-workos-artex-crm-pull/) |
@@ -193,6 +194,8 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-11-07-sonicwall-sslvpn-saml-bypass](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) | CVE-2026-19868 | Yes | 2026-11-06 | 2026-11-20 | Unknown | 0.00621 | 50.05 | 2026-11-09 (KEV catalogue 2026.11.06) |
 | [2026-11-07-workos-artex-crm-pull](hunts/2026/2026-11-07-workos-artex-crm-pull/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-10-qubole-sts-assumerole-vendor-trust](hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/) | n/a (no CVE) | n/a | | | | | | |
+| [2026-11-11-barracuda-esg-cve-2026-116606-config-import](hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/) | CVE-2026-111560 | Yes | 2026-11-10 | 2026-11-13 | Unknown | 0.01060 | 64.83 | 2026-11-11 (KEV catalogue 2026.11.10) |
+| [2026-11-11-barracuda-esg-cve-2026-116606-config-import](hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/) | CVE-2026-116606 | Yes | 2026-11-10 | 2026-11-13 | Unknown | 0.01602 | 76.03 | 2026-11-11 (KEV catalogue 2026.11.10) |
 
 <!-- kev-epss:end -->
 
