@@ -10,10 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 **Outlook CVE-2026-124194: outbound SMB or WebDAV NTLMv2 disclosure**
 - `hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/`
-- Sigma for Outlook starting outbound SMB or NetBIOS session traffic to a non-private address, and for WebDAV PROPFIND, PROPPATCH or MKCOL with an Outlook user agent; hand KQL and Splunk SPL for those plus davclnt.dll loads and outgoing NTLM events. Companion to the Cyber-Threat.net November Patch Tuesday Alert (draft 1832; write-up link to be added when live).
+- Sigma for outbound SMB or NetBIOS session traffic (TCP 445 or 139) to a non-private address initiated by the kernel redirector (System/PID 4, ntoskrnl, or an empty image), and for WebDAV PROPFIND or OPTIONS with a Microsoft-WebDAV-MiniRedir or DavClnt user agent; hand KQL and Splunk SPL for those plus davclnt.dll loads and outgoing NTLM events, with the any-process firewall query as the primary network check. Companion to the Cyber-Threat.net November Patch Tuesday Alert (post 1832): https://cyber-threat.net/november-2026-patch-tuesday-outlook-zero-day/
 - Status: experimental, untested. CVE from Microsoft; KEV catalogue 2026.11.10, due 24 November 2026. FIRST EPSS had not scored the CVE as of 11 November 2026.
-
-### Added
 
 **Qubole vendor-account AssumeRole and stale third-party trust**
 - `hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/`
