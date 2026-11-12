@@ -206,7 +206,6 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-11-11-outlook-cve-2026-124194-ntlm](hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/) | CVE-2026-124194 | Yes | 2026-11-10 | 2026-11-24 | Unknown | not yet scored | – | 2026-11-11 (KEV catalogue 2026.11.10) |
 | [2026-11-12-wfx-phantom-github-actions-stealer](hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/) | n/a (no CVE) | n/a | | | | | | |
 
-
 <!-- kev-epss:end -->
 
 ## Using the queries
