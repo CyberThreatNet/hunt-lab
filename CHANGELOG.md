@@ -23,6 +23,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Sigma for timezone values carrying shell metacharacters in proxy or WAF logs in front of a Barracuda Admin UI; hand KQL and Splunk SPL for Admin UI connections from outside the management range, configuration restore, import and timezone events in appliance syslog, and new outbound destinations from the appliance. Companion to the Cyber-Threat.net Alert (post 1669): https://cyber-threat.net/barracuda-esg-cve-2026-116606-pre-auth-root/
 - Status: experimental, untested. CVEs from Barracuda and Mandiant (MNDT-2026-0041, MNDT-2026-0042); KEV catalogue 2026.11.10, due 13 November 2026. No indicators published.
 
+**Openwave Webtop Media Transcoder CVE-2026-111793: file-type restriction bypass**
+- `hunts/2026/2026-11-11-openwave-webtop-cve-2026-111793-transcoder/`
+- Sigma for transcoder requests naming document types a webmail preview service rarely needs (path scope is a placeholder to replace); hand KQL and Splunk SPL for connections to the transcoder from outside the Webtop front ends, unusual file types, and per-account spikes against a 30-day baseline; version inventory against the 1.1.22.0 fix.
+- Status: experimental, untested. CVE from Openwave CAN-2026-2032674 and JPCERT/CC JVNVU#93403064; KEV catalogue 2026.11.10, due 24 November 2026. No indicators or request format published.
+
 **Qubole vendor-account AssumeRole and stale third-party trust**
 - `hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/`
 - Sigma for AssumeRole from the Qubole vendor account and the actor-only IAM user; hand KQL, Splunk SPL and Athena SQL for follow-on secret, parameter, Lambda and S3 activity; IAM Access Analyzer and CLI audit for stale trust. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
