@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**SCKit worm: rogue ScreenConnect clients via cloud Run Command**
+- `hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/`
+- Sigma for the C:\Windows\Temp dropper files and RelayTrap folder, the TrapWatch task and RelayTrapLiteAlert Run value, rogue client command lines and the Huntress network indicators; hand KQL for Run Command children, a second ScreenConnect client per device, Defender exclusions and cookie theft on technician workstations; YARA for kit scripts and the 16 published SHA256 values. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
+- Status: experimental, untested. Indicators from Huntress (11 November 2026); extension list from ConnectWise. No CVE, so no `cve-context.yaml`.
+
 **Qubole vendor-account AssumeRole and stale third-party trust**
 - `hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/`
 - Sigma for AssumeRole from the Qubole vendor account and the actor-only IAM user; hand KQL, Splunk SPL and Athena SQL for follow-on secret, parameter, Lambda and S3 activity; IAM Access Analyzer and CLI audit for stale trust. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
