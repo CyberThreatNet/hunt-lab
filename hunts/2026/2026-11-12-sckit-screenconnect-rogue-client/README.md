@@ -9,7 +9,7 @@
 | **Status** | Experimental |
 | **Platforms** | Windows endpoints managed through ScreenConnect (cloud or on-premises); MSP technician workstations; ScreenConnect instance audit, Run Command and Toolbox history; EDR and network telemetry |
 | **ATT&CK** | T1199 Trusted Relationship, T1072 Software Deployment Tools, T1219 Remote Access Software, T1105 Ingress Tool Transfer, T1053.005 Scheduled Task, T1547.001 Registry Run Keys, T1543.003 Windows Service, T1562.001 Disable or Modify Tools, T1539 Steal Web Session Cookie, T1550.004 Web Session Cookie |
-| **CVEs** | None. No CVE has been assigned to the RMM+ extension flaw as of 12 November 2026 |
+| **CVEs** | CVE-2026-127063 (third-party RMM+ extension, ConnectWise 12 November 2026 disclosures) |
 | **Files** | `rule-sckit-temp-dropper.yml`, `rule-sckit-trapwatch-persistence.yml`, `rule-sckit-rogue-screenconnect-client.yml`, `rule-sckit-network.yml` (Sigma, DRL 1.1); `query.kql` (MIT); `sckit.yar` (DRL 1.1); `sources.md`; `ci-targets.txt` |
 
 ## Do this first: do not triage over ScreenConnect
@@ -23,9 +23,9 @@ If your ScreenConnect panel was used against you, an operator sent Run Command j
 ## Threat context
 
 - **When and how big.** Huntress saw the activity start at about 17:47 UTC on 11 November 2026 and counted at least 288 endpoints across 48 organisations within 90 minutes, about a third of them in the first 10 minutes. Earlier reporting by BleepingComputer, quoting Huntress on Reddit, gave "6 compromised MSPs and 286+ endpoints" across 47 organisations. The blog figure is the later one.
-- **Likely entry.** Huntress's 11 November update (23:34 ET) ties the activity to RMM+, a third-party ScreenConnect extension. In versions 1.0.31 and 1.0.32, if an administrator never set the extension's access key, RMM+ accepted a blank one. RMM+ authenticates with that shared key and so bypasses ScreenConnect user accounts, roles and MFA. Huntress saw commands with no matching login, linked to RMM+ in the logs. ConnectWise itself says the initial access method is still under investigation.
-- **ConnectWise response.** ConnectWise found about 400 partner environments with one or more of five extensions (Labtech Plus, RMM Plus, RMM+, RMM Plus Password Link, RMM+ Password Link). It disabled them where it could. On-premises partners must disable them themselves and not re-enable or reinstall them. Disabling an extension does not remove access already set up on endpoints.
-- **Versions.** Huntress says the current ScreenConnect releases, 26.6.6.9747 and 26.7.6.9783, are affected. This is an extension and configuration problem, not a ScreenConnect patch you can install.
+- **Likely entry.** Huntress's 11 November update (23:34 ET) ties the activity to RMM+, a third-party ScreenConnect extension. In versions 1.0.31 and 1.0.32, if an administrator never set the extension's access key, RMM+ accepted a blank one. RMM+ authenticates with that shared key and so bypasses ScreenConnect user accounts, roles and MFA. Huntress saw commands with no matching login, linked to RMM+ in the logs. ConnectWise has not confirmed the initial access method and says it is assessing Huntress's findings.
+- **ConnectWise response.** The ConnectWise Trust Center was updated at 18:45 UTC on 12 November. In its 12 November disclosures, ConnectWise assigned CVE-2026-127063 to the third-party RMM+ extension. It found about 400 partner environments with one or more of five extensions (Labtech Plus, RMM Plus, RMM+, RMM Plus Password Link, RMM+ Password Link). It disabled them where it could. On-premises partners must disable them themselves and not re-enable or reinstall them. Disabling an extension does not remove access already set up on endpoints. ConnectWise's disclosure says no fixed RMM+ version has been announced, and that disabling the extension is the current mitigation.
+- **Technician clients.** Partners should put every ScreenConnect technician client on version 26.6.5 or later. ConnectWise has verified that the fix for CVE-2026-84869, released in the 26.6.5 client on 8 September 2026, blocks the toolkit's attempted endpoint-to-technician spread. Updating a cloud console does not automatically update technician clients. Huntress says the current ScreenConnect releases, 26.6.6.9747 and 26.7.6.9783, are affected, because the RMM+ issue sits in the extension.
 - **Spread.** The code is built to steal a technician's `.aspxauth` session cookie, replay it against the panel and broadcast a payload through the Shared Toolbox. Huntress has not seen that step succeed: the console takeover attempt failed in every recovered host log it checked.
 
 ## Indicators (defanged; Huntress block list, 11 November 2026)
@@ -61,12 +61,13 @@ Huntress publishes SHA256 values for 16 kit files; they are in `sckit.yar`. Hunt
 ## First-hour checklist for MSPs and their customers
 
 1. **Panel, from a clean device.** Open Administration, Extensions. If RMM+ or any of the other four extensions is present, disable it (on-premises) or confirm ConnectWise disabled it (cloud). If you must keep RMM+ for now, set a long random access key. Do not reinstall.
-2. **Run Command and Toolbox history.** Look for mass Run Command jobs you did not start, especially from about 17:00 UTC on 11 November, and any Shared Toolbox item that appeared and vanished. Huntress warns earlier victims are likely, so check back as far as the logs go.
-3. **Endpoints.** Run Q1, Q3 and Q4 across every managed estate. Two ScreenConnect client services on one host, `C:\ProgramData\RelayTrap`, or a `TrapWatch` task means the host is compromised.
-4. **Block.** Add the indicators above to DNS and egress block lists, and run Q5 back to the start of your logs.
-5. **Isolate and clean.** Isolate affected hosts and keep them isolated until cleanup is done. Huntress has seen reinfection soon after isolation was lifted. Remove the rogue client service, the `TrapWatch` task, `C:\ProgramData\RelayTrap\`, the `%TEMP%` kit files (`sckit-*`, `Panel-Lateral.ps1`, `runnew.cmd`, `ToolboxRelayUploader.exe`, `sqlite3.exe`) and the `RelayTrapLiteAlert` Run value. Verify the legitimate client separately before removing anything.
-6. **Revoke.** From a trusted device, end active ScreenConnect web sessions, rotate ScreenConnect credentials, and revoke browser and identity-provider sessions for technicians who may have connected to an affected host.
-7. **Technicians.** Run Q7 and the YARA rule on any workstation that connected to a suspect host after 11 November.
+2. **Technician clients.** Put every ScreenConnect technician client, cloud or on-premises, on version 26.6.5 or later, so the CVE-2026-84869 fix can block endpoint-to-technician spread. Check the installed client on each technician workstation; do not rely on the console version alone.
+3. **Run Command and Toolbox history.** Look for mass Run Command jobs you did not start, especially from about 17:00 UTC on 11 November, and any Shared Toolbox item that appeared and vanished. Huntress warns earlier victims are likely, so check back as far as the logs go.
+4. **Endpoints.** Run Q1, Q3 and Q4 across every managed estate. Two ScreenConnect client services on one host, `C:\ProgramData\RelayTrap`, or a `TrapWatch` task means the host is compromised.
+5. **Block.** Add the indicators above to DNS and egress block lists, and run Q5 back to the start of your logs.
+6. **Isolate and clean.** Isolate affected hosts and keep them isolated until cleanup is done. Huntress has seen reinfection soon after isolation was lifted. Remove the rogue client service, the `TrapWatch` task, `C:\ProgramData\RelayTrap\`, the `%TEMP%` kit files (`sckit-*`, `Panel-Lateral.ps1`, `runnew.cmd`, `ToolboxRelayUploader.exe`, `sqlite3.exe`) and the `RelayTrapLiteAlert` Run value. Verify the legitimate client separately before removing anything.
+7. **Revoke.** From a trusted device, end active ScreenConnect web sessions, rotate ScreenConnect credentials, and revoke browser and identity-provider sessions for technicians who may have connected to an affected host.
+8. **Technicians.** Run Q7 and the YARA rule on any workstation that connected to a suspect host after 11 November.
 
 ## Tuning and false positives
 
