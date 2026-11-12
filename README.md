@@ -22,6 +22,7 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
 | 2026-11-11 | Outlook CVE-2026-124194: outbound SMB or WebDAV NTLMv2 disclosure | CVE-2026-124194 | T1187 | — | [`2026-11-11-outlook-cve-2026-124194-ntlm`](hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/) |
+| 2026-11-11 | Cisco BroadWorks CVE-2026-20320: OCI-P blind XXE file read | CVE-2026-20320 | T1190, T1005, T1048 | n/a | [`2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe`](hunts/2026/2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe/) |
 | 2026-11-10 | Qubole vendor-account AssumeRole and stale third-party trust | — | T1199, T1078.004, T1550.001, T1526, T1552, T1530 | — | [`2026-11-10-qubole-sts-assumerole-vendor-trust`](hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/) |
 | 2026-11-07 | SonicWall SSL-VPN logins that skipped SAML/MFA (CVE-2026-19868) | CVE-2026-19868 | T1133, T1078, T1556 | — | [`2026-11-07-sonicwall-sslvpn-saml-bypass`](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) |
 | 2026-11-07 | WorkOS breach: ARTEX agent user agents and bulk CRM pulls | — | T1190, T1078.001, T1110, T1213, T1119 | — | [`2026-11-07-workos-artex-crm-pull`](hunts/2026/2026-11-07-workos-artex-crm-pull/) |
@@ -194,6 +195,7 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-11-07-sonicwall-sslvpn-saml-bypass](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) | CVE-2026-19868 | Yes | 2026-11-06 | 2026-11-20 | Unknown | 0.00621 | 50.05 | 2026-11-09 (KEV catalogue 2026.11.06) |
 | [2026-11-07-workos-artex-crm-pull](hunts/2026/2026-11-07-workos-artex-crm-pull/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-10-qubole-sts-assumerole-vendor-trust](hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/) | n/a (no CVE) | n/a | | | | | | |
+| [2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe](hunts/2026/2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe/) | CVE-2026-20320 | Yes | 2026-11-10 | 2026-11-24 | Unknown | 0.00385 | 32.92 | 2026-11-11 (KEV catalogue 2026.11.10) |
 | [2026-11-11-outlook-cve-2026-124194-ntlm](hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/) | CVE-2026-124194 | Yes | 2026-11-10 | 2026-11-24 | Unknown | not yet scored | – | 2026-11-11 (KEV catalogue 2026.11.10) |
 
 <!-- kev-epss:end -->
