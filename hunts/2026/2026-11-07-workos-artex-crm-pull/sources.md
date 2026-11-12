@@ -19,6 +19,6 @@
 - WorkOS bulletin cites Wiz, Google and CrowdStrike reporting on ARTEX: not linked, those reports not fetched this session.
 
 ## Notes
-- Valentine's brief listed three UAs; WorkOS publishes five plus JA4 and IPs. All included.
+- The editorial brief listed three UAs; WorkOS publishes five plus JA4 and IPs. All included.
 - "No rate limits" and "dev credential left in prod" both confirmed in WorkOS wording.
 - Internal links verified via WP search 7 Nov: posts 1301, 1302, 1479, 1482 published.
