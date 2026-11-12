@@ -1,7 +1,6 @@
 # Evidence notes (review pack)
 
-Captured under `../../../../../evidence/` relative to this hunt folder
-(`/workspace/ct-plan/adobe-magento-polyshell-2026-10-27/evidence/`).
+Captured in the editorial evidence store (not published in this repository).
 
 | File | What |
 |------|------|
