@@ -18,6 +18,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Sigma for connections to the OCI-P provisioning ports (TCP 2208 and 2209), to be scoped with the OCI-P Network Access List; hand KQL and Splunk SPL for OCI-P sessions from outside the allow-list, new egress and DNS from BroadWorks servers (the out-of-band XXE channel), the two correlated within 10 minutes, Java child processes, and DTD or entity declarations in OCI-P logs.
 - Status: experimental, untested. CVE from Cisco advisory cisco-sa-bworks-xxe-uwUd7CEt; KEV catalogue 2026.11.10, due 24 November 2026. No indicators published.
 
+**Barracuda ESG CVE-2026-116606 and CVE-2026-111560: config-import bypass to root**
+- `hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/`
+- Sigma for timezone values carrying shell metacharacters in proxy or WAF logs in front of a Barracuda Admin UI; hand KQL and Splunk SPL for Admin UI connections from outside the management range, configuration restore, import and timezone events in appliance syslog, and new outbound destinations from the appliance. Companion to the Cyber-Threat.net Alert (post 1669): https://cyber-threat.net/barracuda-esg-cve-2026-116606-pre-auth-root/
+- Status: experimental, untested. CVEs from Barracuda and Mandiant (MNDT-2026-0041, MNDT-2026-0042); KEV catalogue 2026.11.10, due 13 November 2026. No indicators published.
+
 **Qubole vendor-account AssumeRole and stale third-party trust**
 - `hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/`
 - Sigma for AssumeRole from the Qubole vendor account and the actor-only IAM user; hand KQL, Splunk SPL and Athena SQL for follow-on secret, parameter, Lambda and S3 activity; IAM Access Analyzer and CLI audit for stale trust. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
