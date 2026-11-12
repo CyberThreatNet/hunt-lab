@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**Outlook CVE-2026-124194: outbound SMB or WebDAV NTLMv2 disclosure**
+- `hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/`
+- Sigma for outbound SMB or NetBIOS session traffic (TCP 445 or 139) to a non-private address initiated by the kernel redirector (System/PID 4, ntoskrnl, or an empty image), and for WebDAV PROPFIND or OPTIONS with a Microsoft-WebDAV-MiniRedir or DavClnt user agent; hand KQL and Splunk SPL for those plus davclnt.dll loads and outgoing NTLM events, with the any-process firewall query as the primary network check. Companion to the Cyber-Threat.net November Patch Tuesday Alert (post 1832): https://cyber-threat.net/november-2026-patch-tuesday-outlook-zero-day/
+- Status: experimental, untested. CVE from Microsoft; KEV catalogue 2026.11.10, due 24 November 2026. FIRST EPSS had not scored the CVE as of 11 November 2026.
+
 **Cisco BroadWorks CVE-2026-20320: OCI-P blind XXE file read**
 - `hunts/2026/2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe/`
 - Sigma for connections to the OCI-P provisioning ports (TCP 2208 and 2209), to be scoped with the OCI-P Network Access List; hand KQL and Splunk SPL for OCI-P sessions from outside the allow-list, new egress and DNS from BroadWorks servers (the out-of-band XXE channel), the two correlated within 10 minutes, Java child processes, and DTD or entity declarations in OCI-P logs.
