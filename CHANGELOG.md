@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**wfx (WFX Phantom) GitHub Actions secret stealer: run gaps and cloud persistence**
+- `hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/`
+- Read-only gh scripts for probe PRs, payload and cleanup commits and missing workflow run numbers; Sigma for wfx- AWS sessions, trust policies opened to any AWS account, deleted workflow runs and runner egress to the collection servers and Telegram; hand KQL for CloudTrail, Entra wfx-ci- federated credentials and runner /proc memory reads; YARA for the stealer config, the hidden .ci-*.sh npm hook and injected workflow steps; rotation checklist. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
+- Status: experimental, untested. Indicators from StepSecurity, Aikido and SafeDep (12 November 2026). No CVE, so no `cve-context.yaml`.
+
 **Qubole vendor-account AssumeRole and stale third-party trust**
 - `hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/`
 - Sigma for AssumeRole from the Qubole vendor account and the actor-only IAM user; hand KQL, Splunk SPL and Athena SQL for follow-on secret, parameter, Lambda and S3 activity; IAM Access Analyzer and CLI audit for stale trust. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).

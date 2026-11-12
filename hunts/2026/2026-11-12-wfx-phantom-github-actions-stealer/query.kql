@@ -1,0 +1,60 @@
+// wfx (wfx-loot, WFX Phantom) GitHub Actions secret stealer: cloud persistence and runner egress
+// Cyber-Threat.net Hunt Lab, 12 November 2026. MIT licence.
+// Sources: StepSecurity, Aikido, SafeDep (all 12 November 2026). Campaign from about 12:45 UTC on 10 November 2026.
+// Tables: Microsoft Sentinel AWSCloudTrail, Entra ID AuditLogs, Defender XDR DeviceNetworkEvents and DeviceProcessEvents.
+// Column names follow the standard Sentinel and Defender schemas. Check them against your workspace.
+
+let campaign_start = datetime(2026-11-10T12:00:00Z);
+let wfx_ips = dynamic(["194.150.166.244", "18.143.168.96", "153.75.82.159"]);
+
+// Q1. AWS: STS sessions named wfx-* (GitHub OIDC or role chaining)
+AWSCloudTrail
+| where TimeGenerated >= campaign_start
+| where EventSource == "sts.amazonaws.com" and EventName in ("AssumeRoleWithWebIdentity", "AssumeRole")
+| extend SessionName = tostring(parse_json(RequestParameters).roleSessionName)
+| where SessionName startswith "wfx-"
+| project TimeGenerated, RecipientAccountId, EventName, SessionName, RoleArn = tostring(parse_json(RequestParameters).roleArn),
+          UserIdentityType, UserIdentityPrincipalid, SourceIpAddress, UserAgent;
+
+// Q2. AWS: follow-on persistence from those sessions, and any role opened to every AWS account
+AWSCloudTrail
+| where TimeGenerated >= campaign_start
+| where EventName in ("CreateAccessKey", "UpdateAssumeRolePolicy")
+| extend PolicyDoc = url_decode(tostring(parse_json(RequestParameters).policyDocument))
+| extend FromWfxSession = UserIdentityArn has "/wfx-"
+| extend OpenTrust = EventName == "UpdateAssumeRolePolicy" and PolicyDoc matches regex @"""AWS""\s*:\s*\[?\s*""\*"""
+| where FromWfxSession or OpenTrust or EventName == "CreateAccessKey"
+| project TimeGenerated, RecipientAccountId, EventName, UserIdentityArn, FromWfxSession, OpenTrust,
+          Target = coalesce(tostring(parse_json(RequestParameters).userName), tostring(parse_json(RequestParameters).roleName)), SourceIpAddress
+| order by FromWfxSession desc, OpenTrust desc, TimeGenerated asc;
+
+// Q3. Entra ID: federated identity credentials named wfx-ci-* added to app registrations
+AuditLogs
+| where TimeGenerated >= campaign_start
+| where OperationName has "Update application" or OperationName has "federated"
+| mv-expand Target = TargetResources
+| mv-expand Prop = Target.modifiedProperties
+| where tostring(Prop.displayName) has "FederatedIdentityCredentials"
+| where tostring(Prop.newValue) has "wfx-ci-"
+| project TimeGenerated, OperationName, App = tostring(Target.displayName), AppId = tostring(Target.id),
+          InitiatedBy = coalesce(tostring(InitiatedBy.user.userPrincipalName), tostring(InitiatedBy.app.displayName)),
+          NewValue = tostring(Prop.newValue);
+
+// Q4. Self-hosted runners: egress to the collection servers or to Telegram
+DeviceNetworkEvents
+| where Timestamp >= campaign_start
+| where RemoteIP in (wfx_ips) or RemoteUrl has "api.telegram.org"
+| project Timestamp, DeviceName, RemoteIP, RemotePort, RemoteUrl, InitiatingProcessFileName, InitiatingProcessCommandLine, InitiatingProcessParentFileName
+| order by Timestamp asc;
+
+// Q5. Self-hosted runners: something reading Runner.Worker or Runner.Listener memory through /proc
+// The stealer uses python3 (with sudo when available) to read /proc/<pid>/mem. Treat a hit as a completed theft.
+DeviceProcessEvents
+| where Timestamp >= campaign_start
+| where FileName in~ ("python3", "python", "sudo")
+| where ProcessCommandLine has "/proc/" and ProcessCommandLine has_any ("/mem", "/maps", "Runner.Worker", "Runner.Listener")
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessCommandLine
+
+// Q6. GitHub audit log (if streamed to Sentinel; table and column names depend on your connector)
+// Look for workflows.delete_workflow_run within minutes of a push by the same actor, and list repositories with
+// several deletions. See rule-wfx-github-run-deleted.yml and find-run-gaps.sh for the run-number check.
