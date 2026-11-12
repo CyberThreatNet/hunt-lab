@@ -8,6 +8,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**Outlook CVE-2026-124194: outbound SMB or WebDAV NTLMv2 disclosure**
+- `hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/`
+- Sigma for outbound SMB or NetBIOS session traffic (TCP 445 or 139) to a non-private address initiated by the kernel redirector (System/PID 4, ntoskrnl, or an empty image), and for WebDAV PROPFIND or OPTIONS with a Microsoft-WebDAV-MiniRedir or DavClnt user agent; hand KQL and Splunk SPL for those plus davclnt.dll loads and outgoing NTLM events, with the any-process firewall query as the primary network check. Companion to the Cyber-Threat.net November Patch Tuesday Alert (post 1832): https://cyber-threat.net/november-2026-patch-tuesday-outlook-zero-day/
+- Status: experimental, untested. CVE from Microsoft; KEV catalogue 2026.11.10, due 24 November 2026. FIRST EPSS had not scored the CVE as of 11 November 2026.
+
+**Cisco BroadWorks CVE-2026-20320: OCI-P blind XXE file read**
+- `hunts/2026/2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe/`
+- Sigma for connections to the OCI-P provisioning ports (TCP 2208 and 2209), to be scoped with the OCI-P Network Access List; hand KQL and Splunk SPL for OCI-P sessions from outside the allow-list, new egress and DNS from BroadWorks servers (the out-of-band XXE channel), the two correlated within 10 minutes, Java child processes, and DTD or entity declarations in OCI-P logs.
+- Status: experimental, untested. CVE from Cisco advisory cisco-sa-bworks-xxe-uwUd7CEt; KEV catalogue 2026.11.10, due 24 November 2026. No indicators published.
+
+**Barracuda ESG CVE-2026-116606 and CVE-2026-111560: config-import bypass to root**
+- `hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/`
+- Sigma for timezone values carrying shell metacharacters in proxy or WAF logs in front of a Barracuda Admin UI; hand KQL and Splunk SPL for Admin UI connections from outside the management range, configuration restore, import and timezone events in appliance syslog, and new outbound destinations from the appliance. Companion to the Cyber-Threat.net Alert (post 1669): https://cyber-threat.net/barracuda-esg-cve-2026-116606-pre-auth-root/
+- Status: experimental, untested. CVEs from Barracuda and Mandiant (MNDT-2026-0041, MNDT-2026-0042); KEV catalogue 2026.11.10, due 13 November 2026. No indicators published.
+
 **Openwave Webtop Media Transcoder CVE-2026-111793: file-type restriction bypass**
 - `hunts/2026/2026-11-11-openwave-webtop-cve-2026-111793-transcoder/`
 - Sigma for transcoder requests naming document types a webmail preview service rarely needs (path scope is a placeholder to replace); hand KQL and Splunk SPL for connections to the transcoder from outside the Webtop front ends, unusual file types, and per-account spikes against a 30-day baseline; version inventory against the 1.1.22.0 fix.
