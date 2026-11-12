@@ -1,0 +1,4 @@
+# aws/cloudtrail, github/audit and network_connection: Splunk conversion only.
+# The repository pipelines do not map aws or github log sources for Kusto or Elastic.
+# Hand KQL (Sentinel AWSCloudTrail, Entra AuditLogs, Defender XDR) ships in query.kql.
+-t splunk --without-pipeline

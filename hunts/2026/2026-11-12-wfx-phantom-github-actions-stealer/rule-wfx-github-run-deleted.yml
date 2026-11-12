@@ -1,0 +1,31 @@
+title: GitHub Actions Workflow Run Deleted (wfx CI Stealer Cleanup)
+id: 89e3e3f0-e71d-461d-bab1-f63094264b64
+status: experimental
+description: |
+    Detects deletion of a GitHub Actions workflow run in the organisation or
+    enterprise audit log. The wfx stealer pushes its payload, then reverts the
+    commit (ci: restore, ci: cleanup) and deletes the run with its logs, usually
+    within minutes. A missing run number is often the only trace. Correlate with
+    commits titled ci: refresh build cache, chore: add ci helper or chore: add
+    dependency audit workflow by the same actor.
+references:
+    - https://www.stepsecurity.io/blog/wfx-phantom-the-github-actions-secret-stealer
+    - https://www.aikido.dev/blog/compromised-github-accounts-push-ci-secret-stealer-to-tens-of-thousands-of-repositories
+    - https://docs.github.com/en/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/audit-log-events-for-your-organization
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-12
+tags:
+    - attack.stealth
+    - attack.t1070
+    - detection.emerging-threats
+logsource:
+    product: github
+    service: audit
+detection:
+    selection:
+        action: 'workflows.delete_workflow_run'
+    condition: selection
+falsepositives:
+    - Maintainers tidying old runs, and retention or clean-up automation. Baseline who deletes runs and how often; a deletion minutes after a push by a developer account is the lead.
+level: medium
