@@ -1,0 +1,41 @@
+title: AWS Session Named wfx- From GitHub OIDC or Role Chaining (wfx CI Stealer)
+id: ab3a995e-1079-4fff-a911-7628ee1b149d
+status: experimental
+description: |
+    Detects AWS STS sessions whose role session name starts with wfx-, the prefix
+    the wfx (wfx-loot, WFX Phantom) GitHub Actions secret stealer gives its AWS
+    sessions, and the follow-on persistence calls made from such sessions:
+    CreateAccessKey for IAM users and UpdateAssumeRolePolicy. Campaign active from
+    about 12:45 UTC on 10 November 2026.
+references:
+    - https://www.stepsecurity.io/blog/wfx-phantom-the-github-actions-secret-stealer
+    - https://safedep.io/blog/github-actions-wfx-credential-stealer
+    - https://www.aikido.dev/blog/compromised-github-accounts-push-ci-secret-stealer-to-tens-of-thousands-of-repositories
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-12
+tags:
+    - attack.privilege-escalation
+    - attack.t1078.004
+    - attack.persistence
+    - attack.t1098.001
+    - detection.emerging-threats
+logsource:
+    product: aws
+    service: cloudtrail
+detection:
+    selection_session:
+        eventSource: 'sts.amazonaws.com'
+        eventName:
+            - 'AssumeRoleWithWebIdentity'
+            - 'AssumeRole'
+        requestParameters.roleSessionName|startswith: 'wfx-'
+    selection_followon:
+        eventName:
+            - 'CreateAccessKey'
+            - 'UpdateAssumeRolePolicy'
+        userIdentity.arn|contains: '/wfx-'
+    condition: 1 of selection_*
+falsepositives:
+    - An internal job that happens to use a wfx- session name. Check the role, the GitHub repository in the OIDC subject and the time.
+level: high

@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**wfx (WFX Phantom) GitHub Actions secret stealer: run gaps and cloud persistence**
+- `hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/`
+- Read-only gh scripts for probe PRs, payload and cleanup commits and missing workflow run numbers; Sigma for wfx- AWS sessions, trust policies opened to any AWS account, deleted workflow runs and runner egress to the collection servers and Telegram; hand KQL for CloudTrail, Entra wfx-ci- federated credentials and runner /proc memory reads; YARA for the stealer config, the hidden .ci-*.sh npm hook and injected workflow steps; rotation checklist. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
+- Status: experimental, untested. Indicators from StepSecurity, Aikido and SafeDep (12 November 2026). No CVE, so no `cve-context.yaml`.
+
 **Outlook CVE-2026-124194: outbound SMB or WebDAV NTLMv2 disclosure**
 - `hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/`
 - Sigma for outbound SMB or NetBIOS session traffic (TCP 445 or 139) to a non-private address initiated by the kernel redirector (System/PID 4, ntoskrnl, or an empty image), and for WebDAV PROPFIND or OPTIONS with a Microsoft-WebDAV-MiniRedir or DavClnt user agent; hand KQL and Splunk SPL for those plus davclnt.dll loads and outgoing NTLM events, with the any-process firewall query as the primary network check. Companion to the Cyber-Threat.net November Patch Tuesday Alert (post 1832): https://cyber-threat.net/november-2026-patch-tuesday-outlook-zero-day/
@@ -27,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `hunts/2026/2026-11-11-openwave-webtop-cve-2026-111793-transcoder/`
 - Sigma for transcoder requests naming document types a webmail preview service rarely needs (path scope is a placeholder to replace); hand KQL and Splunk SPL for connections to the transcoder from outside the Webtop front ends, unusual file types, and per-account spikes against a 30-day baseline; version inventory against the 1.1.22.0 fix.
 - Status: experimental, untested. CVE from Openwave CAN-2026-2032674 and JPCERT/CC JVNVU#93403064; KEV catalogue 2026.11.10, due 24 November 2026. No indicators or request format published.
+
 
 **Qubole vendor-account AssumeRole and stale third-party trust**
 - `hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/`

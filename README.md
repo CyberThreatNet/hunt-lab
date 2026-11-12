@@ -21,6 +21,7 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-11-12 | wfx (WFX Phantom) GitHub Actions secret stealer: run gaps and cloud persistence | — | T1078, T1195.002, T1552.001, T1003.007, T1098.001, T1070, T1041, T1567 | — | [`2026-11-12-wfx-phantom-github-actions-stealer`](hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/) |
 | 2026-11-11 | Outlook CVE-2026-124194: outbound SMB or WebDAV NTLMv2 disclosure | CVE-2026-124194 | T1187 | — | [`2026-11-11-outlook-cve-2026-124194-ntlm`](hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/) |
 | 2026-11-11 | Cisco BroadWorks CVE-2026-20320: OCI-P blind XXE file read | CVE-2026-20320 | T1190, T1005, T1048 | n/a | [`2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe`](hunts/2026/2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe/) |
 | 2026-11-11 | Barracuda ESG CVE-2026-116606 and CVE-2026-111560: config-import bypass to root | CVE-2026-111560, CVE-2026-116606 | T1190, T1059.004, T1562.001 | n/a | [`2026-11-11-barracuda-esg-cve-2026-116606-config-import`](hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/) |
@@ -86,6 +87,7 @@ hunt-lab/
 
 | Date | Hunt | ATT&CK | Status |
 |---|---|---|---|
+| 2026-11-12 | [wfx (WFX Phantom) GitHub Actions secret stealer: run gaps and cloud persistence](hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/) | T1078, T1195.002, T1552.001, T1003.007, T1098.001, T1070, T1041, T1567 | Experimental, draft, untested |
 | 2026-11-10 | [Qubole vendor-account AssumeRole and stale third-party trust](hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/) | T1199, T1078.004, T1550.001, T1526, T1552, T1530 | Experimental, draft, untested |
 | 2026-11-07 | [SonicWall SSL-VPN logins that skipped SAML/MFA (CVE-2026-19868)](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) | T1133, T1078, T1556 | Experimental, draft, untested |
 | 2026-11-07 | [WorkOS breach: ARTEX agent user agents and bulk CRM pulls](hunts/2026/2026-11-07-workos-artex-crm-pull/) | T1190, T1078.001, T1110, T1213, T1119 | Experimental, draft, untested |
@@ -202,6 +204,7 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe](hunts/2026/2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe/) | CVE-2026-20320 | Yes | 2026-11-10 | 2026-11-24 | Unknown | 0.00385 | 32.92 | 2026-11-11 (KEV catalogue 2026.11.10) |
 | [2026-11-11-openwave-webtop-cve-2026-111793-transcoder](hunts/2026/2026-11-11-openwave-webtop-cve-2026-111793-transcoder/) | CVE-2026-111793 | Yes | 2026-11-10 | 2026-11-24 | Unknown | 0.00274 | 19.97 | 2026-11-11 (KEV catalogue 2026.11.10) |
 | [2026-11-11-outlook-cve-2026-124194-ntlm](hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/) | CVE-2026-124194 | Yes | 2026-11-10 | 2026-11-24 | Unknown | not yet scored | – | 2026-11-11 (KEV catalogue 2026.11.10) |
+| [2026-11-12-wfx-phantom-github-actions-stealer](hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/) | n/a (no CVE) | n/a | | | | | | |
 
 <!-- kev-epss:end -->
 

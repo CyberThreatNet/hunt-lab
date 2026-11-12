@@ -1,0 +1,31 @@
+title: AWS Role Trust Policy Opened to Any AWS Account
+id: ee2a16b5-92fb-424a-866d-80351d911de5
+status: experimental
+description: |
+    Detects UpdateAssumeRolePolicy calls that set a principal of AWS "*", which lets
+    any AWS account assume the role. The wfx GitHub Actions stealer rewrites the
+    trust policy of a role it has chained into in this way so that access survives
+    credential rotation. Useful beyond this campaign: an open trust policy is rarely
+    intended.
+references:
+    - https://www.stepsecurity.io/blog/wfx-phantom-the-github-actions-secret-stealer
+    - https://www.aikido.dev/blog/compromised-github-accounts-push-ci-secret-stealer-to-tens-of-thousands-of-repositories
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-12
+tags:
+    - attack.persistence
+    - attack.t1098
+    - detection.emerging-threats
+logsource:
+    product: aws
+    service: cloudtrail
+detection:
+    selection:
+        eventSource: 'iam.amazonaws.com'
+        eventName: 'UpdateAssumeRolePolicy'
+        requestParameters.policyDocument|re: '"AWS"\s*:\s*\[?\s*"\*"'
+    condition: selection
+falsepositives:
+    - Rare. A role deliberately opened to all accounts with a restrictive condition block (for example aws:PrincipalOrgID). Review the condition before closing.
+level: high
