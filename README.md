@@ -21,6 +21,7 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-11-12 | SCKit worm: rogue ScreenConnect clients via cloud Run Command | — | T1199, T1072, T1219, T1105, T1053.005, T1547.001, T1543.003, T1562.001, T1539, T1550.004 | — | [`2026-11-12-sckit-screenconnect-rogue-client`](hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/) |
 | 2026-11-10 | Qubole vendor-account AssumeRole and stale third-party trust | — | T1199, T1078.004, T1550.001, T1526, T1552, T1530 | — | [`2026-11-10-qubole-sts-assumerole-vendor-trust`](hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/) |
 | 2026-11-07 | SonicWall SSL-VPN logins that skipped SAML/MFA (CVE-2026-19868) | CVE-2026-19868 | T1133, T1078, T1556 | — | [`2026-11-07-sonicwall-sslvpn-saml-bypass`](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) |
 | 2026-11-07 | WorkOS breach: ARTEX agent user agents and bulk CRM pulls | — | T1190, T1078.001, T1110, T1213, T1119 | — | [`2026-11-07-workos-artex-crm-pull`](hunts/2026/2026-11-07-workos-artex-crm-pull/) |
@@ -82,6 +83,7 @@ hunt-lab/
 
 | Date | Hunt | ATT&CK | Status |
 |---|---|---|---|
+| 2026-11-12 | [SCKit worm: rogue ScreenConnect clients via cloud Run Command](hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/) | T1199, T1072, T1219, T1105, T1053.005, T1547.001, T1543.003, T1562.001, T1539, T1550.004 | Experimental, draft, untested |
 | 2026-11-10 | [Qubole vendor-account AssumeRole and stale third-party trust](hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/) | T1199, T1078.004, T1550.001, T1526, T1552, T1530 | Experimental, draft, untested |
 | 2026-11-07 | [SonicWall SSL-VPN logins that skipped SAML/MFA (CVE-2026-19868)](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) | T1133, T1078, T1556 | Experimental, draft, untested |
 | 2026-11-07 | [WorkOS breach: ARTEX agent user agents and bulk CRM pulls](hunts/2026/2026-11-07-workos-artex-crm-pull/) | T1190, T1078.001, T1110, T1213, T1119 | Experimental, draft, untested |
@@ -193,6 +195,7 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-11-07-sonicwall-sslvpn-saml-bypass](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) | CVE-2026-19868 | Yes | 2026-11-06 | 2026-11-20 | Unknown | 0.00621 | 50.05 | 2026-11-09 (KEV catalogue 2026.11.06) |
 | [2026-11-07-workos-artex-crm-pull](hunts/2026/2026-11-07-workos-artex-crm-pull/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-10-qubole-sts-assumerole-vendor-trust](hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/) | n/a (no CVE) | n/a | | | | | | |
+| [2026-11-12-sckit-screenconnect-rogue-client](hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/) | n/a (no CVE) | n/a | | | | | | |
 
 <!-- kev-epss:end -->
 

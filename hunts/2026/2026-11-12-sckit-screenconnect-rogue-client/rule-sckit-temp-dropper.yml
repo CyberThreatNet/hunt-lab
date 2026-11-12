@@ -1,0 +1,46 @@
+title: SCKit ScreenConnect Worm Files Written to Windows Temp or RelayTrap
+id: 3a53de32-d6b5-4957-8fb8-1b4731ae3bb7
+status: experimental
+description: |
+    Detects files that Huntress documented for the SCKit worm (first seen about
+    17:47 UTC on 11 November 2026). An operator used the cloud ScreenConnect
+    Run Command feature, running as SYSTEM, to download an attacker-controlled
+    ScreenConnect installer to C:\Windows\Temp\sc.msi, write a dropper to
+    C:\Windows\Temp\sckit-run.bat and fetch C:\Windows\Temp\sckit-decoder.ps1.
+    The kit then unpacks to C:\ProgramData\RelayTrap. Filenames can change in a
+    rebuilt kit, so treat a miss as no evidence of absence.
+references:
+    - https://www.huntress.com/blog/sckit-worm-rogue-screenconnect
+    - https://www.connectwise.com/blog/screenconnect-security-update-guidance-for-partners
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-12-sckit-screenconnect-rogue-client
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-12
+tags:
+    - attack.execution
+    - attack.t1072
+    - attack.command-and-control
+    - attack.t1105
+    - attack.t1219
+    - detection.emerging-threats
+logsource:
+    product: windows
+    category: file_event
+detection:
+    selection_temp:
+        TargetFilename|endswith:
+            - '\Windows\Temp\sc.msi'
+            - '\Windows\Temp\sckit-run.bat'
+            - '\Windows\Temp\sckit-decoder.ps1'
+    selection_kit:
+        TargetFilename|contains:
+            - '\sckit-loader.ps1'
+            - '\sckit-decoder.ps1'
+            - '\Panel-Lateral.ps1'
+            - '\Panel-Lateral-free.ps1'
+            - '\ToolboxRelayUploader.exe'
+            - '\Run-Lateral-Full.bat'
+            - '\ProgramData\RelayTrap\'
+    condition: 1 of selection_*
+falsepositives:
+    - A legitimate MSI that happens to be called sc.msi in C:\Windows\Temp. Check the signer, the ScreenConnect relay host it installs and who ran it.
+level: high
