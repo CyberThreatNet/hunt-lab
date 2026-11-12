@@ -1,0 +1,35 @@
+title: Connection to wfx CI Stealer Collection Servers or Telegram From a Build Runner
+id: 48a00440-f24f-4961-96ca-dffde9366334
+status: experimental
+description: |
+    Detects connections to the three HTTP collection servers (TCP 8080, /exfil)
+    published for the wfx GitHub Actions stealer, and to api.telegram.org, which
+    copies from about 05:30 UTC on 12 November 2026 use instead of a collection IP.
+    Scope the Telegram selection to self-hosted CI runners and build hosts; it is
+    noisy on desktops.
+references:
+    - https://www.stepsecurity.io/blog/wfx-phantom-the-github-actions-secret-stealer
+    - https://safedep.io/blog/github-actions-wfx-credential-stealer
+    - https://thehackernews.com/2026/11/4837-hijacked-github-accounts-ran-ci.html
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-12
+tags:
+    - attack.exfiltration
+    - attack.t1041
+    - attack.t1567
+    - detection.emerging-threats
+logsource:
+    category: network_connection
+detection:
+    selection_ip:
+        DestinationIp:
+            - '194.150.166.244'
+            - '18.143.168.96'
+            - '153.75.82.159'
+    selection_telegram:
+        DestinationHostname|endswith: 'api.telegram.org'
+    condition: 1 of selection_*
+falsepositives:
+    - Build jobs that post legitimate notifications to Telegram. Allow-list those runners and bot tokens.
+level: high
