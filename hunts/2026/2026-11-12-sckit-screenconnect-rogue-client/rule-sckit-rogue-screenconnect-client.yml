@@ -1,0 +1,42 @@
+title: Rogue ScreenConnect Client Linked to SCKit Infrastructure
+id: 628c1a65-513e-4280-bb33-d9cc91e1d0de
+status: experimental
+description: |
+    Detects a ScreenConnect client process or installer whose command line names
+    the attacker relays, client IDs or participant name that Huntress published
+    for the SCKit worm. The rogue client appears alongside the MSP's legitimate
+    ScreenConnect client, so a second client on one host is the lead. The client
+    command line carries the relay host and client ID in its query string.
+references:
+    - https://www.huntress.com/blog/sckit-worm-rogue-screenconnect
+    - https://www.bleepingcomputer.com/news/security/active-screenconnect-attacks-breach-msps-impact-dozens-of-organizations/
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-12-sckit-screenconnect-rogue-client
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-12
+tags:
+    - attack.command-and-control
+    - attack.t1219
+    - attack.persistence
+    - attack.t1543.003
+    - detection.emerging-threats
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_ioc:
+        CommandLine|contains:
+            - '185.99.255.28'
+            - 'newnewnew.gotdns.org'
+            - 'soxnewwork.homedns.org'
+            - 'sc.payproofkit.com'
+            - '155.94.150.39'
+            - '2588ef5c15954b10'
+            - 'ed630cc2c873b091'
+            - '&c=Exploited'
+    selection_msi:
+        Image|endswith: '\msiexec.exe'
+        CommandLine|contains: '\Windows\Temp\sc.msi'
+    condition: 1 of selection_*
+falsepositives:
+    - Incident responders replaying the published indicators in a lab.
+level: critical

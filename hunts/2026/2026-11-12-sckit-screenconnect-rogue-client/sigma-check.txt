@@ -1,0 +1,9 @@
+sigma check (sigma-cli 3.1.0, pysigma 1.5.1), run locally 12 November 2026:
+sigma check --fail-on-error --fail-on-issues -x filename_length -x duplicate_filename hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/
+=== Summary ===
+Found 0 errors, 0 condition errors and 0 issues.
+No rule errors found.
+No condition errors found.
+No validation issues found.
+
+Conversions: -t kusto -p microsoft_xdr and -t splunk --without-pipeline succeeded for all four rules.

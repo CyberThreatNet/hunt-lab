@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**SCKit worm: rogue ScreenConnect clients via cloud Run Command**
+- `hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/`
+- Sigma for the C:\Windows\Temp dropper files and RelayTrap folder, the TrapWatch task and RelayTrapLiteAlert Run value, rogue client command lines and the Huntress network indicators; hand KQL for Run Command children, a second ScreenConnect client per device, Defender exclusions and cookie theft on technician workstations; YARA for kit scripts and the 16 published SHA256 values. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
+- Status: experimental, untested. Indicators from Huntress (11 November 2026); CVE-2026-127063 and technician-client guidance from the ConnectWise Trust Center update (12 November 2026, 18:45 UTC) and the CVE-2026-127063 disclosure.
+
 **wfx (WFX Phantom) GitHub Actions secret stealer: run gaps and cloud persistence**
 - `hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/`
 - Read-only gh scripts for probe PRs, payload and cleanup commits and missing workflow run numbers; Sigma for wfx- AWS sessions, trust policies opened to any AWS account, deleted workflow runs and runner egress to the collection servers and Telegram; hand KQL for CloudTrail, Entra wfx-ci- federated credentials and runner /proc memory reads; YARA for the stealer config, the hidden .ci-*.sh npm hook and injected workflow steps; rotation checklist. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
