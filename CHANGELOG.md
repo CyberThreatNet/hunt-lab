@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**Apache httpd CVE-2026-119618: find HTTP/2 servers on affected builds**
+- `hunts/2026/2026-11-13-apache-httpd-mod-http2-cve-2026-119618/`
+- Exposure check, not an exploit hunt: read-only host script (build and package version, http2_module loaded, every Protocols line httpd loads, verdict), an outside-in ALPN and h2c check, a crash-watch script, and hand KQL for Defender Vulnerability Management and for AH00052 and kernel segfault bursts. Distribution fixed versions for Red Hat, Ubuntu and Debian, and the Protocols http/1.1 stopgap. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
+- Status: experimental, untested. Facts from Apache (2.4.71, 11 November 2026), Red Hat, Ubuntu and Debian; not in KEV (catalogue 2026.11.10). No Sigma rules: there is no exploit-specific log signature.
+
 **SCKit worm: rogue ScreenConnect clients via cloud Run Command**
 - `hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/`
 - Sigma for the C:\Windows\Temp dropper files and RelayTrap folder, the TrapWatch task and RelayTrapLiteAlert Run value, rogue client command lines and the Huntress network indicators; hand KQL for Run Command children, a second ScreenConnect client per device, Defender exclusions and cookie theft on technician workstations; YARA for kit scripts and the 16 published SHA256 values. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
