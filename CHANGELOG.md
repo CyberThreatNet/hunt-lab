@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**PHP2Shell on Check Point gateways: portal webshells, TSGA and an ESXi wiper**
+- `hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/`
+- Read-only gateway and ESXi triage scripts (CVE-2026-123039 socket and log checks, zz*.tpl and challenge_render.tpl webshells, TSGA and TSProxy paths, TCP 11072, upload_progress_pwn session files, vpxuser SSH, destroy_v6 and DREAM_ANNEXATION.txt); Sigma for the webshell drop, TSGA artefacts and process, the two scanning addresses and the wiper note; hand KQL for Sentinel (scan sources, .tpl requests, implant strings, blocked DynamicCLI calls, vpxuser SSH, firewall log gaps); YARA for the webshell, TSGA and TSProxy, the wiper and the eight published SHA256 values. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
+- Status: experimental, untested. Indicators from Check Point Research and the Check Point advisory (12 November 2026); KEV catalogue 2026.11.10 (PHP2Shell CVEs listed; CVE-2026-123039 not listed).
+
 **SCKit worm: rogue ScreenConnect clients via cloud Run Command**
 - `hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/`
 - Sigma for the C:\Windows\Temp dropper files and RelayTrap folder, the TrapWatch task and RelayTrapLiteAlert Run value, rogue client command lines and the Huntress network indicators; hand KQL for Run Command children, a second ScreenConnect client per device, Defender exclusions and cookie theft on technician workstations; YARA for kit scripts and the 16 published SHA256 values. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).

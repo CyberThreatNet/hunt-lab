@@ -1,0 +1,53 @@
+sigma check (sigma-cli 3.1.0), run locally 13 November 2026:
+sigma check --fail-on-error --fail-on-issues -x filename_length -x duplicate_filename hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/
+=== Summary ===
+Found 0 errors, 0 condition errors and 0 issues.
+No rule errors found.
+No condition errors found.
+No validation issues found.
+
+== rule-cp-portal-webshell-drop.yml: sigma convert -t kusto -p microsoft_xdr
+DeviceProcessEvents
+| where (ProcessCommandLine contains "base64 -d" and ProcessCommandLine contains ".tpl") or (ProcessCommandLine contains "/tmp/.up.tpl" or ProcessCommandLine contains "challenge_render.tpl")
+== rule-cp-portal-webshell-drop.yml: sigma convert -t splunk --without-pipeline
+(CommandLine="*base64 -d*" CommandLine="*.tpl*") OR CommandLine IN ("*/tmp/.up.tpl*", "*challenge_render.tpl*")
+== rule-cp-scan-sources.yml: sigma convert -t kusto -p microsoft_xdr
+Error: Error while converting: Unable to determine table name from rule.  The query table is determined in the following order of priority:
+  1) The value provided to processing pipeline's query_table parameter, if using a Python script.
+  2) If the query_table is already set in the pipeline state, such as from a custom user-defined pipeline if using sigma-cli.
+  3) If the rule's logsource category is present in the pipeline's category_to_table_mappings dictionary in mappings.py, use that value.
+  4) If the rule has an EventID, use the table name from the pipeline's eventid_to_table_mappings dictionary in mappings.py.
+For more details, see https://github.com/AttackIQ/pySigma-backend-kusto/blob/main/README.md#%EF%B8%8F-custom-table-names-new-in-030-beta.
+== rule-cp-scan-sources.yml: sigma convert -t splunk --without-pipeline
+src_ip IN ("130.94.19.204", "130.94.19.168")
+== rule-cp-tsga-artefacts.yml: sigma convert -t kusto -p microsoft_xdr
+DeviceFileEvents
+| where (FolderPath in~ ("/tmp/CPconfigdaemon", "/tmp/.bd.log", "/tmp/.up.tpl", "/tmp/.p_sock", "/lib/libcpfwcommon.so")) or FolderPath endswith "/slot_CPconfigdaemon"
+== rule-cp-tsga-artefacts.yml: sigma convert -t splunk --without-pipeline
+TargetFilename IN ("/tmp/CPconfigdaemon", "/tmp/.bd.log", "/tmp/.up.tpl", "/tmp/.p_sock", "/lib/libcpfwcommon.so") OR TargetFilename="*/slot_CPconfigdaemon"
+== rule-cp-tsga-process.yml: sigma convert -t kusto -p microsoft_xdr
+DeviceProcessEvents
+| where ((FolderPath endswith "/CPconfigdaemon" or FolderPath endswith "/slot_CPconfigdaemon") or (ProcessCommandLine contains "/tmp/CPconfigdaemon" or ProcessCommandLine contains "/tmp/.bd.log")) or (FolderPath =~ "/tmp/des" or ProcessCommandLine contains "destroy_v6") or FolderPath endswith "/gogo"
+== rule-cp-tsga-process.yml: sigma convert -t splunk --without-pipeline
+Image IN ("*/CPconfigdaemon", "*/slot_CPconfigdaemon") OR CommandLine IN ("*/tmp/CPconfigdaemon*", "*/tmp/.bd.log*") OR Image="/tmp/des" OR CommandLine="*destroy_v6*" OR Image="*/gogo"
+== rule-esxi-wiper-note.yml: sigma convert -t kusto -p microsoft_xdr
+DeviceFileEvents
+| where FolderPath in~ ("/tmp/des") or FolderPath endswith "/DREAM_ANNEXATION.txt"
+== rule-esxi-wiper-note.yml: sigma convert -t splunk --without-pipeline
+TargetFilename IN ("*/DREAM_ANNEXATION.txt", "/tmp/des")
+
+== sentinel_asim (local only, Linux rules)
+-- rule-cp-portal-webshell-drop.yml
+imProcessCreate
+| where (TargetProcessCommandLine contains "base64 -d" and TargetProcessCommandLine contains ".tpl") or (TargetProcessCommandLine contains "/tmp/.up.tpl" or TargetProcessCommandLine contains "challenge_render.tpl")
+-- rule-cp-tsga-artefacts.yml
+imFileEvent
+| where (TargetFileName in~ ("/tmp/CPconfigdaemon", "/tmp/.bd.log", "/tmp/.up.tpl", "/tmp/.p_sock", "/lib/libcpfwcommon.so")) or TargetFileName endswith "/slot_CPconfigdaemon"
+-- rule-cp-tsga-process.yml
+imProcessCreate
+| where ((TargetProcessName endswith "/CPconfigdaemon" or TargetProcessName endswith "/slot_CPconfigdaemon") or (TargetProcessCommandLine contains "/tmp/CPconfigdaemon" or TargetProcessCommandLine contains "/tmp/.bd.log")) or (TargetProcessName =~ "/tmp/des" or TargetProcessCommandLine contains "destroy_v6") or TargetProcessName endswith "/gogo"
+-- rule-esxi-wiper-note.yml
+imFileEvent
+| where TargetFileName in~ ("/tmp/des") or TargetFileName endswith "/DREAM_ANNEXATION.txt"
+
+Note: rule-cp-scan-sources.yml (category firewall) has no Kusto table mapping; expected. Splunk conversion succeeds for all five rules.

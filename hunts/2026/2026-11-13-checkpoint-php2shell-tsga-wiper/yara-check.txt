@@ -1,0 +1,6 @@
+compiled with yara-python 4.5.4
+synthetic ws ['CP_PHP2Shell_Portal_Template_Webshell']
+synthetic elf ['CP_TSGA_TSProxy_PhiliKit_ELF']
+synthetic wiper ['CP_Campaign_destroy_v6_Wiper']
+synthetic benign_php []
+synthetic benign_elf []

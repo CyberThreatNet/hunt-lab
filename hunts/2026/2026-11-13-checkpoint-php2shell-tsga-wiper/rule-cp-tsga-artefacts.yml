@@ -1,0 +1,41 @@
+title: TSGA or TSProxy Artefacts on a Check Point Gateway
+id: db5fadc3-a510-4743-a3c1-c4865cbcce42
+status: experimental
+description: |
+    Detects file paths and process names Check Point Research published for
+    TSGA, a PhiliKit-derived Linux backdoor, and its embedded TSProxy library,
+    seen on Check Point Security Gateways after PHP2Shell and CVE-2026-123039
+    exploitation (30 October to 4 November 2026). TSGA was started as
+    /tmp/CPconfigdaemon with output to /tmp/.bd.log, relaunched itself as
+    slot_CPconfigdaemon in the boot persistence directory, and wrote TSProxy to
+    /lib/libcpfwcommon.so. Both TSGA and PhiliKit use the Unix socket /tmp/.p_sock.
+references:
+    - https://research.checkpoint.com/2026/php2shell-exploitation-on-check-point-gateway/
+    - https://blog.checkpoint.com/security/security-advisory-active-exploitation-of-php2shell-and-local-privilege-escalation/
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-13
+tags:
+    - attack.persistence
+    - attack.t1036.005
+    - attack.t1055
+    - attack.command-and-control
+    - attack.t1090
+    - detection.emerging-threats
+logsource:
+    product: linux
+    category: file_event
+detection:
+    selection_path:
+        TargetFilename:
+            - '/tmp/CPconfigdaemon'
+            - '/tmp/.bd.log'
+            - '/tmp/.up.tpl'
+            - '/tmp/.p_sock'
+            - '/lib/libcpfwcommon.so'
+    selection_name:
+        TargetFilename|endswith: '/slot_CPconfigdaemon'
+    condition: 1 of selection_*
+falsepositives:
+    - None expected for the /tmp paths. Check Point has not said whether any genuine component uses the name libcpfwcommon.so; compare with a known-clean gateway on the same version and Jumbo take before acting on that path alone.
+level: critical

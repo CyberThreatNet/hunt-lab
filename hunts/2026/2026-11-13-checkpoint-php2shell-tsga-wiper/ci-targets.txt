@@ -1,0 +1,4 @@
+# CI converts every rule in this folder with each target. rule-cp-scan-sources.yml uses the firewall
+# category, which the Kusto pipelines do not map, so CI runs Splunk only. The four Linux rules also convert
+# with -t kusto -p microsoft_xdr and -p sentinel_asim locally (see sigma-check.txt); Sentinel hand KQL is in query.kql.
+-t splunk --without-pipeline
