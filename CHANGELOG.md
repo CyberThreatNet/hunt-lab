@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**PHP2Shell on Check Point gateways: portal webshells, TSGA and an ESXi wiper**
+- `hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/`
+- Read-only gateway and ESXi triage scripts (CVE-2026-123039 socket and log checks, including the sk1000362 `Received =` greps for unexpected DynamicCLI commands, zz*.tpl and challenge_render.tpl webshells, TSGA and TSProxy paths, TCP 11072, upload_progress_pwn session files, vpxuser SSH, destroy_v6 and DREAM_ANNEXATION.txt); Sigma for the webshell drop, TSGA artefacts and process, the two scanning addresses and the wiper note; hand KQL for Sentinel (scan sources, .tpl requests, implant strings, blocked DynamicCLI calls, vpxuser SSH, firewall log gaps); YARA for the webshell, TSGA and TSProxy, the wiper and the eight published SHA256 values (the webshell rule requires the published key or upload path, not only a mention of challenge_render.tpl). Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
+- Status: experimental, untested. Indicators from Check Point Research and the Check Point advisory (12 November 2026); KEV catalogue 2026.11.10 (PHP2Shell CVEs listed; CVE-2026-123039 not listed).
+
 **Apache httpd CVE-2026-119618: find HTTP/2 servers on affected builds**
 - `hunts/2026/2026-11-13-apache-httpd-mod-http2-cve-2026-119618/`
 - Exposure check, not an exploit hunt: read-only host script (build and package version, http2_module loaded, every Protocols line httpd loads, verdict), an outside-in ALPN and h2c check, a crash-watch script, and hand KQL for Defender Vulnerability Management and for AH00052 and kernel segfault bursts. Distribution fixed versions for Red Hat, Ubuntu and Debian, and the Protocols http/1.1 stopgap. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).

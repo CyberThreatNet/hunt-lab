@@ -1,0 +1,34 @@
+title: Traffic From PHP2Shell Check Point Campaign Scanning Addresses
+id: 44f7abd9-3593-4801-ab5d-f2646737f817
+status: experimental
+description: |
+    Detects traffic from the two scanning and exploitation source addresses
+    Check Point published on 12 November 2026 for the PHP2Shell and
+    CVE-2026-123039 campaign against Check Point Security Gateways (activity seen
+    30 October to 4 November 2026). Search back to at least 30 October.
+    Addresses on VPS hosting can be reassigned, so weigh the date of the match.
+references:
+    - https://research.checkpoint.com/2026/php2shell-exploitation-on-check-point-gateway/
+    - https://blog.checkpoint.com/security/security-advisory-active-exploitation-of-php2shell-and-local-privilege-escalation/
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-13
+tags:
+    - attack.initial-access
+    - attack.t1190
+    - attack.reconnaissance
+    - attack.t1595.002
+    - cve.2026-109618
+    - cve.2026-109619
+    - detection.emerging-threats
+logsource:
+    category: firewall
+detection:
+    selection:
+        src_ip:
+            - '130.94.19.204'
+            - '130.94.19.168'
+    condition: selection
+falsepositives:
+    - Later, unrelated use of the same addresses by a new VPS tenant.
+level: high

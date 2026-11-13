@@ -1,0 +1,63 @@
+// Cyber-Threat.net Hunt Lab, 13 Nov 2026. Licence: MIT.
+// PHP2Shell (CVE-2026-109618, CVE-2026-109619) + CVE-2026-123039 on Check Point Security Gateways.
+// Source: Check Point Research and Check Point advisory, 12 Nov 2026. Activity seen 30 Oct to 4 Nov 2026.
+// Microsoft Sentinel. Table names assume Check Point logs arrive as CEF in CommonSecurityLog
+// and gateway or ESXi syslog in Syslog. Adjust to your connectors. Tune before scheduling.
+
+// Q1. Any traffic from the two published scanning and exploitation addresses, back to 30 October.
+let cp_ips = dynamic(["130.94.19.204", "130.94.19.168"]);
+union isfuzzy=true
+    (CommonSecurityLog | where TimeGenerated > datetime(2026-10-25) | where SourceIP in (cp_ips) or DestinationIP in (cp_ips)
+        | project TimeGenerated, Table="CommonSecurityLog", DeviceVendor, DeviceName = Computer, SourceIP, DestinationIP, DestinationPort, RequestURL, Activity, DeviceAction),
+    (Syslog | where TimeGenerated > datetime(2026-10-25) | where SyslogMessage has_any (cp_ips)
+        | project TimeGenerated, Table="Syslog", DeviceName = Computer, SyslogMessage)
+| order by TimeGenerated asc
+
+// Q2. Mobile Access portal requests that hit .tpl files or carry the exploitation marker.
+// Needs portal or WAF access logs with the URL. Webshells were zz*.tpl in the login-page template directory.
+CommonSecurityLog
+| where TimeGenerated > datetime(2026-10-25)
+| where RequestURL has ".tpl" or RequestURL has "upload_progress" or RequestURL has "zz2026"
+| summarize Hits=count(), First=min(TimeGenerated), Last=max(TimeGenerated), URLs=make_set(RequestURL, 20) by SourceIP, Computer
+| order by Hits desc
+
+// Q3. Gateway and ESXi syslog naming the implant, wiper, note or socket paths.
+Syslog
+| where TimeGenerated > datetime(2026-10-25)
+| where SyslogMessage has_any ("CPconfigdaemon", "slot_CPconfigdaemon", "libcpfwcommon.so", "/tmp/.p_sock", "/tmp/.bd.log",
+                               "/tmp/.up.tpl", "challenge_render.tpl", "destroy_v6", "DREAM_ANNEXATION", "/tmp/des ", "upload_progress_pwn")
+| project TimeGenerated, Computer, Facility, ProcessName, SyslogMessage
+| order by TimeGenerated asc
+
+// Q4. CVE-2026-123039 blocked attempts on patched gateways (if dynamicCli.log is forwarded).
+Syslog
+| where TimeGenerated > ago(30d)
+| where SyslogMessage has "Rejected connection from unauthorized uid"
+| extend uid = toint(extract(@"unauthorized uid (\d+)", 1, SyslogMessage)), pid = extract(@"pid (\d+)", 1, SyslogMessage)
+| summarize Attempts=count(), First=min(TimeGenerated), Last=max(TimeGenerated), Uids=make_set(uid) by Computer
+
+// Q5. ESXi: SSH logins as vpxuser (the vCenter agent account). Interactive SSH as vpxuser is unusual.
+// Set gw_ips to your gateways' internal addresses to see which came from a gateway.
+let gw_ips = dynamic([]);
+Syslog
+| where TimeGenerated > datetime(2026-10-25)
+| where ProcessName =~ "sshd" or SyslogMessage has "sshd"
+| where SyslogMessage has "vpxuser" and SyslogMessage has_any ("Accepted", "session opened")
+| extend SrcIP = extract(@"from (\d{1,3}(?:\.\d{1,3}){3})", 1, SyslogMessage)
+| extend FromGateway = SrcIP in (gw_ips)
+| project TimeGenerated, EsxiHost = Computer, SrcIP, FromGateway, SyslogMessage
+| order by TimeGenerated asc
+
+// Q6. Firewall log gaps: hours where a gateway that normally logs went silent.
+// Check Point lists unexplained gaps in traffic logs, especially after a logging daemon crash, as an indicator.
+// TSGA can tamper with binary firewall logs.
+let lookback = 21d;
+CommonSecurityLog
+| where TimeGenerated > ago(lookback)
+| where DeviceVendor =~ "Check Point"
+| summarize Events=count() by Computer, bin(TimeGenerated, 1h)
+| make-series Events=sum(Events) default=0 on TimeGenerated from ago(lookback) to now() step 1h by Computer
+| mv-expand TimeGenerated to typeof(datetime), Events to typeof(long)
+| where Events == 0
+| summarize SilentHours=count(), FirstSilent=min(TimeGenerated), LastSilent=max(TimeGenerated) by Computer
+| order by SilentHours desc

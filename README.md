@@ -21,6 +21,7 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-11-13 | PHP2Shell on Check Point gateways: portal webshells, TSGA and an ESXi wiper | CVE-2026-109618, CVE-2026-109619, CVE-2026-123039 | T1190, T1595.002, T1068, T1505.003, T1140, T1036.005, T1055, T1090, T1070, T1046, T1021.004, T1078, T1485 | — | [`2026-11-13-checkpoint-php2shell-tsga-wiper`](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) |
 | 2026-11-13 | Apache httpd CVE-2026-119618: find HTTP/2 servers on affected builds | CVE-2026-119618 | T1190 | — | [`2026-11-13-apache-httpd-mod-http2-cve-2026-119618`](hunts/2026/2026-11-13-apache-httpd-mod-http2-cve-2026-119618/) |
 | 2026-11-12 | SCKit worm: rogue ScreenConnect clients via cloud Run Command | CVE-2026-127063 | T1199, T1072, T1219, T1105, T1053.005, T1547.001, T1543.003, T1562.001, T1539, T1550.004 | — | [`2026-11-12-sckit-screenconnect-rogue-client`](hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/) |
 | 2026-11-12 | wfx (WFX Phantom) GitHub Actions secret stealer: run gaps and cloud persistence | — | T1078, T1195.002, T1552.001, T1003.007, T1098.001, T1070, T1041, T1567 | — | [`2026-11-12-wfx-phantom-github-actions-stealer`](hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/) |
@@ -88,6 +89,7 @@ hunt-lab/
 
 | Date | Hunt | ATT&CK | Status |
 |---|---|---|---|
+| 2026-11-13 | [PHP2Shell on Check Point gateways: portal webshells, TSGA and an ESXi wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | T1190, T1595.002, T1068, T1505.003, T1140, T1036.005, T1055, T1090, T1070, T1046, T1021.004, T1078, T1485 | Experimental, draft, untested |
 | 2026-11-13 | [Apache httpd CVE-2026-119618: find HTTP/2 servers on affected builds](hunts/2026/2026-11-13-apache-httpd-mod-http2-cve-2026-119618/) | T1190 | Experimental, draft, untested |
 | 2026-11-12 | [SCKit worm: rogue ScreenConnect clients via cloud Run Command](hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/) | T1199, T1072, T1219, T1105, T1053.005, T1547.001, T1543.003, T1562.001, T1539, T1550.004 | Experimental, draft, untested |
 | 2026-11-12 | [wfx (WFX Phantom) GitHub Actions secret stealer: run gaps and cloud persistence](hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/) | T1078, T1195.002, T1552.001, T1003.007, T1098.001, T1070, T1041, T1567 | Experimental, draft, untested |
@@ -210,6 +212,9 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-11-12-sckit-screenconnect-rogue-client](hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/) | CVE-2026-127063 | No | – | – | – | not yet scored | – | 2026-11-13 (KEV catalogue 2026.11.10) |
 | [2026-11-12-wfx-phantom-github-actions-stealer](hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-13-apache-httpd-mod-http2-cve-2026-119618](hunts/2026/2026-11-13-apache-httpd-mod-http2-cve-2026-119618/) | CVE-2026-119618 | No | – | – | – | 0.00398 | 34.55 | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-11-13-checkpoint-php2shell-tsga-wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-11-13-checkpoint-php2shell-tsga-wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-11-13-checkpoint-php2shell-tsga-wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | CVE-2026-123039 | No | – | – | – | not yet scored | – | 2026-11-13 (KEV catalogue 2026.11.10) |
 
 <!-- kev-epss:end -->
 
