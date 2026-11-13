@@ -16,6 +16,16 @@ ls -l /tmp/dynamic_socket 2>/dev/null || echo "no /tmp/dynamic_socket (dynamic_s
 echo "== CVE-2026-123039: blocked attempts after the fix (non-zero or unexpected uid = attempt)"
 grep "Rejected connection from unauthorized uid" /var/log/dynamicCli.log* 2>/dev/null | tail -50
 
+echo "== CVE-2026-123039: Received commands that do not use the expected Clish wrapper (sk1000362)"
+# Legitimate requests look like: Received = #524288# . /opt/CPshared/5.0/tmp/.CPprofile.sh >> /dev/null; export SP_DISTRIBUTE=0; set -o noglob; <Gaia binary> 2>&1
+grep "Received =" /var/log/dynamicCli.log* 2>/dev/null | grep -vF "CPprofile.sh >> /dev/null; export SP_DISTRIBUTE=0; set -o noglob;" | tail -50
+
+echo "== CVE-2026-123039: system() sink (uncommon in legitimate traffic, sk1000362)"
+grep -F "Received = #return_value#" /var/log/dynamicCli.log* 2>/dev/null | tail -50
+
+echo "== CVE-2026-123039: commands commonly associated with exploitation attempts (sk1000362)"
+grep -EI "Received =.*( id;| whoami| /etc/shadow| ncat| nc -| /dev/tcp| curl | wget | base64| useradd| authorized_keys)" /var/log/dynamicCli.log* 2>/dev/null | tail -50
+
 echo "== TSGA / TSProxy / webshell upload artefacts"
 for f in /tmp/CPconfigdaemon /tmp/.bd.log /tmp/.up.tpl /tmp/.p_sock /lib/libcpfwcommon.so /tmp/des; do
   [ -e "$f" ] && { echo "FOUND $f"; ls -la --time-style=full-iso "$f"; sha256sum "$f" 2>/dev/null; }

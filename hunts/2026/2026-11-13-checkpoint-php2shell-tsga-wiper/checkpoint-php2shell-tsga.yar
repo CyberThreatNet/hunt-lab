@@ -9,17 +9,16 @@ rule CP_PHP2Shell_Portal_Template_Webshell
         reference = "https://research.checkpoint.com/2026/php2shell-exploitation-on-check-point-gateway/"
         severity = "critical"
         tlp = "CLEAR"
-        note = "Strings come from the published key and upload path, not from a sample. The small first-stage shell may carry neither; the hash covers the one sample Check Point listed."
+        note = "Strings come from the published key and upload path, not from a sample. The small first-stage shell may carry neither; the hash covers the one sample Check Point listed. challenge_render.tpl is a published drop name but is also a genuine portal file, so it is not used as a standalone match."
     strings:
         $php = "<?php" ascii nocase
         $key = "zz2026" ascii
         $up = "/tmp/.up.tpl" ascii
-        $tpl = "challenge_render.tpl" ascii
     condition:
         filesize < 200KB and
         (
             hash.sha256(0, filesize) == "edb3e92eb7bda7413a09edcc4b1ba3cbed4bcdf42808a8abce63b6e4c3fda2b3" or
-            ($php and ($key or $up or $tpl)) or
+            ($php and ($key or $up)) or
             ($key and $up)
         )
 }

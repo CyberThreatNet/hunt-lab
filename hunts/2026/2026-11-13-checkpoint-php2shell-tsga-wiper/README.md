@@ -77,7 +77,7 @@ Check Point also lists: a process or binary named like `CPconfigdaemon`; scanner
 ## First-hour checklist
 
 1. **Patch** every gateway, Management and Log Server to the Jumbo takes above. If you cannot yet, apply the sk1000362 interim step and the PHP2Shell hotfix.
-2. **Check the socket.** `ls -l /tmp/dynamic_socket` should show `srw-rw---- root config` (0660), not 0777. After patching, read `/var/log/dynamicCli.log` for `Rejected connection from unauthorized uid`; a non-zero or unexpected uid (for example 99, nobody) is a blocked attempt. Correlate bursts with portal and authentication logs.
+2. **Check the socket and DynamicCLI log.** `ls -l /tmp/dynamic_socket` should show `srw-rw---- root config` (0660), not 0777. After patching, read `/var/log/dynamicCli.log` for `Rejected connection from unauthorized uid`; a non-zero or unexpected uid (for example 99, nobody) is a blocked attempt. Also grep `Received =` lines that do not use the expected Clish wrapper (`CPprofile.sh >> /dev/null; export SP_DISTRIBUTE=0; set -o noglob;`), the `Received = #return_value#` system() sink, and the exploitation command patterns in sk1000362. Correlate bursts with portal and authentication logs.
 3. **Run `host-checks.sh`** on every gateway that had an affected portal reachable from the internet after 21 October. Save the output off the box.
 4. **Search back to 30 October** for the two addresses (Q1) and for portal requests to `.tpl` files (Q2).
 5. **Check ESXi.** Run `esxi-checks.sh` on every ESXi host the gateway could reach, and Q5 in the SIEM. A `vpxuser` SSH login from a gateway is a finding.
@@ -87,7 +87,7 @@ Check Point also lists: a process or binary named like `CPconfigdaemon`; scanner
 ## Tuning and false positives
 
 - Most gateways do not forward process or file events. The Sigma rules need auditd or an equivalent agent; the shell scripts are the main tool.
-- `challenge_render.tpl` may also be a genuine portal file name: judge it by content, size and time against a clean gateway on the same version.
+- `challenge_render.tpl` may also be a genuine portal file name: judge it by content, size and time against a clean gateway on the same version. The YARA webshell rule does not match on that name alone.
 - `libcpfwcommon.so` is a name chosen to look like a Check Point library. Check Point lists `/lib/libcpfwcommon.so` as the TSProxy drop path. Confirm against a clean gateway before acting on the name alone.
 - Portal segfaults can have other causes. Hundreds in a short window, with session files containing `upload_progress_pwn`, is the pattern Check Point describes.
 - gogo is a public scanner. The YARA rule matches only the published hash; the Sigma selection on the name should be scoped to gateways and ESXi.
@@ -96,7 +96,7 @@ Check Point also lists: a process or binary named like `CPconfigdaemon`; scanner
 
 - Draft for review: untested in a live estate. No sample was run, downloaded or built.
 - `sigma check --fail-on-issues`: 0 errors and 0 issues (`sigma-check.txt`). Splunk conversion succeeds for all five rules; the four Linux rules also convert for Microsoft XDR and Sentinel ASIM. The firewall rule has no Kusto table mapping, so CI runs Splunk only (`ci-targets.txt`).
-- `checkpoint-php2shell-tsga.yar` compiles with yara-python 4.5.4 and was smoke-tested against synthetic strings only (`yara-check.txt`). String choices follow Check Point's published paths and key; they are not taken from samples.
+- `checkpoint-php2shell-tsga.yar` compiles with yara-python 4.5.4 and was smoke-tested against synthetic strings only (`yara-check.txt`). The webshell rule matches the published key or `/tmp/.up.tpl` (with a PHP tag), or the published hash; a benign PHP file that only mentions `challenge_render.tpl` does not match. String choices follow Check Point's published paths and key; they are not taken from samples.
 - `host-checks.sh` and `esxi-checks.sh` pass `bash -n` and `sh -n`. Check commands on a lab gateway before running across an estate.
 
 ## Related Hunt Lab packs
