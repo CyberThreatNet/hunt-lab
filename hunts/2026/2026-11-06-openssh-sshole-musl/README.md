@@ -1,5 +1,9 @@
 # OpenSSH *sshole (CVE-2026-123158): musl / Alpine password bypass
 
+Full write-up: [Hunt: OpenSSH *sshole star accounts and Alpine doas](https://cyber-threat.net/hunt-openssh-sshole-star-accounts-doas/) on Cyber-Threat.net.
+
+Companion Alert: [OpenSSH *sshole CVE-2026-123158: musl Alpine password bypass](https://cyber-threat.net/openssh-sshole-cve-2026-123158-musl-alpine/) on Cyber-Threat.net.
+
 | Hunt ID | Date | Status | Platforms | ATT&CK | CVEs | Files |
 |---|---|---|---|---|---|---|
 | 2026-11-06-openssh-sshole-musl | 2026-11-06 | Experimental | Linux auth logs; host inventory; Microsoft Sentinel / Defender; Splunk | T1078, T1110, T1548 | CVE-2026-123158 | rule-sshd-star-password-accept.yml, rule-alpine-doas-after-ssh.yml, query.kql, host-checks.sh, ci-targets.txt, sources.md |

@@ -1,6 +1,6 @@
 # VOLTA-AUTODOXER (VOLTA) - OpenRouter triage and artefacts
 
-Companion write-up: Cyber-Threat.net VOLTA explainer (publishing with this hunt).
+Companion write-up: [VOLTA-AUTODOXER: AI ranks stolen victim data via OpenRouter](https://cyber-threat.net/volta-autodoxer-ai-victim-ranking-openrouter/) on Cyber-Threat.net.
 
 > **Draft for review: untested.** Behavioural starting points from Cisco Talos (31 October 2026). No sample detonated. No YARA body: Talos published SHA256 and filenames only.
 

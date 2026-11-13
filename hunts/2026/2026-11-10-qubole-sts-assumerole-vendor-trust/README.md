@@ -1,5 +1,7 @@
 # Qubole vendor-account AssumeRole and stale third-party trust
 
+Full write-up: [Wiz: Qubole AWS roles abused to steal secrets and S3 data](https://cyber-threat.net/qubole-aws-trust-abuse-customer-secrets/) on Cyber-Threat.net.
+
 | Hunt ID | Date | Status | Platforms | ATT&CK | CVEs | Files |
 |---|---|---|---|---|---|---|
 | 2026-11-10-qubole-sts-assumerole-vendor-trust | 2026-11-10 | Experimental | AWS CloudTrail (Athena, Microsoft Sentinel AWSCloudTrail, Splunk AWS add-on); IAM Access Analyzer; AWS CLI | T1199, T1078.004, T1550.001, T1526, T1552, T1530 | n/a | rule-assume-role-actor-iam-user.yml, rule-assume-role-qubole-account.yml, query.kql, query.spl, query-athena.sql, audit-trust-policies.md, ci-targets.txt, sources.md |
@@ -71,4 +73,4 @@ Field names in `query.kql` follow the Sentinel `AWSCloudTrail` table as document
 ## Credits and licence
 
 - Cyber-Threat.net Hunt Lab, from Wiz's 9 November 2026 blog (Zack Morrow, Sean Johnstone, Benjamin Read). The Register reported the same incident.
-- `rule-*.yml`: [DRL 1.1](../../LICENSE-DRL). `query.kql`, `query.spl`, `query-athena.sql`, `audit-trust-policies.md` and this README: [MIT](../../LICENSE).
+- `rule-*.yml`: [DRL 1.1](../../../LICENSE-DRL). `query.kql`, `query.spl`, `query-athena.sql`, `audit-trust-policies.md` and this README: [MIT](../../../LICENSE).

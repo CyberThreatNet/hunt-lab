@@ -1,5 +1,7 @@
 # MLflow scorer invoke (CVE-2026-116692)
 
+Full write-up: [Patch now: Apple KEV flaw, MLflow RCE, eight Aruba 10.0s](https://cyber-threat.net/patch-now-apple-kev-mlflow-aruba/) on Cyber-Threat.net.
+
 > **Draft: untested.** Path-based hunt for the scorer invoke API named in the CVE.
 
 | | |

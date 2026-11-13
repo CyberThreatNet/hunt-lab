@@ -1,5 +1,7 @@
 # GitLab CI regex unauthenticated RCE hunt (CVE-2026-97229)
 
+Full write-up: [GitLab CVE-2026-97229: CISA deadline passed 1 Nov](https://cyber-threat.net/gitlab-cve-2026-97229-ci-regex-rce-kev/) on Cyber-Threat.net.
+
 > **Status banner:** Draft for review: untested
 
 | | |
@@ -64,4 +66,4 @@ An attacker probing or exploiting CVE-2026-97229 against a self-managed GitLab i
 ## Credits and licence
 
 - Author: Cyber-Threat.net Hunt Lab
-- Sigma rules: [DRL 1.1](../../../../LICENSE-DRL). `query.kql`, `query.spl` and this README: [MIT](../../../../LICENSE).
+- Sigma rules: [DRL 1.1](../../../LICENSE-DRL). `query.kql`, `query.spl` and this README: [MIT](../../../LICENSE).

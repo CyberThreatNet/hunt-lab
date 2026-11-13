@@ -1,5 +1,7 @@
 # Synology C3RB3R / outdated DSM exposure and encryption artefacts
 
+Full write-up: [Synology NAS hit by C3RB3R via outdated DSM](https://cyber-threat.net/synology-c3rb3r-ransomware-outdated-dsm/) on Cyber-Threat.net.
+
 | Hunt ID | Date | Status | Platforms | ATT&CK | CVEs | Files |
 |---|---|---|---|---|---|---|
 | 2026-11-03-synology-c3rb3r-dsm | 2026-11-03 | Experimental | Synology DSM; network edge; Splunk; Microsoft Sentinel / Defender | T1190, T1486, T1490 | CVE-2024-10441 (linked), CVE-2024-50629, CVE-2024-10445 | rule.yml, rule-proxy-dsm-exposure.yml, query.kql, host-checks.sh, ci-targets.txt, sources.md |

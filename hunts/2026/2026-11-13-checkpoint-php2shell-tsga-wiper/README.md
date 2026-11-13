@@ -1,5 +1,7 @@
 # PHP2Shell on Check Point gateways: portal webshells, TSGA and an ESXi wiper
 
+Full write-up: [PHP2Shell on Check Point gateways: hunt webshells, TSGA and a wiper](https://cyber-threat.net/php2shell-check-point-gateways-webshells-tsga-esxi-wiper/) on Cyber-Threat.net.
+
 > **Status:** Draft for review: untested
 
 | | |

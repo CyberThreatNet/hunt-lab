@@ -1,6 +1,6 @@
 # Cursor Marketplace SSH persistence (Anthropic.claude-code 2.1.313)
 
-Full write-up: companion Alert draft on Cyber-Threat.net (slug `cursor-marketplace-trojanised-extension-ssh-backdoor`).
+Full write-up: [Trojanised Cursor marketplace extension plants SSH backdoor](https://cyber-threat.net/cursor-marketplace-trojanised-extension-ssh-backdoor/) on Cyber-Threat.net.
 
 > **Draft for review: untested.** Sigma check expected clean; conversions and host script not engine-tested against live infections.
 

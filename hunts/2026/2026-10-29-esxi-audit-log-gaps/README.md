@@ -1,5 +1,7 @@
 # ESXi audit-log gaps and unpatched inventory (CVE-2026-41709)
 
+Full write-up: [ESXi CVE-2026-41709: KEV logging gap used as zero-day](https://cyber-threat.net/esxi-cve-2026-41709-kev-logging-gap-zero-day/) on Cyber-Threat.net.
+
 > **Status banner:** Draft for review: untested
 
 | | |
@@ -64,4 +66,4 @@ The behaviour hunted here is **generic** for audit-gap and inventory detection. 
 ## Credits and licence
 
 - Author: Cyber-Threat.net Hunt Lab
-- `rule.yml`, `rule-shell-without-auth.yml`: [DRL 1.1](../../../../LICENSE-DRL). `query.kql`, `query.spl` and this README: [MIT](../../../../LICENSE).
+- `rule.yml`, `rule-shell-without-auth.yml`: [DRL 1.1](../../../LICENSE-DRL). `query.kql`, `query.spl` and this README: [MIT](../../../LICENSE).
