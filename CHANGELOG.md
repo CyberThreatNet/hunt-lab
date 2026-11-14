@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**SCKit worm: rogue ScreenConnect clients pushed through cloud Run Command**
+- `hunts/2026/2026-11-14-sckit-screenconnect-partner-access/`
+- Updated from the 12 November pack with the 13 November network indicators (185.241.211.197, 007.from-ak.com, UpdateConnect.ClientSetup.msi, portproxy and hosts-file edits as Q8). Sigma for dropper files, TrapWatch persistence, a second ScreenConnect client and the published network indicators; hand KQL for Run Command children, a second client, Defender exclusions, cookie theft and the 13 November extras; YARA for kit scripts and the published SHA256 values. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/screenconnect-unauthorised-partner-access-sckit/
+- Status: experimental, untested. Indicators from Huntress (11 and 13 November 2026); CVE-2026-127063 and technician-client guidance from the ConnectWise Trust Center (updated 13 November 2026, 21:15 UTC) and the CVE-2026-127063 disclosure. Not in KEV (catalogue 2026.11.13).
+
+**Citrix NetScaler Console CVE-2026-120869: exposure check**
+- `hunts/2026/2026-11-14-citrix-netscaler-console-cve-2026-120869/`
+- Exposure checklist only: inventory of Console 14.1 builds before 14.1-74.34, restrict the Console IP to a trusted management network, and review audit and configuration history. No exploit-specific Sigma or KQL, because Citrix published no indicators or log signatures. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/citrix-netscaler-console-cve-2026-120869/
+- Status: experimental, untested. Facts from Citrix CTX697320 and CTX697305, and CVE.org CVE-2026-120869; not in KEV (catalogue 2026.11.13). FIRST EPSS on 13 November 2026 is 0.00513 (44.3rd percentile). Exploitation in the wild is not confirmed.
+
 **PHP2Shell on Check Point gateways: portal webshells, TSGA and an ESXi wiper**
 - `hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/`
 - Read-only gateway and ESXi triage scripts (CVE-2026-123039 socket and log checks, including the sk1000362 `Received =` greps for unexpected DynamicCLI commands, zz*.tpl and challenge_render.tpl webshells, TSGA and TSProxy paths, TCP 11072, upload_progress_pwn session files, vpxuser SSH, destroy_v6 and DREAM_ANNEXATION.txt); Sigma for the webshell drop, TSGA artefacts and process, the two scanning addresses and the wiper note; hand KQL for Sentinel (scan sources, .tpl requests, implant strings, blocked DynamicCLI calls, vpxuser SSH, firewall log gaps); YARA for the webshell, TSGA and TSProxy, the wiper and the eight published SHA256 values (the webshell rule requires the published key or upload path, not only a mention of challenge_render.tpl). Companion to the Cyber-Threat.net Alert (write-up link to be added when live).

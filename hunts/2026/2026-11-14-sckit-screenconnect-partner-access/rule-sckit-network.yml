@@ -1,0 +1,40 @@
+title: Network Connection to SCKit ScreenConnect Worm Infrastructure
+id: 7632de84-7a81-42fb-bedd-02ef6127423c
+status: experimental
+description: |
+    Detects connections to the attacker ScreenConnect server, relays, panel,
+    stager and possible C2 that Huntress published for the SCKit worm on
+    11 November 2026, plus the 13 November wave (185.241.211.197 and
+    007.from-ak.com). Dynamic DNS names can be re-pointed, so check the time of
+    the match against the campaign window.
+references:
+    - https://www.huntress.com/blog/sckit-worm-rogue-screenconnect
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-14-sckit-screenconnect-partner-access
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-14
+tags:
+    - attack.command-and-control
+    - attack.t1219
+    - attack.t1105
+    - detection.emerging-threats
+logsource:
+    product: windows
+    category: network_connection
+detection:
+    selection_ip:
+        DestinationIp:
+            - '185.99.255.28'
+            - '155.94.150.39'
+            - '185.241.211.197'
+    selection_host:
+        DestinationHostname|endswith:
+            - 'newnewnew.gotdns.org'
+            - 'soxnewwork.homedns.org'
+            - 'sc.payproofkit.com'
+            - 'ns.mo7sen.dev'
+            - 'cdn007-digitaldownloads.com'
+            - '007.from-ak.com'
+    condition: 1 of selection_*
+falsepositives:
+    - Incident-response or research lab replays of the published indicators.
+level: high
