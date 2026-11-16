@@ -1,0 +1,91 @@
+// Enterprise-side hunts related to SMS one-time code risk.
+// These will not detect SilentAir, SS7, Diameter or GTP. They look for the
+// traces an enterprise might see if an SMS code was used, a phone method
+// changed, or a sign-in looked risky. Column names checked against Microsoft
+// Learn on 14 November 2026. Confirm in your workspace.
+//
+// Query 1. Defender XDR (EntraIdSignInEvents, preview; Entra ID P2 required).
+// Risk columns are documented. This table has no authentication-method column,
+// so it cannot filter on SMS.
+let start = ago(30d);
+EntraIdSignInEvents
+| where Timestamp >= start
+| where RiskLevelDuringSignIn >= 10 or RiskLevelAggregated >= 10 or RiskState >= 4
+| project Timestamp, AccountUpn, AccountObjectId, Application, IPAddress, Country,
+    State, City, ErrorCode, AuthenticationRequirement, RiskLevelDuringSignIn,
+    RiskLevelAggregated, RiskEventTypes, RiskState, UserAgent, SessionId, CorrelationId
+| order by Timestamp desc
+;
+// Query 2. Microsoft Sentinel / Log Analytics only (not Defender advanced hunting).
+// SigninLogs.AuthenticationMethodsUsed can include SMS, per the Azure Monitor
+// table reference. Use this to find successful or failed sign-ins that used SMS
+// and were also scored as risky.
+let start = ago(30d);
+SigninLogs
+| where TimeGenerated >= start
+| where AuthenticationMethodsUsed has "SMS"
+| project TimeGenerated, UserPrincipalName, UserId, AppDisplayName, IPAddress,
+    Location, ResultType, ResultDescription, AuthenticationMethodsUsed,
+    AuthenticationRequirement, RiskLevelDuringSignIn, RiskLevelAggregated,
+    RiskState, RiskEventTypes_V2, UserAgent, CorrelationId, Id
+| order by TimeGenerated desc
+;
+// Query 3. Sentinel AuditLogs: changes to security information, including
+// phone methods. Activity names are from Microsoft Entra's combined
+// registration documentation. This is not a SIM-swap or number-port event;
+// Entra does not log the carrier side.
+let start = ago(30d);
+AuditLogs
+| where TimeGenerated >= start
+| where ActivityDisplayName in (
+    "User registered security information",
+    "User deleted security information",
+    "User changed default security information"
+)
+| extend ActorUpn = tostring(InitiatedBy.user.userPrincipalName)
+| extend TargetUpn = tostring(TargetResources[0].userPrincipalName)
+| project TimeGenerated, ActivityDisplayName, OperationName, Result, ResultReason,
+    LoggedByService, ActorUpn, TargetUpn, CorrelationId, Id, AdditionalDetails,
+    TargetResources
+| order by TimeGenerated desc
+;
+// Query 4. Optional overlap: a security-information change followed within
+// 24 hours by a risky sign-in for the same account (Sentinel).
+let start = ago(30d);
+let changes =
+    AuditLogs
+    | where TimeGenerated >= start
+    | where ActivityDisplayName in (
+        "User registered security information",
+        "User deleted security information",
+        "User changed default security information"
+    )
+    | extend TargetUpn = tostring(TargetResources[0].userPrincipalName)
+    | where isnotempty(TargetUpn)
+    | project ChangeTime=TimeGenerated, ActivityDisplayName, TargetUpn, CorrelationId;
+changes
+| join kind=inner (
+    SigninLogs
+    | where TimeGenerated >= start
+    | where RiskLevelDuringSignIn in ("medium", "high") or RiskState in ("atRisk", "confirmedCompromised")
+    | project SignInTime=TimeGenerated, UserPrincipalName, IPAddress, AppDisplayName,
+        AuthenticationMethodsUsed, RiskLevelDuringSignIn, RiskState, RiskEventTypes_V2, Id
+) on $left.TargetUpn == $right.UserPrincipalName
+| where SignInTime between (ChangeTime .. (ChangeTime + 24h))
+| project ChangeTime, ActivityDisplayName, TargetUpn, SignInTime, AppDisplayName,
+    IPAddress, AuthenticationMethodsUsed, RiskLevelDuringSignIn, RiskState, RiskEventTypes_V2
+| order by SignInTime desc
+
+;
+// Query 5. Defender XDR DeviceFileEvents: exact MD5 match for the two samples
+// Enea published on 11 November 2026 (GTPDoor v3 and SCTPE). SCTPE is not a
+// confirmed SilentAir implant. A miss does not clear a host. This is a
+// hand-corrected query; do not use the raw sigma-to-kusto conversion, which
+// emits MD5 startswith.
+DeviceFileEvents
+| where MD5 in (
+    "35f0d4d0c5519a2957338e448fce53bc",
+    "da35d98c9a22e8ede93595d21fe7e63e"
+)
+| project Timestamp, DeviceName, DeviceId, ActionType, FolderPath, FileName, MD5, SHA256, SHA1, InitiatingProcessFileName, InitiatingProcessCommandLine, ReportId
+| order by Timestamp desc

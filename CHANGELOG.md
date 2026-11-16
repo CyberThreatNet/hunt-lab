@@ -8,6 +8,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**BO Team: Log4Shell on vCenter and a supply-chain near miss**
+- `hunts/2026/2026-11-16-bo-team-log4shell-vcenter/`
+- Sigma for the hourly pgcache cron script, nofrillsdns or GSocket installer fetches, and comsvcs.dll LSASS dumps; hand KQL for LSASS and NTDS dumping, the published file paths and hashes, and the published infrastructure; a Linux auditd shell-hunt guide; YARA for the pgcache and GSocket downloader strings. Companion to the Cyber-Threat.net article: https://cyber-threat.net/bo-team-log4shell-vcenter-supply-chain/
+- Status: experimental, untested. Source: Kaspersky ICS CERT (5 November 2026). CVE-2021-44228 is in KEV (added 2021-12-10).
+
+**ARTEX agent-speed intrusions: FBI FLASH-20261113-001**
+- `hunts/2026/2026-11-16-artex-fbi-flash-agent-speed/`
+- Sigma for the FLASH IPv4 addresses and DNS lookups of the FLASH domain; hand KQL for sign-ins from FLASH addresses, unusual service-principal sign-ins, application credential and permission changes, Graph API bursts and portal request bursts. The FLASH addresses are historical and can be reassigned. Companion to the Cyber-Threat.net article: https://cyber-threat.net/hunt-lab-detecting-artex-agent-speed-intrusions/
+- Status: experimental, untested. Source: FBI FLASH-20261113-001 (13 November 2026, TLP:CLEAR). No CVE.
+
+**SilentAir and LIMINAL PANDA: signalling interception and GTPDoor on the IPX**
+- `hunts/2026/2026-11-14-silentair-liminal-panda-signalling/`
+- Operator pseudo-logic for SS7 UpdateLocation and Diameter ULR diversion; Sigma for the published GTPDoor v3 MD5; enterprise KQL for SMS sign-in exposure, phone-method changes and risky sign-ins; a Splunk conversion. Write-up link to be added when live.
+- Status: experimental, untested. Source: Enea. No CVE.
+
 **SCKit worm: rogue ScreenConnect clients pushed through cloud Run Command**
 - `hunts/2026/2026-11-14-sckit-screenconnect-partner-access/`
 - Updated from the 12 November pack with the 13 November network indicators (185.241.211.197, 007.from-ak.com, UpdateConnect.ClientSetup.msi, portproxy and hosts-file edits as Q8). Sigma for dropper files, TrapWatch persistence, a second ScreenConnect client and the published network indicators; hand KQL for Run Command children, a second client, Defender exclusions, cookie theft and the 13 November extras; YARA for kit scripts and the published SHA256 values. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/screenconnect-unauthorised-partner-access-sckit/

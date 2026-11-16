@@ -1,0 +1,34 @@
+title: GTPDoor v3 or SCTPE Sample MD5
+id: 7c2a1e4b-9d18-4f6a-8b3e-e5a91c0d2f44
+status: experimental
+description: |
+    Detects the two MD5 hashes Enea published on 11 November 2026 as sample
+    malware references for GTPDoor version 3 (GTP-U variant) and SCTPE, a
+    kernel trojan that can send and receive SS7 and Diameter. Enea does not
+    present SCTPE as a confirmed SilentAir implant, and a miss does not rule
+    out LIMINAL PANDA or SilentAir. Needs file or image-hash telemetry that
+    records MD5.
+references:
+    - https://www.enea.com/insights/the-enemy-within-tracking-liminal-panda-and-silentair-through-mobile-networks/
+    - https://cyber-threat.net/git/hunt-lab/hunts/2026/2026-11-14-silentair-liminal-panda-signalling/
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-14
+tags:
+    - attack.command-and-control
+    - detection.emerging-threats
+logsource:
+    product: linux
+    category: file_event
+detection:
+    selection:
+        Hashes|contains:
+            - 'MD5=35f0d4d0c5519a2957338e448fce53bc'
+            - 'md5=35f0d4d0c5519a2957338e448fce53bc'
+            - '35f0d4d0c5519a2957338e448fce53bc'
+            - 'MD5=da35d98c9a22e8ede93595d21fe7e63e'
+            - 'md5=da35d98c9a22e8ede93595d21fe7e63e'
+            - 'da35d98c9a22e8ede93595d21fe7e63e'
+    condition: selection
+falsepositives:
+    - Security research samples and sandbox detonations stored on a lab host.
+level: high

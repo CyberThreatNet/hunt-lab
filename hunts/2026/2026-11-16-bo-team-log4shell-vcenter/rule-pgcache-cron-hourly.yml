@@ -1,0 +1,38 @@
+title: BO Team pgcache Script in cron.hourly
+id: e0f5476e-298c-4743-838d-cd3a7203ee98
+status: experimental
+description: |
+  Detects creation or use of /etc/cron.hourly/pgcache, the hourly
+  hypervisor backdoor path Kaspersky ICS CERT documented in the June
+  2025 BO Team intrusion (report published 5 November 2026). The file
+  was disguised as a PostgreSQL component. Also looks for the published
+  MD5. A miss does not clear a host; filenames can change.
+references:
+  - https://ics-cert.kaspersky.com/publications/reports/2026/11/05/supply-chain-attack-bo-team-in-a-software-developers-infrastructure/
+  - https://cyber-threat.net/git/hunt-lab/hunts/2026/2026-11-16-bo-team-log4shell-vcenter/
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-16
+tags:
+  - attack.persistence
+  - attack.t1053.003
+  - attack.t1036
+  - detection.emerging-threats
+logsource:
+  product: linux
+  category: file_event
+detection:
+  selection_path:
+    TargetFilename|contains:
+      - '/etc/cron.hourly/pgcache'
+      - '/etc/cron.hourly/1vmware-timesync'
+  selection_hash:
+    Hashes|contains:
+      - '346b04985ec6c5d107ba0ddf32fe7691'
+      - 'MD5=346b04985ec6c5d107ba0ddf32fe7691'
+      - 'cb2908ef4cc042bfe856c84e9b61a2f9'
+      - '68957de915e2a58339fa477f8078bdf4'
+  condition: selection_path or selection_hash
+falsepositives:
+  - Security-research samples stored on a lab host.
+  - A legitimate file that happens to be named pgcache. Confirm the hash and content.
+level: high

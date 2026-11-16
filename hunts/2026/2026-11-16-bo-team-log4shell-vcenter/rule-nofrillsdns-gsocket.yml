@@ -1,0 +1,36 @@
+title: BO Team nofrillsdns or GSocket Installer Fetch
+id: 1ae3cf89-be52-4e13-8a1a-3d080d67b5b7
+status: experimental
+description: |
+  Detects DNS or HTTP activity involving the nofrillsdns.com hostnames
+  or the GSocket installer URL that Kaspersky ICS CERT published for
+  the BO Team vCenter intrusion. Also looks for related IPv4 addresses
+  from the same report. Treat DNS to 127.0.0.1 for these names as a
+  parked command-and-control lead, not as proof of a live beacon.
+references:
+  - https://ics-cert.kaspersky.com/publications/reports/2026/11/05/supply-chain-attack-bo-team-in-a-software-developers-infrastructure/
+  - https://cyber-threat.net/git/hunt-lab/hunts/2026/2026-11-16-bo-team-log4shell-vcenter/
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-16
+tags:
+  - attack.command-and-control
+  - attack.t1071.001
+  - attack.t1105
+  - detection.emerging-threats
+logsource:
+  category: proxy
+detection:
+  selection_host:
+    c-uri|contains:
+      - 'nofrillsdns.com'
+      - 'gsocket.io/y'
+      - 'ip-223-6.dataclub.info'
+    cs-host|contains:
+      - 'nofrillsdns.com'
+      - 'gsocket.io'
+      - 'dataclub.info'
+  condition: selection_host
+falsepositives:
+  - Security research or blocklist testing.
+  - Unrelated use of the public GSocket project. Confirm the hostname, key and parent process.
+level: high

@@ -1,0 +1,53 @@
+title: FBI FLASH ARTEX Campaign IP Addresses
+id: 4f586c16-62a6-47a0-a3c1-7a64e2525f9e
+status: experimental
+description: |
+  Detects network connections to IPv4 addresses published in FBI
+  FLASH-20261113-001 as historically observed ARTEX campaign
+  infrastructure. The FLASH and its companion spreadsheet warn that
+  these addresses may be reassigned and should not be treated as
+  standalone indicators. Treat hits as leads and corroborate them.
+references:
+  - https://www.ic3.gov/CSA/2026/261113.pdf
+  - https://www.ic3.gov/CSA/2026/261113.csv
+  - https://cyber-threat.net/git/hunt-lab/hunts/2026/2026-11-16-artex-fbi-flash-agent-speed/
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-16
+tags:
+  - attack.command-and-control
+  - attack.t1071
+  - detection.emerging-threats
+logsource:
+  category: firewall
+detection:
+  selection:
+    dst_ip:
+            - '38.244.50.120'
+            - '144.172.64.60'
+            - '144.172.64.99'
+            - '144.172.64.128'
+            - '187.15.88.186'
+            - '187.15.90.217'
+            - '187.15.89.186'
+            - '101.53.80.20'
+            - '205.214.59.31'
+            - '124.155.252.63'
+            - '154.201.79.246'
+            - '23.248.249.90'
+            - '23.158.220.98'
+            - '103.248.148.84'
+            - '203.160.133.172'
+            - '209.209.85.38'
+            - '199.19.95.66'
+            - '199.19.95.67'
+            - '199.19.95.68'
+            - '91.92.240.238'
+            - '85.11.168.45'
+            - '178.16.54.129'
+            - '31.77.229.35'
+            - '85.11.167.52'
+  condition: selection
+falsepositives:
+  - Addresses later reassigned to benign cloud or VPN services.
+  - Authorised testing or threat-intelligence lookbacks.
+level: medium

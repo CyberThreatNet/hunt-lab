@@ -1,0 +1,15 @@
+// GTPDoor v3 or SCTPE sample MD5 (DRAFT FOR REVIEW, untested)
+// Hunt ID: 2026-11-14-silentair-liminal-panda-signalling
+// Hand-corrected Defender XDR query. The raw conversion
+// `sigma convert -t kusto -p microsoft_xdr` emits `MD5 startswith` for
+// Hashes|contains, which is too weak for an exact sample hash. Use this
+// instead. Hashes are the MD5 values Enea published on 11 November 2026.
+// A miss does not rule out LIMINAL PANDA or SilentAir.
+// Licence: MIT
+DeviceFileEvents
+| where MD5 in (
+    "35f0d4d0c5519a2957338e448fce53bc",
+    "da35d98c9a22e8ede93595d21fe7e63e"
+)
+| project Timestamp, DeviceName, DeviceId, ActionType, FolderPath, FileName, MD5, SHA256, SHA1, InitiatingProcessFileName, InitiatingProcessCommandLine, ReportId
+| order by Timestamp desc

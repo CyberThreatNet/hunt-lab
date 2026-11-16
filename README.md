@@ -21,6 +21,9 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-11-16 | BO Team Log4Shell on vCenter and a supply-chain near miss | CVE-2021-44228 | T1190, T1021.004, T1053.003, T1105, T1003.001, T1003.003, T1036, T1195 | [Article](https://cyber-threat.net/bo-team-log4shell-vcenter-supply-chain/) | [`2026-11-16-bo-team-log4shell-vcenter`](hunts/2026/2026-11-16-bo-team-log4shell-vcenter/) |
+| 2026-11-16 | ARTEX agent-speed intrusions: FBI FLASH-20261113-001 infrastructure and behaviour | — | T1190, T1078, T1528, T1110, T1195 | [Article](https://cyber-threat.net/hunt-lab-detecting-artex-agent-speed-intrusions/) | [`2026-11-16-artex-fbi-flash-agent-speed`](hunts/2026/2026-11-16-artex-fbi-flash-agent-speed/) |
+| 2026-11-14 | SilentAir and LIMINAL PANDA: signalling interception and GTPDoor on the IPX | — | T1111 | — | [`2026-11-14-silentair-liminal-panda-signalling`](hunts/2026/2026-11-14-silentair-liminal-panda-signalling/) |
 | 2026-11-14 | SCKit worm: rogue ScreenConnect clients pushed through cloud Run Command | CVE-2026-127063 | T1199, T1072, T1219, T1105, T1053.005, T1547.001, T1543.003, T1562.001, T1539, T1550.004 | [Article](https://cyber-threat.net/screenconnect-unauthorised-partner-access-sckit/) | [`2026-11-14-sckit-screenconnect-partner-access`](hunts/2026/2026-11-14-sckit-screenconnect-partner-access/) |
 | 2026-11-14 | Citrix NetScaler Console CVE-2026-120869: exposure check | CVE-2026-120869 | T1190, T1133 | [Article](https://cyber-threat.net/citrix-netscaler-console-cve-2026-120869/) | [`2026-11-14-citrix-netscaler-console-cve-2026-120869`](hunts/2026/2026-11-14-citrix-netscaler-console-cve-2026-120869/) |
 | 2026-11-13 | PHP2Shell on Check Point gateways: portal webshells, TSGA and an ESXi wiper | CVE-2026-109618, CVE-2026-109619, CVE-2026-123039 | T1190, T1595.002, T1068, T1505.003, T1140, T1036.005, T1055, T1090, T1070, T1046, T1021.004, T1078, T1485 | [Article](https://cyber-threat.net/php2shell-check-point-gateways-webshells-tsga-esxi-wiper/) | [`2026-11-13-checkpoint-php2shell-tsga-wiper`](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) |
@@ -91,6 +94,9 @@ hunt-lab/
 
 | Date | Hunt | ATT&CK | Status |
 |---|---|---|---|
+| 2026-11-16 | [BO Team Log4Shell on vCenter and a supply-chain near miss](hunts/2026/2026-11-16-bo-team-log4shell-vcenter/) | T1190, T1021.004, T1053.003, T1105, T1003.001, T1003.003, T1036, T1195 | Experimental, draft, untested |
+| 2026-11-16 | [ARTEX agent-speed intrusions: FBI FLASH-20261113-001 infrastructure and behaviour](hunts/2026/2026-11-16-artex-fbi-flash-agent-speed/) | T1190, T1078, T1528, T1110, T1195 | Experimental, draft, untested |
+| 2026-11-14 | [SilentAir and LIMINAL PANDA: signalling interception and GTPDoor on the IPX](hunts/2026/2026-11-14-silentair-liminal-panda-signalling/) | T1111 | Experimental, draft, untested |
 | 2026-11-14 | [SCKit worm: rogue ScreenConnect clients pushed through cloud Run Command](hunts/2026/2026-11-14-sckit-screenconnect-partner-access/) | T1199, T1072, T1219, T1105, T1053.005, T1547.001, T1543.003, T1562.001, T1539, T1550.004 | Experimental, draft, untested |
 | 2026-11-14 | [Citrix NetScaler Console CVE-2026-120869: exposure check](hunts/2026/2026-11-14-citrix-netscaler-console-cve-2026-120869/) | T1190, T1133 | Experimental, draft, untested |
 | 2026-11-13 | [PHP2Shell on Check Point gateways: portal webshells, TSGA and an ESXi wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | T1190, T1595.002, T1068, T1505.003, T1140, T1036.005, T1055, T1090, T1070, T1046, T1021.004, T1078, T1485 | Experimental, draft, untested |
@@ -221,6 +227,9 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 | [2026-11-13-checkpoint-php2shell-tsga-wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | CVE-2026-123039 | No | – | – | – | not yet scored | – | 2026-11-13 (KEV catalogue 2026.11.10) |
 | [2026-11-14-citrix-netscaler-console-cve-2026-120869](hunts/2026/2026-11-14-citrix-netscaler-console-cve-2026-120869/) | CVE-2026-120869 | No | – | – | – | 0.00513 | 44.32 | 2026-11-14 (KEV catalogue 2026.11.13) |
 | [2026-11-14-sckit-screenconnect-partner-access](hunts/2026/2026-11-14-sckit-screenconnect-partner-access/) | CVE-2026-127063 | No | – | – | – | 0.00376 | 32.10 | 2026-11-14 (KEV catalogue 2026.11.13) |
+| [2026-11-14-silentair-liminal-panda-signalling](hunts/2026/2026-11-14-silentair-liminal-panda-signalling/) | n/a (no CVE) | n/a | | | | | | |
+| [2026-11-16-artex-fbi-flash-agent-speed](hunts/2026/2026-11-16-artex-fbi-flash-agent-speed/) | n/a (no CVE) | n/a | | | | | | |
+| [2026-11-16-bo-team-log4shell-vcenter](hunts/2026/2026-11-16-bo-team-log4shell-vcenter/) | CVE-2021-44228 | Yes | 2021-12-10 | 2021-12-24 | Known | 0.99999 | 100.00 | 2026-11-16 (KEV catalogue 2026.11.13) |
 
 <!-- kev-epss:end -->
 
