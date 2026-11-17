@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+**Optimizely Web script injection (16 November 2026)**
+- `hunts/2026/2026-11-17-optimizely-web-script-injection/`
+- Sigma for proxy and DNS hits on the published injection infrastructure; KQL for Microsoft Defender and Sentinel; YARA for saved snippets and page archives; a read-only snippet check script. Covers 13 to 17 November 2026, including the earlier webshell.lol wave. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/optimizely-supply-chain-attack-check-scripts/
+- Status: experimental; YARA tested on synthetic samples only. Indicators from Report URI and BleepingComputer. No CVE.
+
+**NoisyTCP CVE-2026-99288: Linux TCP remote crash**
+- `hunts/2026/2026-11-17-noisytcp-cve-2026-99288/`
+- Read-only exposure check script, Sigma for kernel panics with tcp_v4_rcv in the trace, and KQL for Defender Vulnerability Management and Sentinel. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/noisytcp-cve-2026-99288-linux-tcp-crash/
+- Status: experimental, untested. Not in KEV (catalogue 2026.11.17).
+
 **BO Team: Log4Shell on vCenter and a supply-chain near miss**
 - `hunts/2026/2026-11-16-bo-team-log4shell-vcenter/`
 - Sigma for the hourly pgcache cron script, nofrillsdns or GSocket installer fetches, and comsvcs.dll LSASS dumps; hand KQL for LSASS and NTDS dumping, the published file paths and hashes, and the published infrastructure; a Linux auditd shell-hunt guide; YARA for the pgcache and GSocket downloader strings. Companion to the Cyber-Threat.net article: https://cyber-threat.net/bo-team-log4shell-vcenter-supply-chain/

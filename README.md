@@ -21,6 +21,8 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
 | Date | Hunt | CVE | ATT&CK | Write-up | Folder |
 |---|---|---|---|---|---|
+| 2026-11-17 | Optimizely Web script injection: card skimmer, wallet swapper and iOS exploit loader | — | T1195.002, T1189, T1059.007, T1027, T1056, T1539, T1113, T1565.003, T1041, T1203 | [Article](https://cyber-threat.net/optimizely-supply-chain-attack-check-scripts/) | [`2026-11-17-optimizely-web-script-injection`](hunts/2026/2026-11-17-optimizely-web-script-injection/) |
+| 2026-11-17 | NoisyTCP CVE-2026-99288: Linux TCP remote crash exposure and panic check | CVE-2026-99288 | T1499.004, T1190 | [Article](https://cyber-threat.net/noisytcp-cve-2026-99288-linux-tcp-crash/) | [`2026-11-17-noisytcp-cve-2026-99288`](hunts/2026/2026-11-17-noisytcp-cve-2026-99288/) |
 | 2026-11-16 | BO Team Log4Shell on vCenter and a supply-chain near miss | CVE-2021-44228 | T1190, T1021.004, T1053.003, T1105, T1003.001, T1003.003, T1036, T1195 | [Article](https://cyber-threat.net/bo-team-log4shell-vcenter-supply-chain/) | [`2026-11-16-bo-team-log4shell-vcenter`](hunts/2026/2026-11-16-bo-team-log4shell-vcenter/) |
 | 2026-11-16 | ARTEX agent-speed intrusions: FBI FLASH-20261113-001 infrastructure and behaviour | — | T1190, T1078, T1528, T1110, T1195 | [Article](https://cyber-threat.net/hunt-lab-detecting-artex-agent-speed-intrusions/) | [`2026-11-16-artex-fbi-flash-agent-speed`](hunts/2026/2026-11-16-artex-fbi-flash-agent-speed/) |
 | 2026-11-14 | SilentAir and LIMINAL PANDA: signalling interception and GTPDoor on the IPX | — | T1111 | — | [`2026-11-14-silentair-liminal-panda-signalling`](hunts/2026/2026-11-14-silentair-liminal-panda-signalling/) |
@@ -29,7 +31,7 @@ Repository: <https://github.com/CyberThreatNet/hunt-lab>
 | 2026-11-13 | PHP2Shell on Check Point gateways: portal webshells, TSGA and an ESXi wiper | CVE-2026-109618, CVE-2026-109619, CVE-2026-123039 | T1190, T1595.002, T1068, T1505.003, T1140, T1036.005, T1055, T1090, T1070, T1046, T1021.004, T1078, T1485 | [Article](https://cyber-threat.net/php2shell-check-point-gateways-webshells-tsga-esxi-wiper/) | [`2026-11-13-checkpoint-php2shell-tsga-wiper`](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) |
 | 2026-11-13 | Apache httpd CVE-2026-119618: find HTTP/2 servers on affected builds | CVE-2026-119618 | T1190 | [Article](https://cyber-threat.net/apache-httpd-cve-2026-119618-mod-http2-exposure-check/) | [`2026-11-13-apache-httpd-mod-http2-cve-2026-119618`](hunts/2026/2026-11-13-apache-httpd-mod-http2-cve-2026-119618/) |
 | 2026-11-12 | SCKit worm: rogue ScreenConnect clients via cloud Run Command | CVE-2026-127063 | T1199, T1072, T1219, T1105, T1053.005, T1547.001, T1543.003, T1562.001, T1539, T1550.004 | — | [`2026-11-12-sckit-screenconnect-rogue-client`](hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/) |
-| 2026-11-12 | wfx (WFX Phantom) GitHub Actions secret stealer: run gaps and cloud persistence | — | T1078, T1195.002, T1552.001, T1003.007, T1098.001, T1070, T1041, T1567 | — | [`2026-11-12-wfx-phantom-github-actions-stealer`](hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/) |
+| 2026-11-12 | wfx (WFX Phantom) GitHub Actions secret stealer: run gaps and cloud persistence | — | T1078, T1195.002, T1552.001, T1003.007, T1098.001, T1070, T1041, T1567 | [Article](https://cyber-threat.net/wfx-phantom-github-actions-secret-stealer/) | [`2026-11-12-wfx-phantom-github-actions-stealer`](hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/) |
 | 2026-11-11 | Outlook CVE-2026-124194: outbound SMB or WebDAV NTLMv2 disclosure | CVE-2026-124194 | T1187 | [Article](https://cyber-threat.net/hunt-outlook-cve-2026-124194-ntlmv2-hash-leak/) | [`2026-11-11-outlook-cve-2026-124194-ntlm`](hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/) |
 | 2026-11-11 | Cisco BroadWorks CVE-2026-20320: OCI-P blind XXE file read | CVE-2026-20320 | T1190, T1005, T1048 | n/a | [`2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe`](hunts/2026/2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe/) |
 | 2026-11-11 | Barracuda ESG CVE-2026-116606 and CVE-2026-111560: config-import bypass to root | CVE-2026-111560, CVE-2026-116606 | T1190, T1059.004, T1562.001 | [Alert](https://cyber-threat.net/barracuda-esg-cve-2026-116606-pre-auth-root/) | [`2026-11-11-barracuda-esg-cve-2026-116606-config-import`](hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/) |
@@ -94,6 +96,8 @@ hunt-lab/
 
 | Date | Hunt | ATT&CK | Status |
 |---|---|---|---|
+| 2026-11-17 | [Optimizely Web script injection: card skimmer, wallet swapper and iOS exploit loader](hunts/2026/2026-11-17-optimizely-web-script-injection/) | T1195.002, T1189, T1059.007, T1027, T1056, T1539, T1113, T1565.003, T1041, T1203 | Experimental, draft, untested |
+| 2026-11-17 | [NoisyTCP CVE-2026-99288: Linux TCP remote crash exposure and panic check](hunts/2026/2026-11-17-noisytcp-cve-2026-99288/) | T1499.004, T1190 | Experimental, draft, untested |
 | 2026-11-16 | [BO Team Log4Shell on vCenter and a supply-chain near miss](hunts/2026/2026-11-16-bo-team-log4shell-vcenter/) | T1190, T1021.004, T1053.003, T1105, T1003.001, T1003.003, T1036, T1195 | Experimental, draft, untested |
 | 2026-11-16 | [ARTEX agent-speed intrusions: FBI FLASH-20261113-001 infrastructure and behaviour](hunts/2026/2026-11-16-artex-fbi-flash-agent-speed/) | T1190, T1078, T1528, T1110, T1195 | Experimental, draft, untested |
 | 2026-11-14 | [SilentAir and LIMINAL PANDA: signalling interception and GTPDoor on the IPX](hunts/2026/2026-11-14-silentair-liminal-panda-signalling/) | T1111 | Experimental, draft, untested |
@@ -178,58 +182,60 @@ If FIRST returns no EPSS row for a CVE that already has a score, the script keep
 
 | Hunt | CVE | In KEV | KEV added | KEV due | Ransomware use (KEV) | EPSS (0-1) | EPSS percentile (0-100) | Checked |
 |---|---|---|---|---|---|---|---|---|
-| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-24-arista-cve-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | CVE-2026-7473 | Yes | 2026-06-09 | 2026-06-23 | Unknown | 0.01108 | 66.33 | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-22-php-web-server-spawning-shell](hunts/2026/2026-10-22-php-web-server-spawning-shell/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-24-arista-cve-2026-7473](hunts/2026/2026-10-24-arista-cve-2026-7473/) | CVE-2026-7473 | Yes | 2026-06-09 | 2026-06-23 | Unknown | 0.01108 | 66.43 | 2026-11-17 (KEV catalogue 2026.11.17) |
 | [2026-10-25-dcsync-replication-by-non-dc-account](hunts/2026/2026-10-25-dcsync-replication-by-non-dc-account/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-25-lsass-dump-via-lolbins](hunts/2026/2026-10-25-lsass-dump-via-lolbins/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-10-26-node2shell-brotli](hunts/2026/2026-10-26-node2shell-brotli/) | CVE-2026-111497 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.82641 | 99.67 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-27-magento-cms-loader-domains](hunts/2026/2026-10-27-magento-cms-loader-domains/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.47472 | 98.86 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-27-magento-polyshell-webshell](hunts/2026/2026-10-27-magento-polyshell-webshell/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.47472 | 98.86 | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-10-26-node2shell-brotli](hunts/2026/2026-10-26-node2shell-brotli/) | CVE-2026-111497 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.82641 | 99.67 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-27-magento-cms-loader-domains](hunts/2026/2026-10-27-magento-cms-loader-domains/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.47472 | 98.86 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-27-magento-polyshell-webshell](hunts/2026/2026-10-27-magento-polyshell-webshell/) | CVE-2026-48356 | Yes | 2026-10-27 | 2026-11-10 | Unknown | 0.47472 | 98.86 | 2026-11-17 (KEV catalogue 2026.11.17) |
 | [2026-10-27-testmetest-ide-hook-loader](hunts/2026/2026-10-27-testmetest-ide-hook-loader/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-10-28-beyondtrust-sawfly-bareclaw](hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw/) | CVE-2026-102764 | Yes | 2026-10-16 | 2026-10-19 | Unknown | 0.79485 | 99.61 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108014 | No | – | – | – | 0.00128 | 2.52 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108015 | No | – | – | – | 0.00128 | 2.52 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-104935 | Yes | 2026-10-13 | 2026-10-16 | Unknown | 0.88936 | 99.78 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-111357 | Yes | 2026-10-30 | 2026-11-02 | Unknown | 0.00533 | 45.50 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-118527 | Yes | 2026-10-30 | 2026-11-13 | Unknown | 0.00822 | 57.80 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-28-mlflow-scorer-invoke](hunts/2026/2026-10-28-mlflow-scorer-invoke/) | CVE-2026-116692 | No | – | – | – | 0.00704 | 53.80 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-28-peoplesoft-psigw-psemhub](hunts/2026/2026-10-28-peoplesoft-psigw-psemhub/) | CVE-2026-35273 | Yes | 2026-06-12 | 2026-06-15 | Known | 0.96678 | 99.89 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-46300 | Yes | 2026-10-28 | 2026-10-31 | Unknown | 0.16130 | 96.97 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-29-cisco-sdwan-keydrift](hunts/2026/2026-10-29-cisco-sdwan-keydrift/) | CVE-2026-20127 | Yes | 2026-02-25 | 2026-02-27 | Unknown | 0.87620 | 99.76 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-10-29-esxi-audit-log-gaps](hunts/2026/2026-10-29-esxi-audit-log-gaps/) | CVE-2026-41709 | Yes | 2026-10-28 | 2026-11-11 | Unknown | 0.00689 | 53.23 | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-10-28-beyondtrust-sawfly-bareclaw](hunts/2026/2026-10-28-beyondtrust-sawfly-bareclaw/) | CVE-2026-102764 | Yes | 2026-10-16 | 2026-10-19 | Unknown | 0.79485 | 99.61 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108014 | No | – | – | – | 0.00128 | 2.53 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-28-emudhra-trust-store](hunts/2026/2026-10-28-emudhra-trust-store/) | CVE-2026-108015 | No | – | – | – | 0.00128 | 2.53 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-104935 | Yes | 2026-10-13 | 2026-10-16 | Unknown | 0.88936 | 99.78 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-111357 | Yes | 2026-10-30 | 2026-11-02 | Unknown | 0.00533 | 45.60 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-28-ivanti-ics-xdscgi](hunts/2026/2026-10-28-ivanti-ics-xdscgi/) | CVE-2026-118527 | Yes | 2026-10-30 | 2026-11-13 | Unknown | 0.00822 | 57.92 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-28-mlflow-scorer-invoke](hunts/2026/2026-10-28-mlflow-scorer-invoke/) | CVE-2026-116692 | No | – | – | – | 0.00704 | 53.91 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-28-peoplesoft-psigw-psemhub](hunts/2026/2026-10-28-peoplesoft-psigw-psemhub/) | CVE-2026-35273 | Yes | 2026-06-12 | 2026-06-15 | Known | 0.96678 | 99.88 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-46300 | Yes | 2026-10-28 | 2026-10-31 | Unknown | 0.16130 | 96.98 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-28-php2shell-fragnesia-chain](hunts/2026/2026-10-28-php2shell-fragnesia-chain/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-29-cisco-sdwan-keydrift](hunts/2026/2026-10-29-cisco-sdwan-keydrift/) | CVE-2026-20127 | Yes | 2026-02-25 | 2026-02-27 | Unknown | 0.87620 | 99.76 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-10-29-esxi-audit-log-gaps](hunts/2026/2026-10-29-esxi-audit-log-gaps/) | CVE-2026-41709 | Yes | 2026-10-28 | 2026-11-11 | Unknown | 0.00689 | 53.34 | 2026-11-17 (KEV catalogue 2026.11.17) |
 | [2026-10-30-cursor-marketplace-ssh-persistence](hunts/2026/2026-10-30-cursor-marketplace-ssh-persistence/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-10-30-gitlab-ci-regex-rce](hunts/2026/2026-10-30-gitlab-ci-regex-rce/) | CVE-2026-97229 | Yes | 2026-10-29 | 2026-11-01 | Unknown | 0.69289 | 99.37 | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-10-30-gitlab-ci-regex-rce](hunts/2026/2026-10-30-gitlab-ci-regex-rce/) | CVE-2026-97229 | Yes | 2026-10-29 | 2026-11-01 | Unknown | 0.69289 | 99.37 | 2026-11-17 (KEV catalogue 2026.11.17) |
 | [2026-10-31-ghostaction-gheist](hunts/2026/2026-10-31-ghostaction-gheist/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-10-31-litellm-11070-startup-hooks](hunts/2026/2026-10-31-litellm-11070-startup-hooks/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-02-agentic-intrusion-machine-speed](hunts/2026/2026-11-02-agentic-intrusion-machine-speed/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-11-02-lxd-trust-store-cve-2026-112816](hunts/2026/2026-11-02-lxd-trust-store-cve-2026-112816/) | CVE-2026-112816 | No | – | – | – | 0.00303 | 23.42 | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-11-02-lxd-trust-store-cve-2026-112816](hunts/2026/2026-11-02-lxd-trust-store-cve-2026-112816/) | CVE-2026-112816 | No | – | – | – | 0.00303 | 23.44 | 2026-11-17 (KEV catalogue 2026.11.17) |
 | [2026-11-02-volta-autodoxer](hunts/2026/2026-11-02-volta-autodoxer/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-11-03-synology-c3rb3r-dsm](hunts/2026/2026-11-03-synology-c3rb3r-dsm/) | CVE-2024-10441 | No | – | – | – | 0.01251 | 69.84 | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-11-03-synology-c3rb3r-dsm](hunts/2026/2026-11-03-synology-c3rb3r-dsm/) | CVE-2024-10441 | No | – | – | – | 0.01251 | 69.93 | 2026-11-17 (KEV catalogue 2026.11.17) |
 | [2026-11-05-crafty-falcon-bfsi](hunts/2026/2026-11-05-crafty-falcon-bfsi/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-06-cwpdoor-cwpsrv](hunts/2026/2026-11-06-cwpdoor-cwpsrv/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-11-06-openssh-sshole-musl](hunts/2026/2026-11-06-openssh-sshole-musl/) | CVE-2026-123158 | Yes | 2026-11-09 | 2026-11-12 | Unknown | 0.18900 | 97.34 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-11-07-sonicwall-sslvpn-saml-bypass](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) | CVE-2026-19868 | Yes | 2026-11-06 | 2026-11-20 | Unknown | 0.00532 | 45.46 | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-11-06-openssh-sshole-musl](hunts/2026/2026-11-06-openssh-sshole-musl/) | CVE-2026-123158 | Yes | 2026-11-09 | 2026-11-12 | Unknown | 0.18900 | 97.34 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-07-sonicwall-sslvpn-saml-bypass](hunts/2026/2026-11-07-sonicwall-sslvpn-saml-bypass/) | CVE-2026-19868 | Yes | 2026-11-06 | 2026-11-20 | Unknown | 0.00532 | 45.56 | 2026-11-17 (KEV catalogue 2026.11.17) |
 | [2026-11-07-workos-artex-crm-pull](hunts/2026/2026-11-07-workos-artex-crm-pull/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-10-qubole-sts-assumerole-vendor-trust](hunts/2026/2026-11-10-qubole-sts-assumerole-vendor-trust/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-11-11-barracuda-esg-cve-2026-116606-config-import](hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/) | CVE-2026-111560 | Yes | 2026-11-10 | 2026-11-13 | Unknown | 0.06196 | 93.60 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-11-11-barracuda-esg-cve-2026-116606-config-import](hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/) | CVE-2026-116606 | Yes | 2026-11-10 | 2026-11-13 | Unknown | 0.08934 | 95.31 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe](hunts/2026/2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe/) | CVE-2026-20320 | Yes | 2026-11-10 | 2026-11-24 | Unknown | 0.00820 | 57.74 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-11-11-openwave-webtop-cve-2026-111793-transcoder](hunts/2026/2026-11-11-openwave-webtop-cve-2026-111793-transcoder/) | CVE-2026-111793 | Yes | 2026-11-10 | 2026-11-24 | Unknown | 0.00638 | 51.07 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-11-11-outlook-cve-2026-124194-ntlm](hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/) | CVE-2026-124194 | Yes | 2026-11-10 | 2026-11-24 | Unknown | 0.01620 | 76.42 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-11-12-sckit-screenconnect-rogue-client](hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/) | CVE-2026-127063 | No | – | – | – | not yet scored | – | 2026-11-13 (KEV catalogue 2026.11.10) |
+| [2026-11-11-barracuda-esg-cve-2026-116606-config-import](hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/) | CVE-2026-111560 | Yes | 2026-11-10 | 2026-11-13 | Unknown | 0.09082 | 95.38 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-11-barracuda-esg-cve-2026-116606-config-import](hunts/2026/2026-11-11-barracuda-esg-cve-2026-116606-config-import/) | CVE-2026-116606 | Yes | 2026-11-10 | 2026-11-13 | Unknown | 0.10947 | 95.96 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe](hunts/2026/2026-11-11-cisco-broadworks-cve-2026-20320-ocip-xxe/) | CVE-2026-20320 | Yes | 2026-11-10 | 2026-11-24 | Unknown | 0.00976 | 62.69 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-11-openwave-webtop-cve-2026-111793-transcoder](hunts/2026/2026-11-11-openwave-webtop-cve-2026-111793-transcoder/) | CVE-2026-111793 | Yes | 2026-11-10 | 2026-11-24 | Unknown | 0.00638 | 51.19 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-11-outlook-cve-2026-124194-ntlm](hunts/2026/2026-11-11-outlook-cve-2026-124194-ntlm/) | CVE-2026-124194 | Yes | 2026-11-10 | 2026-11-24 | Unknown | 0.01620 | 76.50 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-12-sckit-screenconnect-rogue-client](hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/) | CVE-2026-127063 | No | – | – | – | 0.00376 | 32.14 | 2026-11-17 (KEV catalogue 2026.11.17) |
 | [2026-11-12-wfx-phantom-github-actions-stealer](hunts/2026/2026-11-12-wfx-phantom-github-actions-stealer/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-11-13-apache-httpd-mod-http2-cve-2026-119618](hunts/2026/2026-11-13-apache-httpd-mod-http2-cve-2026-119618/) | CVE-2026-119618 | No | – | – | – | 0.00398 | 34.55 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-11-13-checkpoint-php2shell-tsga-wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-11-13-checkpoint-php2shell-tsga-wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-11-13-checkpoint-php2shell-tsga-wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | CVE-2026-123039 | No | – | – | – | not yet scored | – | 2026-11-13 (KEV catalogue 2026.11.10) |
-| [2026-11-14-citrix-netscaler-console-cve-2026-120869](hunts/2026/2026-11-14-citrix-netscaler-console-cve-2026-120869/) | CVE-2026-120869 | No | – | – | – | 0.00513 | 44.32 | 2026-11-14 (KEV catalogue 2026.11.13) |
-| [2026-11-14-sckit-screenconnect-partner-access](hunts/2026/2026-11-14-sckit-screenconnect-partner-access/) | CVE-2026-127063 | No | – | – | – | 0.00376 | 32.10 | 2026-11-14 (KEV catalogue 2026.11.13) |
+| [2026-11-13-apache-httpd-mod-http2-cve-2026-119618](hunts/2026/2026-11-13-apache-httpd-mod-http2-cve-2026-119618/) | CVE-2026-119618 | No | – | – | – | 0.01583 | 75.98 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-13-checkpoint-php2shell-tsga-wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | CVE-2026-109618 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-13-checkpoint-php2shell-tsga-wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | CVE-2026-109619 | Yes | 2026-10-26 | 2026-10-29 | Unknown | 0.99999 | 100.00 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-13-checkpoint-php2shell-tsga-wiper](hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/) | CVE-2026-123039 | Yes | 2026-11-13 | 2026-11-16 | Unknown | 0.01938 | 80.49 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-14-citrix-netscaler-console-cve-2026-120869](hunts/2026/2026-11-14-citrix-netscaler-console-cve-2026-120869/) | CVE-2026-120869 | No | – | – | – | 0.00518 | 44.66 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-14-sckit-screenconnect-partner-access](hunts/2026/2026-11-14-sckit-screenconnect-partner-access/) | CVE-2026-127063 | No | – | – | – | 0.00376 | 32.14 | 2026-11-17 (KEV catalogue 2026.11.17) |
 | [2026-11-14-silentair-liminal-panda-signalling](hunts/2026/2026-11-14-silentair-liminal-panda-signalling/) | n/a (no CVE) | n/a | | | | | | |
 | [2026-11-16-artex-fbi-flash-agent-speed](hunts/2026/2026-11-16-artex-fbi-flash-agent-speed/) | n/a (no CVE) | n/a | | | | | | |
-| [2026-11-16-bo-team-log4shell-vcenter](hunts/2026/2026-11-16-bo-team-log4shell-vcenter/) | CVE-2021-44228 | Yes | 2021-12-10 | 2021-12-24 | Known | 0.99999 | 100.00 | 2026-11-16 (KEV catalogue 2026.11.13) |
+| [2026-11-16-bo-team-log4shell-vcenter](hunts/2026/2026-11-16-bo-team-log4shell-vcenter/) | CVE-2021-44228 | Yes | 2021-12-10 | 2021-12-24 | Known | 0.99999 | 100.00 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-17-noisytcp-cve-2026-99288](hunts/2026/2026-11-17-noisytcp-cve-2026-99288/) | CVE-2026-99288 | No | – | – | – | 0.00156 | 4.84 | 2026-11-17 (KEV catalogue 2026.11.17) |
+| [2026-11-17-optimizely-web-script-injection](hunts/2026/2026-11-17-optimizely-web-script-injection/) | n/a (no CVE) | n/a | | | | | | |
 
 <!-- kev-epss:end -->
 
