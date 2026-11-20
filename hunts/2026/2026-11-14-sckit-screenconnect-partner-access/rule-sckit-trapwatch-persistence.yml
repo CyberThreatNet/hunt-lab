@@ -1,5 +1,8 @@
-title: SCKit TrapWatch Scheduled Task or RelayTrapLiteAlert Run Key
-id: e2fc1a22-d29c-485c-8d6a-c7db8188b69f
+title: SCKit TrapWatch Scheduled Task or RelayTrapLiteAlert Run Key (Partner Access Follow-up)
+id: 299616a3-3d2b-4243-841c-500c91b72c63
+related:
+    - id: e2fc1a22-d29c-485c-8d6a-c7db8188b69f
+      type: derived
 status: experimental
 description: |
     Detects the persistence Huntress documented for the SCKit worm. TrapWatch.ps1
@@ -12,6 +15,7 @@ references:
     - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-14-sckit-screenconnect-partner-access
 author: Cyber-Threat.net Hunt Lab
 date: 2026-11-12
+modified: 2026-11-20
 tags:
     - attack.persistence
     - attack.t1053.005

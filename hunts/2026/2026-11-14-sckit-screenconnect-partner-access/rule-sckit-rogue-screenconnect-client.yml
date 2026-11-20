@@ -1,5 +1,8 @@
-title: Rogue ScreenConnect Client Linked to SCKit Infrastructure
-id: 628c1a65-513e-4280-bb33-d9cc91e1d0de
+title: Rogue ScreenConnect Client Linked to SCKit Infrastructure (Partner Access Follow-up)
+id: ecb007c8-af2e-4606-bccf-02403a22f89a
+related:
+    - id: 628c1a65-513e-4280-bb33-d9cc91e1d0de
+      type: derived
 status: experimental
 description: |
     Detects a ScreenConnect client process or installer whose command line names
@@ -13,6 +16,7 @@ references:
     - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-14-sckit-screenconnect-partner-access
 author: Cyber-Threat.net Hunt Lab
 date: 2026-11-12
+modified: 2026-11-20
 tags:
     - attack.command-and-control
     - attack.t1219

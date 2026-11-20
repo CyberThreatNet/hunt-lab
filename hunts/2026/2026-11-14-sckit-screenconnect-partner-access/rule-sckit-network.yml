@@ -1,5 +1,8 @@
-title: Network Connection to SCKit ScreenConnect Worm Infrastructure
-id: 7632de84-7a81-42fb-bedd-02ef6127423c
+title: Network Connection to SCKit ScreenConnect Worm Infrastructure (13 November Wave)
+id: 9999b6ac-5013-4bdf-ad53-7a3e234f947b
+related:
+    - id: 7632de84-7a81-42fb-bedd-02ef6127423c
+      type: derived
 status: experimental
 description: |
     Detects connections to the attacker ScreenConnect server, relays, panel,
@@ -12,6 +15,7 @@ references:
     - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-14-sckit-screenconnect-partner-access
 author: Cyber-Threat.net Hunt Lab
 date: 2026-11-14
+modified: 2026-11-20
 tags:
     - attack.command-and-control
     - attack.t1219

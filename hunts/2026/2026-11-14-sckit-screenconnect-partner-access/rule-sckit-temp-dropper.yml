@@ -1,5 +1,8 @@
-title: SCKit ScreenConnect Worm Files Written to Windows Temp or RelayTrap
-id: 3a53de32-d6b5-4957-8fb8-1b4731ae3bb7
+title: SCKit ScreenConnect Worm Files Written to Windows Temp or RelayTrap (Partner Access Follow-up)
+id: 6c4b8dd1-d8e4-40b2-9602-2bedd8e62614
+related:
+    - id: 3a53de32-d6b5-4957-8fb8-1b4731ae3bb7
+      type: derived
 status: experimental
 description: |
     Detects files that Huntress documented for the SCKit worm (first seen about
@@ -15,6 +18,7 @@ references:
     - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-14-sckit-screenconnect-partner-access
 author: Cyber-Threat.net Hunt Lab
 date: 2026-11-12
+modified: 2026-11-20
 tags:
     - attack.execution
     - attack.t1072

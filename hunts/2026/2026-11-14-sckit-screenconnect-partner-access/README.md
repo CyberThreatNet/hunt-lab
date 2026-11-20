@@ -88,6 +88,8 @@ Huntress publishes SHA256 values for 16 kit files; they are in `sckit.yar`. Hunt
 
 - Draft for review: untested in a live estate. No sample was run.
 - Local `sigma check --fail-on-issues -x filename_length -x duplicate_filename`: see `sigma-check.txt`. Microsoft XDR and Splunk conversions succeed for all four rules.
+- 20 November 2026: Sigma titles and IDs were made unique so these rules can coexist in CI with the 12 November SCKit rogue-client pack. Detection logic is unchanged. The network rule remains the 13 November wave (new IPv4 and host). Each rule lists the 12 November identifier in `related`.
+
 - `sckit.yar` compiles with yara-python 4.5 and was smoke-tested against synthetic strings only.
 - The ScreenConnect client folder and query-string format used in Q3 follow the standard client install layout (`ScreenConnect Client (<id>)`, `h=` relay host). Check it against one of your own hosts before relying on it.
 

@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+**SCKit partner-access Sigma identifiers (20 November 2026)**
+- `hunts/2026/2026-11-14-sckit-screenconnect-partner-access/`
+- New titles and rule IDs so the four Sigma rules can coexist with the 12 November SCKit rogue-client pack in `sigma check`. Detection logic is unchanged. The network rule still adds the 13 November indicators. Each rule records the original identifier in `related`.
+
+
 ### Added
 
 **Optimizely Web script injection (16 November 2026)**
