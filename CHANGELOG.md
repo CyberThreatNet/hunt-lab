@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+**CI conversion targets for 16 and 17 November packs (20 November 2026)**
+- Correct `ci-targets.txt` on the ARTEX and BO Team packs (they listed rule filenames instead of conversion targets) and add the missing files on the Optimizely and NoisyTCP packs, so GitHub Actions can convert them with `-t splunk --without-pipeline`. Detection logic is unchanged.
+
 ### Fixed
 
 **SCKit partner-access Sigma identifiers (20 November 2026)**
