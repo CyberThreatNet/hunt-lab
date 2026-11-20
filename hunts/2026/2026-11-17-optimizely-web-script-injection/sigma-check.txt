@@ -1,0 +1,6 @@
+tool: sigma-cli 3.1.0, 2026-11-17 10:12 GMT
+Command: sigma check --fail-on-error --fail-on-issues -x filename_length -x duplicate_filename rule-*.yml
+Result: 0 errors, 0 condition errors, 0 issues.
+
+YARA: yara-python 4.5.4 compile OK. Synthetic tests: clear-text loader, base64 atob loader and payload markers matched; a clean snippet containing projectJS and atob( did not match. Not tested on real samples.
+Shell: bash -n optimizely-snippet-check.sh OK.

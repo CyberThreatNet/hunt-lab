@@ -1,0 +1,6 @@
+# CI converts every rule in this folder. This hash rule uses Linux file_event.
+# Splunk conversion is saved in query.spl.
+# kusto / microsoft_xdr is omitted: the pipeline turns Hashes|contains into
+# MD5 startswith. A hand-corrected exact-hash query is in query-sigma.kql
+# and query.kql query 5.
+-t splunk --without-pipeline

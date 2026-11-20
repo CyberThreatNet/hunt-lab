@@ -1,0 +1,65 @@
+// Cyber-Threat.net Hunt Lab, 17 November 2026. MIT licence.
+// Optimizely Web script injection, 16 November 2026 (Report URI, BleepingComputer).
+// Window covers the earlier webshell.lol wave (from 13 Nov) and the Optimizely wave (16 Nov).
+// Indicators are historical. Draft for review: untested against a live tenant.
+
+let start = datetime(2026-11-13T00:00:00Z);
+let stop  = datetime(2026-11-18T00:00:00Z);
+let bad_hosts = dynamic(["1688360.cc","5vobauua3ojpklx.icu","eil786npto9u5bq.icu","l7bcsnwc7nzr3uo.icu",
+  "webshell.lol","linkforge.cc","je4ft3gn8vxudum.icu","q1ls1ho9x7wsxlu.icu","ios-hack.icu",
+  "p55abnw2pnsz0bo.icu","1y69gy2mdzaltz1.icu","gm38duxoihbmy5o.icu"]);
+let bad_ips = dynamic(["136.113.106.136","34.96.213.201","34.87.36.58"]);
+
+// 1. Defender for Endpoint: any device that reached the payload hosts or IPs.
+//    T1189 Drive-by Compromise, T1041 Exfiltration Over C2 Channel
+DeviceNetworkEvents
+| where Timestamp between (start .. stop)
+| extend Host = tolower(tostring(parse_url(iff(RemoteUrl startswith "http", RemoteUrl, strcat("https://", RemoteUrl))).Host))
+| where Host has_any (bad_hosts) or RemoteIP in (bad_ips)
+| summarize First=min(Timestamp), Last=max(Timestamp), Hits=count(), Urls=make_set(RemoteUrl, 20)
+    by DeviceName, InitiatingProcessFileName, InitiatingProcessAccountName
+| order by First asc;
+
+// 2. Proxy or firewall logs in Microsoft Sentinel (CommonSecurityLog).
+//    card.php and hit.php mean data left the browser (card skimming T1056, cookies T1539, screenshots T1113).
+CommonSecurityLog
+| where TimeGenerated between (start .. stop)
+| where DestinationHostName has_any (bad_hosts) or RequestURL has_any (bad_hosts) or DestinationIP in (bad_ips)
+| extend Stage = case(RequestURL has "card.php", "card data sent",
+                      RequestURL has "hit.php", "cookies or screenshot sent",
+                      RequestURL has "track.js", "payload loaded",
+                      RequestURL has "boot.js" or RequestURL has_any ("/A8/","/B9/","/C10/","/D11/","/D12/"), "iOS exploit kit",
+                      "other")
+| summarize First=min(TimeGenerated), Last=max(TimeGenerated), Stages=make_set(Stage), Urls=make_set(RequestURL, 20)
+    by SourceIP, SourceUserName, RequestClientApplication
+| order by First asc;
+
+// 3. DNS (Windows DNS Server via DnsEvents). Lookups from user devices in the window are strong leads.
+DnsEvents
+| where TimeGenerated between (start .. stop)
+| where Name has_any (bad_hosts)
+| summarize First=min(TimeGenerated), Last=max(TimeGenerated), Lookups=count() by ClientIP, Name
+| order by First asc;
+
+// 4. Who loaded Optimizely and then reached the payload within 2 minutes (exposure confirmation).
+//    Useful to tie a hit to a visit to a specific affected site.
+let opt = DeviceNetworkEvents
+| where Timestamp between (datetime(2026-11-16T04:00:00Z) .. datetime(2026-11-17T00:00:00Z))
+| where RemoteUrl has "optimizely.com"
+| project DeviceId, DeviceName, OptTime = Timestamp, OptUrl = RemoteUrl;
+let pay = DeviceNetworkEvents
+| where Timestamp between (datetime(2026-11-16T04:00:00Z) .. datetime(2026-11-17T00:00:00Z))
+| where RemoteUrl has_any (bad_hosts) or RemoteIP in (bad_ips)
+| project DeviceId, PayTime = Timestamp, PayUrl = RemoteUrl;
+opt
+| join kind=inner pay on DeviceId
+| where PayTime between (OptTime .. OptTime + 2m)
+| summarize FirstPayload=min(PayTime), OptimizelySnippets=make_set(OptUrl, 10), PayloadUrls=make_set(PayUrl, 10) by DeviceName
+| order by FirstPayload asc;
+
+// 5. Site owners: your own CSP violation reports, if you ingest them into a custom table.
+//    Replace CspReports_CL and its columns with your schema. Look for blocked-uri or
+//    document-uri entries naming the bad hosts, or eval violations on 16 November.
+// CspReports_CL
+// | where TimeGenerated between (start .. stop)
+// | where blocked_uri_s has_any (bad_hosts) or (violated_directive_s has "script-src" and blocked_uri_s == "eval")

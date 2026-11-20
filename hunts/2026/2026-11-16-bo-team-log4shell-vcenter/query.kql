@@ -1,0 +1,49 @@
+// BO Team / vCenter Log4Shell hunts (Cyber-Threat.net Hunt Lab, 16 November 2026)
+// Source: Kaspersky ICS CERT, 5 November 2026.
+
+// Q1: rundll32 comsvcs.dll MiniDumpW, including the obfuscated ordinal.
+DeviceProcessEvents
+| where Timestamp > ago(60d)
+| where FileName =~ "rundll32.exe"
+| where ProcessCommandLine has "comsvcs.dll"
+| where ProcessCommandLine has_any ("MiniDump", "#+0000^24", "#24", ",24")
+| project Timestamp, DeviceName, AccountName, ProcessCommandLine, InitiatingProcessFileName, SHA256
+| order by Timestamp desc;
+
+// Q2: ntdsutil or regedit used in ways that can copy ntds.dit.
+DeviceProcessEvents
+| where Timestamp > ago(60d)
+| where FileName in~ ("ntdsutil.exe", "regedit.exe", "reg.exe")
+| where ProcessCommandLine has_any ("ntds.dit", "NTDS", "ifm", "activate instance ntds")
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine
+| order by Timestamp desc;
+
+// Q3: Nanodump or lsass dump files in Temp, matching names Kaspersky published.
+DeviceFileEvents
+| where Timestamp > ago(60d)
+| where FolderPath has @"\Windows\Temp\"
+| where FileName in~ ("pnSsW4wSk.cur", "bgPk.otf") or FileName endswith ".cur" or FileName endswith ".otf"
+| where InitiatingProcessFileName in~ ("rundll32.exe", "nanodump.exe")
+| project Timestamp, DeviceName, FileName, FolderPath, InitiatingProcessCommandLine, SHA256
+| order by Timestamp desc;
+
+// Q4: Linux file events for the published paths and MD5 values (Defender for Endpoint).
+DeviceFileEvents
+| where Timestamp > ago(60d)
+| where FolderPath has "/etc/cron.hourly/"
+   or MD5 in ("346b04985ec6c5d107ba0ddf32fe7691","cb2908ef4cc042bfe856c84e9b61a2f9","68957de915e2a58339fa477f8078bdf4",
+              "5aa8c19c897176502cf8d8fc543fafc7","5e04b2891635cbaa83ad619fe248e85b","6d12efa1db15121f88d58b9952e301ef",
+              "719e813e527920e83349e061b5b1590f","86ff08749e77d5d078e929e5f9748504","b86690213f0155f7b3b65832301ed932")
+   or FileName in ("pgcache","1vmware-timesync")
+| project Timestamp, DeviceName, FileName, FolderPath, MD5, InitiatingProcessCommandLine
+| order by Timestamp desc;
+
+// Q5: DNS or network to Kaspersky-published infrastructure.
+DeviceNetworkEvents
+| where Timestamp > ago(60d)
+| where RemoteIP in ("95.81.115.77","193.3.23.236","80.76.42.139")
+    or RemoteUrl has "nofrillsdns.com"
+    or RemoteUrl has "gsocket.io"
+    or RemoteUrl has "dataclub.info"
+| project Timestamp, DeviceName, RemoteIP, RemoteUrl, InitiatingProcessCommandLine, InitiatingProcessFileName
+| order by Timestamp desc;

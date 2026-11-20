@@ -1,0 +1,27 @@
+title: DNS Query for xcai[.]pro ARTEX LLM Reseller Domain
+id: aa3ca7ab-c958-4ab9-b975-e427acc8ee2e
+status: experimental
+description: |
+  Detects DNS queries for xcai[.]pro, which FBI FLASH-20261113-001
+  lists as an LLM API reseller used in the South Korea financial
+  campaign (CrowdStrike). A single lookup is a lead, not proof of
+  ARTEX. Confirm context before treating it as malicious.
+references:
+  - https://www.ic3.gov/CSA/2026/261113.pdf
+  - https://cyber-threat.net/git/hunt-lab/hunts/2026/2026-11-16-artex-fbi-flash-agent-speed/
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-16
+tags:
+  - attack.command-and-control
+  - attack.t1071.001
+  - detection.emerging-threats
+logsource:
+  category: dns
+detection:
+  selection:
+    query|contains:
+      - 'xcai.pro'
+  condition: selection
+falsepositives:
+  - Security research, sinkholes, or blocklist testing.
+level: medium

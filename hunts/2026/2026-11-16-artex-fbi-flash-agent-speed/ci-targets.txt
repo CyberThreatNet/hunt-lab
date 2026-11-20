@@ -1,0 +1,2 @@
+rule-fbi-flash-artex-ips.yml
+rule-artex-xcai-pro-dns.yml

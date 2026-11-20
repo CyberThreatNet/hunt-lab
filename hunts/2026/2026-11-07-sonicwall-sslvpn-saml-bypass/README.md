@@ -1,5 +1,7 @@
 # SonicWall SSL-VPN logins that skipped SAML/MFA (CVE-2026-19868)
 
+Full write-up: [SonicWall CVE-2026-19868: exploited SSL-VPN SAML and MFA bypass](https://cyber-threat.net/sonicwall-sonicos-cve-2026-19868-saml-mfa-bypass/) on Cyber-Threat.net.
+
 | Hunt ID | Date | Status | Platforms | ATT&CK | CVEs | Files |
 |---|---|---|---|---|---|---|
 | 2026-11-07-sonicwall-sslvpn-saml-bypass | 2026-11-07 | Experimental | SonicWall SonicOS syslog; SAML IdP sign-in logs (Entra ID, Okta, others); Microsoft Sentinel; Splunk | T1133, T1078, T1556 | CVE-2026-19868 | rule-sslvpn-login-allowed.yml, query.kql, ci-targets.txt, sources.md; templates/ (not deployable) |

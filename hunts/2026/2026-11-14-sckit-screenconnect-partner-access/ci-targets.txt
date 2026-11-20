@@ -1,0 +1,4 @@
+# file_event, process_creation and network_connection: Microsoft XDR and Splunk conversions.
+# Hand KQL with the second-client and Defender-exclusion hunts ships in query.kql.
+-t kusto -p microsoft_xdr
+-t splunk --without-pipeline

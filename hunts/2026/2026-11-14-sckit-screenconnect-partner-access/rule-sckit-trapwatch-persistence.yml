@@ -1,0 +1,42 @@
+title: SCKit TrapWatch Scheduled Task or RelayTrapLiteAlert Run Key
+id: e2fc1a22-d29c-485c-8d6a-c7db8188b69f
+status: experimental
+description: |
+    Detects the persistence Huntress documented for the SCKit worm. TrapWatch.ps1
+    runs as SYSTEM and creates a scheduled task named TrapWatch that stops the
+    legitimate ScreenConnect client and lets an attacker-controlled copy take its
+    place. The kit installer also adds a RelayTrapLiteAlert value under
+    HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run.
+references:
+    - https://www.huntress.com/blog/sckit-worm-rogue-screenconnect
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-14-sckit-screenconnect-partner-access
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-12
+tags:
+    - attack.persistence
+    - attack.t1053.005
+    - attack.t1547.001
+    - detection.emerging-threats
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_schtasks:
+        Image|endswith: '\schtasks.exe'
+        CommandLine|contains|all:
+            - '/create'
+            - 'TrapWatch'
+    selection_ps:
+        CommandLine|contains:
+            - 'Register-ScheduledTask'
+            - 'New-ScheduledTask'
+    selection_ps_name:
+        CommandLine|contains:
+            - 'TrapWatch'
+            - 'RelayTrap'
+    selection_runkey:
+        CommandLine|contains: 'RelayTrapLiteAlert'
+    condition: selection_schtasks or (selection_ps and selection_ps_name) or selection_runkey
+falsepositives:
+    - None expected. The names are specific to the kit.
+level: critical

@@ -1,5 +1,7 @@
 # Cisco SD-WAN KeyDrift controller hunt (CVE-2026-20127)
 
+Full write-up: [Cisco SD-WAN KeyDrift: hunt UAT-11473 after CVE-2026-20127](https://cyber-threat.net/cisco-sdwan-keydrift-cve-2026-20127-uat-11473/) on Cyber-Threat.net.
+
 > **Status banner:** Draft for review: untested
 
 | | |
@@ -65,4 +67,4 @@ An operator who exploited CVE-2026-20127 against a Catalyst SD-WAN controller le
 ## Credits and licence
 
 - Author: Cyber-Threat.net Hunt Lab
-- Sigma rules: [DRL 1.1](../../../../LICENSE-DRL). `query.kql`, `query.spl` and this README: [MIT](../../../../LICENSE).
+- Sigma rules: [DRL 1.1](../../../LICENSE-DRL). `query.kql`, `query.spl` and this README: [MIT](../../../LICENSE).

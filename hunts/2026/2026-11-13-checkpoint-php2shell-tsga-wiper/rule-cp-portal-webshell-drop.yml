@@ -1,0 +1,43 @@
+title: Check Point Mobile Access Portal Template Webshell Written by Base64 Decode
+id: d12b9946-4f0d-4f17-990c-9d69329ed523
+status: experimental
+description: |
+    Detects the webshell drop pattern Check Point Research published on
+    12 November 2026 for PHP2Shell exploitation of Check Point Security Gateways:
+    after root via CVE-2026-123039, the operator ran
+    printf <base64> | base64 -d > <templates>/zz<random>.tpl
+    to write PHP webshells into the directory the Mobile Access portal uses to
+    build its login pages, and later copied an uploaded file into that
+    directory as challenge_render.tpl. Needs process command-line telemetry
+    from the gateway (auditd execve or an equivalent); most gateways do not
+    ship this by default.
+references:
+    - https://research.checkpoint.com/2026/php2shell-exploitation-on-check-point-gateway/
+    - https://support.checkpoint.com/results/sk/sk1000362
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-13
+tags:
+    - attack.persistence
+    - attack.t1505.003
+    - attack.t1140
+    - cve.2026-109618
+    - cve.2026-109619
+    - cve.2026-123039
+    - detection.emerging-threats
+logsource:
+    product: linux
+    category: process_creation
+detection:
+    selection_decode:
+        CommandLine|contains: 'base64 -d'
+    selection_tpl:
+        CommandLine|contains: '.tpl'
+    selection_copy:
+        CommandLine|contains:
+            - '/tmp/.up.tpl'
+            - 'challenge_render.tpl'
+    condition: (selection_decode and selection_tpl) or selection_copy
+falsepositives:
+    - Check Point upgrade or hotfix scripts that unpack portal templates. Check the parent process, the time and whether a Jumbo Hotfix was being installed.
+level: high

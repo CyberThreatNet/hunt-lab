@@ -2,6 +2,8 @@
 
 Full write-up: [Hunt: Ivanti Connect Secure X-DSCGI-PATH mismatch](https://cyber-threat.net/hunt-ivanti-connect-secure-x-dscgi-path/) on Cyber-Threat.net.
 
+Companion Alert: [Ivanti Connect Secure CVE-2026-104935: auth bypass to RCE](https://cyber-threat.net/ivanti-connect-secure-cve-2026-104935-auth-bypass/) on Cyber-Threat.net.
+
 > **Draft for review: untested.** Behavioural starting points from Volexity and CISA. Not an exploit signature.
 
 | | |

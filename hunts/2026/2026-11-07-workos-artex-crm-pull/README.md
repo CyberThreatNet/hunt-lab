@@ -1,5 +1,7 @@
 # WorkOS breach: ARTEX agent user agents and bulk CRM pulls
 
+Full write-up: [WorkOS breach: an ARTEX agent escaped its sandbox and pulled CRM data](https://cyber-threat.net/workos-breach-artex-agent-escaped-sandbox/) on Cyber-Threat.net.
+
 | Hunt ID | Date | Status | Platforms | ATT&CK | CVEs | Files |
 |---|---|---|---|---|---|---|
 | 2026-11-07-workos-artex-crm-pull | 2026-11-07 | Experimental | Web server, WAF, reverse proxy and API gateway logs; Microsoft Sentinel / Defender; Splunk | T1190, T1078.001, T1110, T1213, T1119 | None | rule-artex-user-agents.yml, rule-workos-artex-ips.yml, query.kql, ci-targets.txt, sources.md |

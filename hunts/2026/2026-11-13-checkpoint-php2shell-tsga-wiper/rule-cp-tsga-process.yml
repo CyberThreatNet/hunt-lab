@@ -1,0 +1,43 @@
+title: TSGA Backdoor Process Started on a Check Point Gateway
+id: e3fb6432-3ed1-4e79-b0ea-4dac1cca3ad0
+status: experimental
+description: |
+    Detects the TSGA launch Check Point Research published on 12 November 2026:
+    nohup /tmp/CPconfigdaemon >/tmp/.bd.log 2>&1 &, and the relaunched process
+    name slot_CPconfigdaemon. Also catches the destroy_v6 wiper staged as
+    /tmp/des and the gogo scanner if process telemetry reaches the SIEM from the
+    gateway or the ESXi host.
+references:
+    - https://research.checkpoint.com/2026/php2shell-exploitation-on-check-point-gateway/
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-13
+tags:
+    - attack.execution
+    - attack.t1059.004
+    - attack.t1036.005
+    - attack.discovery
+    - attack.t1046
+    - attack.impact
+    - attack.t1485
+    - detection.emerging-threats
+logsource:
+    product: linux
+    category: process_creation
+detection:
+    selection_tsga:
+        - Image|endswith:
+              - '/CPconfigdaemon'
+              - '/slot_CPconfigdaemon'
+        - CommandLine|contains:
+              - '/tmp/CPconfigdaemon'
+              - '/tmp/.bd.log'
+    selection_wiper:
+        - Image: '/tmp/des'
+        - CommandLine|contains: 'destroy_v6'
+    selection_gogo:
+        Image|endswith: '/gogo'
+    condition: 1 of selection_*
+falsepositives:
+    - A genuine binary called gogo elsewhere on a Linux estate. Scope selection_gogo to gateways and ESXi hosts.
+level: critical

@@ -1,0 +1,29 @@
+title: DREAM_ANNEXATION Wiper Note or destroy_v6 Staging on a Linux or ESXi Host
+id: 2e2fa951-2c0a-4d22-b334-dbe36fac1f31
+status: experimental
+description: |
+    Detects files Check Point Research published for the destructive stage of
+    the PHP2Shell Check Point campaign: the destroy_v6 wiper staged at /tmp/des
+    on a VMware ESXi host, and the DREAM_ANNEXATION.txt note it writes into each
+    directory it processes. ESXi rarely forwards file events; use host-checks
+    and esxi-checks.sh where this rule cannot run.
+references:
+    - https://research.checkpoint.com/2026/php2shell-exploitation-on-check-point-gateway/
+    - https://github.com/CyberThreatNet/hunt-lab/tree/main/hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-13
+tags:
+    - attack.impact
+    - attack.t1485
+    - detection.emerging-threats
+logsource:
+    product: linux
+    category: file_event
+detection:
+    selection:
+        - TargetFilename|endswith: '/DREAM_ANNEXATION.txt'
+        - TargetFilename: '/tmp/des'
+    condition: selection
+falsepositives:
+    - None expected.
+level: critical
