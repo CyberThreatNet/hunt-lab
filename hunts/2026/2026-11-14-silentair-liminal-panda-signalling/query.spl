@@ -1,0 +1,7 @@
+# GTPDoor v3 or SCTPE sample MD5 (DRAFT FOR REVIEW, untested)
+# Hunt ID:   2026-11-14-silentair-liminal-panda-signalling
+# Converted with: sigma convert -t splunk --without-pipeline
+# Tooling: sigma-cli 3.1.0, pySigma 1.5.1, 14 November 2026 (Europe/London)
+# Licence: MIT
+# Context: Enea, 11 November 2026. A miss does not rule out the actor.
+Hashes IN ("*MD5=35f0d4d0c5519a2957338e448fce53bc*", "*md5=35f0d4d0c5519a2957338e448fce53bc*", "*35f0d4d0c5519a2957338e448fce53bc*", "*MD5=da35d98c9a22e8ede93595d21fe7e63e*", "*md5=da35d98c9a22e8ede93595d21fe7e63e*", "*da35d98c9a22e8ede93595d21fe7e63e*")

@@ -1,0 +1,73 @@
+// ARTEX FBI FLASH hunts (Cyber-Threat.net Hunt Lab, 16 November 2026)
+// Source: FBI FLASH-20261113-001 and companion CSV. Vet hits in context.
+// Do not treat FLASH IP addresses or legitimate LLM API domains as
+// standalone blocks.
+let flash_ips = dynamic([
+  "38.244.50.120","144.172.64.60","144.172.64.99","144.172.64.128",
+  "187.15.88.186","187.15.90.217","187.15.89.186","101.53.80.20",
+  "205.214.59.31","124.155.252.63","154.201.79.246","23.248.249.90",
+  "23.158.220.98","103.248.148.84","203.160.133.172","209.209.85.38",
+  "199.19.95.66","199.19.95.67","199.19.95.68","91.92.240.238",
+  "85.11.168.45","178.16.54.129","31.77.229.35","85.11.167.52"
+]);
+// Q1: Sign-ins from FLASH IPs (Entra / Microsoft Sentinel). Transient VPN
+// addresses 187.15.88.186, 187.15.90.217 and 187.15.89.186 were relevant
+// 15-16 October 2026 according to the FLASH (Microsoft).
+SigninLogs
+| where TimeGenerated > ago(60d)
+| where IPAddress in (flash_ips)
+| project TimeGenerated, UserPrincipalName, AppDisplayName, AppId, IPAddress, ResultType, UserAgent, ResourceDisplayName
+| order by TimeGenerated desc;
+
+// Q2: Service-principal sign-ins from unusual sources. Review successes
+// and failures separately, as the FLASH recommends. Do not limit review
+// to the published IP list.
+SigninLogs
+| where TimeGenerated > ago(60d)
+| where ServicePrincipalId != ""
+| where ResultType in ("0","50126","50053","50074","53003")
+| summarize attempts=count(), successes=countif(ResultType=="0"), failures=countif(ResultType!="0"),
+            ips=make_set(IPAddress, 20), apps=make_set(AppDisplayName, 10)
+  by ServicePrincipalName, AppId, bin(TimeGenerated, 1h)
+| where attempts > 20
+| order by attempts desc;
+
+// Q3: Entra audit, credential and permission changes on applications
+// and service principals (FLASH identity recommendations).
+AuditLogs
+| where TimeGenerated > ago(60d)
+| where OperationName in (
+    "Add service principal credentials",
+    "Add application credentials",
+    "Update application",
+    "Add app role assignment to service principal",
+    "Consent to application",
+    "Add owner to application",
+    "Add owner to service principal",
+    "Add member to role",
+    "Add service principal"
+  )
+| project TimeGenerated, OperationName, Result, Identity, TargetResources, CorrelationId
+| order by TimeGenerated desc;
+
+// Q4: Bursts of Graph or high-volume API activity, including sequential
+// lookups. Tune the threshold for your tenant. Start ConnectWise review
+// from 1 October 2026.
+MicrosoftGraphActivityLogs
+| where TimeGenerated > ago(60d)
+| summarize calls=count(), ops=dcount(RequestUri), users=dcount(UserId) by IPAddress, AppId, bin(TimeGenerated, 5m)
+| where calls > 200 or ops > 50
+| order by calls desc;
+
+// Q5: Partner or employee portal style bursts on a web application
+// (Azure Application Gateway). Set portal_paths to your routes.
+let portal_paths = dynamic(["/api/", "/partners/", "/portal/", "/employee/"]);
+AzureDiagnostics
+| where TimeGenerated > ago(14d)
+| where Category == "ApplicationGatewayAccessLog"
+| where requestUri_s has_any (portal_paths)
+| summarize reqs=count(), distinct_paths=dcount(requestUri_s),
+            fails=countif(httpStatus_d in (401,403,429))
+  by clientIP_s, bin(TimeGenerated, 5m)
+| where reqs > 100 or fails > 30
+| order by reqs desc;

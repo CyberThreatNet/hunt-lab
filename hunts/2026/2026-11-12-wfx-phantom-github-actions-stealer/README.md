@@ -1,5 +1,7 @@
 # wfx (wfx-loot, WFX Phantom): GitHub Actions secret stealer, hunt and rotation checklist
 
+Full write-up: [WFX Phantom: stolen GitHub accounts run a CI secret stealer, wipe runs](https://cyber-threat.net/wfx-phantom-github-actions-secret-stealer/) on Cyber-Threat.net.
+
 > **Status:** Draft for review: untested in a live estate
 
 | | |

@@ -1,0 +1,4 @@
+# CI converts every rule in this folder with each target.
+# The pack mixes Windows process_creation, proxy and Linux file_event, so CI
+# runs Splunk only. Hand KQL is in query.kql.
+-t splunk --without-pipeline

@@ -1,0 +1,91 @@
+// SCKit ScreenConnect worm: first-hour hunt (Microsoft Defender XDR advanced hunting)
+// Cyber-Threat.net Hunt Lab, 14 November 2026. MIT licence.
+// Source: Huntress, "SCKit Worm Installs Rogue ScreenConnect Clients and Session Cookie Relays" (11 Nov 2026).
+// Campaign first seen about 17:47 UTC on 11 November 2026. Huntress says sequential attacker tags
+// suggest earlier victims, so the default lookback is 30 days. Widen it if your retention allows.
+// Run these from your SIEM or EDR console, never over a ScreenConnect session to a suspect host.
+
+let lookback = 30d;
+let sckit_ips = dynamic(["185.99.255.28", "155.94.150.39", "185.241.211.197"]);
+let sckit_hosts = dynamic(["newnewnew.gotdns.org", "soxnewwork.homedns.org", "sc.payproofkit.com", "ns.mo7sen.dev", "cdn007-digitaldownloads.com", "007.from-ak.com"]);
+let sckit_ids = dynamic(["2588ef5c15954b10", "ed630cc2c873b091"]);
+
+// Q1. Dropper files in C:\Windows\Temp and the RelayTrap folder
+DeviceFileEvents
+| where Timestamp > ago(lookback)
+| where FolderPath matches regex @"(?i)\\windows\\temp\\(sc\.msi|sckit-run\.bat|sckit-decoder\.ps1)$"
+    or FolderPath has_any (@"\ProgramData\RelayTrap\", "sckit-loader.ps1", "Panel-Lateral", "ToolboxRelayUploader.exe", "Run-Lateral-Full.bat", "Stop-LabTrap")
+| project Timestamp, DeviceName, ActionType, FolderPath, SHA256, InitiatingProcessFileName, InitiatingProcessCommandLine, InitiatingProcessAccountName
+| order by Timestamp asc;
+
+// Q2. Commands pushed through ScreenConnect Run Command that fetch an MSI or write the dropper
+// Run Command children run as SYSTEM under the ScreenConnect client service.
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where InitiatingProcessFileName =~ "ScreenConnect.ClientService.exe"
+    or InitiatingProcessParentFileName =~ "ScreenConnect.ClientService.exe"
+| where ProcessCommandLine has_any ("sc.msi", "sckit", "EadF.php", "ScreenConnect.ClientSetup.msi", "UpdateConnect.ClientSetup.msi", "msiexec", "FromBase64String", "-enc")
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by Timestamp asc;
+
+// Q3. A second ScreenConnect client on one host
+// Each client service runs as "ScreenConnect Client (<16 hex id>)". More than one id per device is the lead.
+// Compare every id against the ids your own panels use; the two published rogue ids are flagged.
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where FileName =~ "ScreenConnect.ClientService.exe" or FolderPath has "ScreenConnect Client ("
+| extend ClientId = extract(@"ScreenConnect Client \(([0-9a-f]{16})\)", 1, FolderPath)
+| extend RelayHost = extract(@"[?&]h=([^&""\s]+)", 1, ProcessCommandLine)
+| summarize Ids = make_set(ClientId, 10), Relays = make_set(RelayHost, 10), FirstSeen = min(Timestamp), LastSeen = max(Timestamp) by DeviceName
+| extend IdCount = array_length(Ids), KnownRogue = set_has_element(Ids, "2588ef5c15954b10") or set_has_element(Ids, "ed630cc2c873b091")
+| where IdCount > 1 or KnownRogue
+| order by KnownRogue desc, IdCount desc;
+
+// Q4. TrapWatch scheduled task, RelayTrapLiteAlert Run key and Defender exclusions
+union
+(DeviceEvents
+ | where Timestamp > ago(lookback)
+ | where ActionType == "ScheduledTaskCreated"
+ | extend TaskName = tostring(parse_json(AdditionalFields).TaskName)
+ | where TaskName has "TrapWatch"
+ | project Timestamp, DeviceName, ActionType, Detail = TaskName, InitiatingProcessCommandLine),
+(DeviceRegistryEvents
+ | where Timestamp > ago(lookback)
+ | where RegistryKey has @"\CurrentVersion\Run" and RegistryValueName =~ "RelayTrapLiteAlert"
+ | project Timestamp, DeviceName, ActionType, Detail = RegistryValueData, InitiatingProcessCommandLine),
+(DeviceRegistryEvents
+ | where Timestamp > ago(lookback)
+ | where RegistryKey has @"\Windows Defender\Exclusions\"
+ | where InitiatingProcessParentFileName =~ "ScreenConnect.ClientService.exe" or InitiatingProcessCommandLine has_any ("CWInstall_", "Installer.ps1", "RelayTrap")
+ | project Timestamp, DeviceName, ActionType, Detail = strcat(RegistryKey, " ", RegistryValueName), InitiatingProcessCommandLine)
+| order by Timestamp asc;
+
+// Q5. Network indicators (Huntress block list)
+DeviceNetworkEvents
+| where Timestamp > ago(lookback)
+| where RemoteIP in (sckit_ips) or RemoteUrl has_any (sckit_hosts)
+| project Timestamp, DeviceName, RemoteIP, RemotePort, RemoteUrl, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by Timestamp asc;
+
+// Q6. Rogue client ids or the installer pattern on any command line
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where ProcessCommandLine has_any (sckit_ids) or ProcessCommandLine has "&c=Exploited" or ProcessCommandLine has_any (sckit_hosts)
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine
+| order by Timestamp asc;
+
+// Q7. Technician workstations: SQLite reading browser cookie stores (the kit uses sqlite3.exe to pull .aspxauth cookies)
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where FileName =~ "sqlite3.exe"
+| where ProcessCommandLine has_any ("Cookies", "Network\\Cookies", "cookies.sqlite")
+| project Timestamp, DeviceName, AccountName, FolderPath, ProcessCommandLine, InitiatingProcessCommandLine
+| order by Timestamp asc;
+
+// Q8. 13 November wave: netsh portproxy and hosts-file edits
+DeviceProcessEvents
+| where Timestamp > ago(lookback)
+| where (ProcessCommandLine has "netsh" and ProcessCommandLine has "portproxy")
+    or (ProcessCommandLine has @"\drivers\etc\hosts" and ProcessCommandLine has_any ("185.241.211.197", "185.99.255.28", "155.94.150.39", "007.from-ak.com", "newnewnew.gotdns.org", "soxnewwork.homedns.org", "sc.payproofkit.com"))
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine, InitiatingProcessFileName
+| order by Timestamp asc;

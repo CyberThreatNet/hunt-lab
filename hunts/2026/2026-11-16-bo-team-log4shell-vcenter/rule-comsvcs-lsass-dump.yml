@@ -1,0 +1,37 @@
+title: LSASS Dump via comsvcs.dll MiniDumpW (BO Team Style)
+id: 77cee04a-ae04-4dfe-9996-8574c39366e8
+status: experimental
+description: |
+  Detects rundll32 launching comsvcs.dll MiniDumpW, including the
+  obfuscated ordinal #+0000^24 that Kaspersky ICS CERT saw after
+  Nanodump was blocked. This technique is not unique to BO Team.
+  Treat hits as credential-dumping leads.
+references:
+  - https://ics-cert.kaspersky.com/publications/reports/2026/11/05/supply-chain-attack-bo-team-in-a-software-developers-infrastructure/
+  - https://cyber-threat.net/git/hunt-lab/hunts/2026/2026-11-16-bo-team-log4shell-vcenter/
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-16
+tags:
+  - attack.credential-access
+  - attack.t1003.001
+  - detection.emerging-threats
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_img:
+    Image|endswith:
+      - '\rundll32.exe'
+  selection_cmd:
+    CommandLine|contains:
+      - 'comsvcs.dll'
+  selection_func:
+    CommandLine|contains:
+      - 'MiniDump'
+      - '#+0000^24'
+      - '#24'
+      - ',24 '
+  condition: selection_img and selection_cmd and selection_func
+falsepositives:
+  - Unusual but authorised memory collection by an incident-response tool that wraps comsvcs.
+level: high

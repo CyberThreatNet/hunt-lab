@@ -1,5 +1,7 @@
 # Agent-driven intrusion: machine-speed discovery and bulk collection
 
+Full write-up: [Chainalysis intrusion: hunting agent-driven attacks in your logs](https://cyber-threat.net/hunt-chainalysis-agentic-intrusion-logs/) on Cyber-Threat.net.
+
 | Hunt ID | Date | Status | Platforms | ATT&CK | CVEs | Files |
 |---|---|---|---|---|---|---|
 | 2026-11-02-agentic-intrusion-machine-speed | 2026-11-02 | Experimental | Linux, Windows; Splunk; Microsoft Defender XDR / Sentinel | T1595.002, T1190, T1059.006, T1082, T1033, T1016, T1083, T1087.004, T1213, T1119, T1078 | None | rule.yml, rule-correlation.yml, query.kql, ci-targets.txt, sources.md |

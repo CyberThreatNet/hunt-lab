@@ -1,0 +1,41 @@
+title: DNS Query for Optimizely Injection Payload Hosts (November 2026)
+id: 90b294cf-4ecd-41b2-856e-3e569304364c
+status: experimental
+description: |
+  Detects DNS lookups for attacker hosts used in the Optimizely Web snippet
+  injection of 16 November 2026 and the earlier webshell.lol wave (Report URI).
+  A lookup from a user device during 13 to 17 November 2026 is a strong lead
+  that the device rendered an infected page. Later lookups are more likely
+  to be blocklist or research traffic.
+references:
+  - https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/
+  - https://cyber-threat.net/git/hunt-lab/hunts/2026/2026-11-17-optimizely-web-script-injection/
+author: Cyber-Threat.net Hunt Lab
+date: 2026-11-17
+tags:
+  - attack.initial-access
+  - attack.t1189
+  - attack.command-and-control
+  - attack.t1071.001
+  - detection.emerging-threats
+logsource:
+  category: dns
+detection:
+  selection:
+    query|endswith:
+      - '1688360.cc'
+      - '5vobauua3ojpklx.icu'
+      - 'eil786npto9u5bq.icu'
+      - 'l7bcsnwc7nzr3uo.icu'
+      - 'webshell.lol'
+      - 'linkforge.cc'
+      - 'je4ft3gn8vxudum.icu'
+      - 'q1ls1ho9x7wsxlu.icu'
+      - 'ios-hack.icu'
+      - 'p55abnw2pnsz0bo.icu'
+      - '1y69gy2mdzaltz1.icu'
+      - 'gm38duxoihbmy5o.icu'
+  condition: selection
+falsepositives:
+  - Sinkholes, blocklist testing and security research.
+level: high

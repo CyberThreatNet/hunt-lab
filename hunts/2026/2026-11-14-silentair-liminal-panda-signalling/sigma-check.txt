@@ -1,0 +1,9 @@
+sigma check (sigma-cli 3.1.0, pySigma 1.5.1), run locally 14 November 2026 (Europe/London):
+sigma check --fail-on-error --fail-on-issues -x filename_length -x duplicate_filename hunts/2026/2026-11-14-silentair-liminal-panda-signalling/
+=== Summary ===
+Found 0 errors, 0 condition errors and 0 issues.
+No rule errors found.
+No condition errors found.
+No validation issues found.
+
+Conversions: -t splunk --without-pipeline succeeded. -t kusto -p microsoft_xdr omitted (see ci-targets.txt).

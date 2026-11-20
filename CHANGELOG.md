@@ -6,7 +6,62 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+**CI conversion targets for 16 and 17 November packs (20 November 2026)**
+- Correct `ci-targets.txt` on the ARTEX and BO Team packs (they listed rule filenames instead of conversion targets) and add the missing files on the Optimizely and NoisyTCP packs, so GitHub Actions can convert them with `-t splunk --without-pipeline`. Detection logic is unchanged.
+
+### Fixed
+
+**SCKit partner-access Sigma identifiers (20 November 2026)**
+- `hunts/2026/2026-11-14-sckit-screenconnect-partner-access/`
+- New titles and rule IDs so the four Sigma rules can coexist with the 12 November SCKit rogue-client pack in `sigma check`. Detection logic is unchanged. The network rule still adds the 13 November indicators. Each rule records the original identifier in `related`.
+
+
 ### Added
+
+**Optimizely Web script injection (16 November 2026)**
+- `hunts/2026/2026-11-17-optimizely-web-script-injection/`
+- Sigma for proxy and DNS hits on the published injection infrastructure; KQL for Microsoft Defender and Sentinel; YARA for saved snippets and page archives; a read-only snippet check script. Covers 13 to 17 November 2026, including the earlier webshell.lol wave. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/optimizely-supply-chain-attack-check-scripts/
+- Status: experimental; YARA tested on synthetic samples only. Indicators from Report URI and BleepingComputer. No CVE.
+
+**NoisyTCP CVE-2026-99288: Linux TCP remote crash**
+- `hunts/2026/2026-11-17-noisytcp-cve-2026-99288/`
+- Read-only exposure check script, Sigma for kernel panics with tcp_v4_rcv in the trace, and KQL for Defender Vulnerability Management and Sentinel. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/noisytcp-cve-2026-99288-linux-tcp-crash/
+- Status: experimental, untested. Not in KEV (catalogue 2026.11.17).
+
+**BO Team: Log4Shell on vCenter and a supply-chain near miss**
+- `hunts/2026/2026-11-16-bo-team-log4shell-vcenter/`
+- Sigma for the hourly pgcache cron script, nofrillsdns or GSocket installer fetches, and comsvcs.dll LSASS dumps; hand KQL for LSASS and NTDS dumping, the published file paths and hashes, and the published infrastructure; a Linux auditd shell-hunt guide; YARA for the pgcache and GSocket downloader strings. Companion to the Cyber-Threat.net article: https://cyber-threat.net/bo-team-log4shell-vcenter-supply-chain/
+- Status: experimental, untested. Source: Kaspersky ICS CERT (5 November 2026). CVE-2021-44228 is in KEV (added 2021-12-10).
+
+**ARTEX agent-speed intrusions: FBI FLASH-20261113-001**
+- `hunts/2026/2026-11-16-artex-fbi-flash-agent-speed/`
+- Sigma for the FLASH IPv4 addresses and DNS lookups of the FLASH domain; hand KQL for sign-ins from FLASH addresses, unusual service-principal sign-ins, application credential and permission changes, Graph API bursts and portal request bursts. The FLASH addresses are historical and can be reassigned. Companion to the Cyber-Threat.net article: https://cyber-threat.net/hunt-lab-detecting-artex-agent-speed-intrusions/
+- Status: experimental, untested. Source: FBI FLASH-20261113-001 (13 November 2026, TLP:CLEAR). No CVE.
+
+**SilentAir and LIMINAL PANDA: signalling interception and GTPDoor on the IPX**
+- `hunts/2026/2026-11-14-silentair-liminal-panda-signalling/`
+- Operator pseudo-logic for SS7 UpdateLocation and Diameter ULR diversion; Sigma for the published GTPDoor v3 MD5; enterprise KQL for SMS sign-in exposure, phone-method changes and risky sign-ins; a Splunk conversion. Write-up link to be added when live.
+- Status: experimental, untested. Source: Enea. No CVE.
+
+**SCKit worm: rogue ScreenConnect clients pushed through cloud Run Command**
+- `hunts/2026/2026-11-14-sckit-screenconnect-partner-access/`
+- Updated from the 12 November pack with the 13 November network indicators (185.241.211.197, 007.from-ak.com, UpdateConnect.ClientSetup.msi, portproxy and hosts-file edits as Q8). Sigma for dropper files, TrapWatch persistence, a second ScreenConnect client and the published network indicators; hand KQL for Run Command children, a second client, Defender exclusions, cookie theft and the 13 November extras; YARA for kit scripts and the published SHA256 values. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/screenconnect-unauthorised-partner-access-sckit/
+- Status: experimental, untested. Indicators from Huntress (11 and 13 November 2026); CVE-2026-127063 and technician-client guidance from the ConnectWise Trust Center (updated 13 November 2026, 21:15 UTC) and the CVE-2026-127063 disclosure. Not in KEV (catalogue 2026.11.13).
+
+**Citrix NetScaler Console CVE-2026-120869: exposure check**
+- `hunts/2026/2026-11-14-citrix-netscaler-console-cve-2026-120869/`
+- Exposure checklist only: inventory of Console 14.1 builds before 14.1-74.34, restrict the Console IP to a trusted management network, and review audit and configuration history. No exploit-specific Sigma or KQL, because Citrix published no indicators or log signatures. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/citrix-netscaler-console-cve-2026-120869/
+- Status: experimental, untested. Facts from Citrix CTX697320 and CTX697305, and CVE.org CVE-2026-120869; not in KEV (catalogue 2026.11.13). FIRST EPSS on 13 November 2026 is 0.00513 (44.3rd percentile). Exploitation in the wild is not confirmed.
+
+**PHP2Shell on Check Point gateways: portal webshells, TSGA and an ESXi wiper**
+- `hunts/2026/2026-11-13-checkpoint-php2shell-tsga-wiper/`
+- Read-only gateway and ESXi triage scripts (CVE-2026-123039 socket and log checks, including the sk1000362 `Received =` greps for unexpected DynamicCLI commands, zz*.tpl and challenge_render.tpl webshells, TSGA and TSProxy paths, TCP 11072, upload_progress_pwn session files, vpxuser SSH, destroy_v6 and DREAM_ANNEXATION.txt); Sigma for the webshell drop, TSGA artefacts and process, the two scanning addresses and the wiper note; hand KQL for Sentinel (scan sources, .tpl requests, implant strings, blocked DynamicCLI calls, vpxuser SSH, firewall log gaps); YARA for the webshell, TSGA and TSProxy, the wiper and the eight published SHA256 values (the webshell rule requires the published key or upload path, not only a mention of challenge_render.tpl). Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
+- Status: experimental, untested. Indicators from Check Point Research and the Check Point advisory (12 November 2026); KEV catalogue 2026.11.10 (PHP2Shell CVEs listed; CVE-2026-123039 not listed).
+
+**Apache httpd CVE-2026-119618: find HTTP/2 servers on affected builds**
+- `hunts/2026/2026-11-13-apache-httpd-mod-http2-cve-2026-119618/`
+- Exposure check, not an exploit hunt: read-only host script (build and package version, http2_module loaded, every Protocols line httpd loads, verdict), an outside-in ALPN and h2c check, a crash-watch script, and hand KQL for Defender Vulnerability Management and for AH00052 and kernel segfault bursts. Distribution fixed versions for Red Hat, Ubuntu and Debian, and the Protocols http/1.1 stopgap. Companion to the Cyber-Threat.net Alert (write-up link to be added when live).
+- Status: experimental, untested. Facts from Apache (2.4.71, 11 November 2026), Red Hat, Ubuntu and Debian; not in KEV (catalogue 2026.11.10). No Sigma rules: there is no exploit-specific log signature.
 
 **SCKit worm: rogue ScreenConnect clients via cloud Run Command**
 - `hunts/2026/2026-11-12-sckit-screenconnect-rogue-client/`
