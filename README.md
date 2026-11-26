@@ -11,7 +11,7 @@ Free threat-hunting queries and detection rules from **Hunt Lab** at [Cyber-Thre
 
 Each week's threats and CVEs become copy-ready hunts for threat hunters, SOC analysts and detection engineers. Hunts are written in **KQL** (Microsoft Sentinel and Defender XDR), **Sigma** and **Splunk SPL**, and mapped to MITRE ATT&CK. Each folder matches a "Hunt of the week" or CVE query pack entry on the site.
 
-Read the write-ups behind each hunt on the [Hunt Lab pages at Cyber-Threat.net](https://cyber-threat.net/category/hunt-lab/), and follow new hunts with the [Hunt Lab RSS feed](https://cyber-threat.net/category/hunt-lab/feed/). Everything here is free to use under the licences below.
+Read the write-ups behind each hunt on the [Hunt Lab pages at Cyber-Threat.net](https://cyber-threat.net/category/hunt-lab/), and follow new hunts with the [Hunt Lab RSS feed](https://cyber-threat.net/category/hunt-lab/feed/). For currently exploited vulnerabilities and live incidents, see the [Alert Tracker](https://cyber-threat.net/alert-tracker/) and the [Threat & Hacking Tracker](https://cyber-threat.net/tracker/). Everything here is free to use under the licences below.
 
 Repository: <https://github.com/CyberThreatNet/hunt-lab>
 
