@@ -6,6 +6,54 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+**MONAI Label CVE-2026-133968: exposure checklist (22 November 2026)**
+- `hunts/2026/2026-11-22-monai-label-cve-2026-133968-exposure/`
+- Inventory and exposure checklist for MONAI Label 0.8.5 or older, authentication left off, untrusted reachability, and the two IP addresses Amazon published. No Sigma or KQL: only those indicators are public. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/monai-label-cve-2026-133968/
+- Status: experimental, untested.
+
+**SAP NetWeaver Enterprise Portal CVE-2025-42884: inventory (21 November 2026)**
+- `hunts/2026/2026-11-21-sap-netweaver-portal-cve-2025-42884-inventory/`
+- Inventory and exposure checklist for Enterprise Portal 7.50 (EP-BASIS and EP-RUNTIME) still waiting on security note 3660969. No invented log signatures; CISA's KEV entry sets forensic triage under BOD 26-04 to No. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/sap-netweaver-portal-cve-2025-42884-kev/
+- Status: experimental, untested. In KEV (catalogue checked at pack draft).
+
+**Cisco Expressway CVE-2026-76466: erlang.log nodeup (20 November 2026)**
+- `hunts/2026/2026-11-20-cisco-expressway-cve-2026-76466-erlang-nodeup/`
+- Sigma for the erlang.log nodeup entry, non-peer connections to the cluster database ports, and Expressway nodes reaching SMB, SQL Server or WinRM; hand KQL; a short IOC list and triage notes. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/cisco-expressway-cve-2026-76466-exploited/
+- Status: experimental, untested.
+
+**VMware vCenter CVE-2026-123890 and ARMORY CASTLE (20 November 2026)**
+- `hunts/2026/2026-11-20-vmware-vcenter-cve-2026-123890-armory-castle/`
+- Sigma for unexpected connections to TCP 2012, SSH being enabled through the VAMI API, the published tool paths and the gdb privilege escalation; experimental YARA; hand KQL; GTIG indicators and triage notes. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/vmware-vcenter-cve-2026-123890-armory-castle/
+- Status: experimental, untested. YARA untested on samples.
+
+**NGINX HTTP/2 CVE-2026-123007 and CVE-2026-123633 (19 November 2026)**
+- `hunts/2026/2026-11-19-nginx-http2-cve-2026-123007-123633/`
+- Sigma for NGINX worker crashes and an NGINX process starting a shell; hand KQL and exposure queries. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/nginx-http2-cve-2026-123007-123633/
+- Status: experimental, untested.
+
+**LiteLLM CVE-2026-40217: guardrail sandbox escape (19 November 2026)**
+- `hunts/2026/2026-11-19-litellm-cve-2026-40217-guardrail-sandbox/`
+- Sigma for posts to the guardrail test endpoint and for a LiteLLM process starting a shell; hand KQL and exposure queries. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/cisa-kev-litellm-cve-2026-40217/
+- Status: experimental, untested. In KEV.
+
+**Java4Shell CVE-2026-114938: AVX-512 Base64 decoder (18 November 2026)**
+- `hunts/2026/2026-11-18-java4shell-cve-2026-114938-avx512-base64/`
+- Sigma for malformed Basic tokens, decoder errors, HotSpot crash logs and a Java process starting a shell; hand KQL; a read-only inventory script. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/java4shell-cve-2026-114938/
+- Status: experimental, untested.
+
+**Dokploy 0.31.1 member-to-root (18 November 2026)**
+- `hunts/2026/2026-11-18-dokploy-0-31-1-member-to-root/`
+- A read-only script that lists backups and schedules with shell characters in their names; Sigma and hand KQL for related process behaviour. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/dokploy-0-31-1-74-security-flaws-update/
+- Status: experimental, untested.
+
+**Puppet Server CVE-2026-115731: report deserialization (18 November 2026)**
+- `hunts/2026/2026-11-18-puppet-server-cve-2026-115731-report-rce/`
+- Sigma for report uploads in web logs and for shells started by the Puppet Server process; hand KQL; version, autosign and CA-key checks. Companion to the Cyber-Threat.net Alert: https://cyber-threat.net/puppet-server-cve-2026-115731-kev/
+- Status: experimental, untested. In KEV (added 17 November 2026).
+
+
 **CI conversion targets for 16 and 17 November packs (20 November 2026)**
 - Correct `ci-targets.txt` on the ARTEX and BO Team packs (they listed rule filenames instead of conversion targets) and add the missing files on the Optimizely and NoisyTCP packs, so GitHub Actions can convert them with `-t splunk --without-pipeline`. Detection logic is unchanged.
 

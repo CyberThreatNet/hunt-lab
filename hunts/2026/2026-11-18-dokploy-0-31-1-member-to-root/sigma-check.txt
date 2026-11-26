@@ -1,0 +1,6 @@
+tool: sigma-cli 3.1.0, 2026-11-18 00:11 GMT
+Command: sigma check --fail-on-error --fail-on-issues -x filename_length -x duplicate_filename rule-*.yml
+Result: 0 errors, 0 condition errors, 0 issues.
+Shell: bash -n dokploy-check.sh OK (not run against a live Dokploy host).
+KQL: not run against a live tenant; column names checked against the Defender advanced hunting schema by hand.
+Schema facts (tables backup and schedule, dokploy-postgres, user/db dokploy) checked against Dokploy source tag v0.31.0.

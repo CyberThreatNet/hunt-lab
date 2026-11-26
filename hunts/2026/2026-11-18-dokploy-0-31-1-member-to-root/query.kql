@@ -1,0 +1,16 @@
+// Cyber-Threat.net Hunt Lab, 18 November 2026. MIT licence.
+// Dokploy 0.31.1 and CVE-2026-129433. Draft for review: untested against a live tenant.
+
+// ATT&CK Technique: T1059.004 Unix Shell
+DeviceProcessEvents
+| where Timestamp > datetime(2026-10-01)
+| where ProcessCommandLine has "com.docker.compose.service="
+| where ProcessCommandLine matches regex @'com\.docker\.compose\.service=[^"]*[;`$|&<>]'
+| project Timestamp, DeviceName, ProcessCommandLine
+
+// ATT&CK Technique: T1059.004 Unix Shell, T1078 Valid Accounts
+DeviceProcessEvents
+| where InitiatingProcessCommandLine has "dokploy"
+| where FileName in ("curl", "wget", "nc", "ncat", "socat", "python3", "perl")
+| where AccountName == "root"
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessCommandLine, AccountName
